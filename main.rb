@@ -27,14 +27,28 @@ begin
   getch
   
   setpos((lines - 5) / 2, (cols - 10) / 2)  
-  input = getch
+  input = "x"
   refresh
   getch
 
   clear
-  setpos((lines - 5) / 2, (cols - 10) / 2)
-  refresh
-  getch
+
+  x = 1
+  while x == 1
+  	if input == 'q'
+  		setpos((lines - 5) / 2, (cols - 10) / 2)  
+  		addstr("Goodbye!")
+  		refresh
+  		getch
+  		break
+  	else
+  	setpos((lines - 5) / 2, (cols - 10) / 2)  
+  	addstr("#{main_char}")
+  	input = getch
+  	refresh
+  	getch
+  	end
+  end
 
   refresh
 ensure
