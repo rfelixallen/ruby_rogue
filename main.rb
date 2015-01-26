@@ -18,16 +18,21 @@ begin
 
   setpos((lines - 5) / 2, (cols - 10) / 2)
   addstr("Welcome to RR. Press any key to start.")
+  refresh
+  getch
+
+  clear
   setpos((lines - 5) / 2, (cols - 10) / 2)
   refresh
+  getch
   
-  setpos((lines - 2) / 2, (cols - 8) / 2)  
+  setpos((lines - 5) / 2, (cols - 10) / 2)  
   input = getch
   refresh
   getch
 
-  setpos((lines - 2) / 2, (cols - 8) / 2)
-  addstr("#{input}")
+  clear
+  setpos((lines - 5) / 2, (cols - 10) / 2)
   refresh
   getch
 
