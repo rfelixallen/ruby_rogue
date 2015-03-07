@@ -32,4 +32,9 @@ addstr("Lines: #{l}, Columns: #{c}")
 refresh
 getch
 
+clear
+setpos((lines - 5) / 2, (cols - 10) / 2)
+addstr("Goodbye!")
+refresh
+getch
 close_screen
