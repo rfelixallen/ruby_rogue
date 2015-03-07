@@ -4,8 +4,12 @@ include Curses
 # This is to test curses windows
 # Discovered that the size of the window is dependant on the terminal, and might fail if the terminal isnt the correct length.
 # window + subwindow origins need to be similar I guess?
-
+noecho
 init_screen
+start_color
+# Determines the colors in the 'attron' below
+init_pair(COLOR_BLUE,COLOR_BLUE,COLOR_BLACK) 
+init_pair(COLOR_RED,COLOR_RED,COLOR_BLACK)
 # Syntax for making windows
 # win = Window.new(lines, cols, y_org, x_org)
 
@@ -17,7 +21,9 @@ getch
 # winder = test_window.subwin(20, 20, (lines - 10) / 2, (cols - 10) / 2)
 winder = test_window.subwin(20, 20, 0, 0)
 winder.setpos(2, 3)
-winder.addstr("Subwindow!")
+winder.attron(color_pair(COLOR_BLUE)|A_NORMAL){
+      winder.addstr("Subwindow!")
+}
 winder.refresh
 winder.getch
 winder.close
