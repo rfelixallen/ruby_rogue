@@ -1,0 +1,2 @@
+require 'curses'
+include Curses
