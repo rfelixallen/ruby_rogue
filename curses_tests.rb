@@ -84,6 +84,22 @@ while i < cols do
 end
 refresh
 
+# New test puts a message at the bottom of the screen
+# Set bottom message Top Border
+setpos((lines - 3),0)
+i = 0
+while i < cols do
+	addch('-')
+	i += 1
+	setpos((lines - 3),i)
+end
+refresh
+
+# Set Message
+setpos(lines - 2, (cols - 10) / 2)
+addstr("***BOTTOM MESSAGE***")
+refresh
+
 setpos((lines - 5) / 2, (cols - 10) / 2)
 addstr("Border Test Complete")
 refresh
