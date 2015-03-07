@@ -14,3 +14,13 @@ winder.addstr("Subwindow!")
 winder.refresh
 winder.getch
 winder.close
+
+
+=begin
+world = Window.new(100, 100, 100, 100)
+world.box("|", "-")
+viewport = world.subwin(5, 5, (lines - 5) / 2, (cols - 10) / 2)
+
+viewport.refresh
+viewport.getch
+=end
