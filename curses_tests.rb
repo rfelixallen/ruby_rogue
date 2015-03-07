@@ -3,12 +3,17 @@ include Curses
 
 init_screen # Begin the standard screen.
 
+setpos((lines - 5) / 2, (cols - 10) / 2)
+addstr("Corner Test")
+refresh
+getch
+flash
+
 # Test putting numbers in corner with a delay between each number.
 setpos(0,0)
 addch('1')
 refresh
-timeout=5000 # Set to 5 seconds so that I can confirm the delay.
-flash
+timeout = 5000 # Set to 5 seconds so that I can confirm the delay.
 
 setpos(0,(cols - 1))
 addch('2')
@@ -26,10 +31,64 @@ refresh
 timeout=(5000)
 
 setpos((lines - 5) / 2, (cols - 10) / 2)
-addstr("Lines: #{l}, Columns: #{c}")
+addstr("Lines: #{lines}, Columns: #{cols}")
 refresh
 getch
+clear
 
+# New test for putting borders around the window
+setpos((lines - 5) / 2, (cols - 10) / 2)
+addstr("Border Test")
+refresh
+getch
+flash
+clear
+
+# Set North Border
+setpos(0,0)
+i = 0
+while i < cols do
+	addch('*')
+	i += 1
+	setpos(0,i)
+end
+refresh
+
+# Set East Border
+setpos(1,(cols - 1))
+i = 0
+while i < lines do
+	addch('*')
+	i += 1
+	setpos(i,(cols-1))
+end
+refresh
+
+# Set South Border
+setpos((lines - 1),0)
+i = 0
+while i < cols do
+	addch('*')
+	i += 1
+	setpos((lines - 1),i)
+end
+refresh
+
+# Set West Border
+setpos(0,0)
+i = 0
+while i < lines do
+	addch('*')
+	i += 1
+	setpos(i,0)
+end
+refresh
+
+setpos((lines - 5) / 2, (cols - 10) / 2)
+addstr("Border Test Complete")
+refresh
+getch
+clear
 
 # Clear screen and give a goodbye message.
 clear
