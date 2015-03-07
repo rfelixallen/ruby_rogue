@@ -4,7 +4,8 @@ include Curses
 # This is to test curses windows
 # Discovered that the size of the window is dependant on the terminal, and might fail if the terminal isnt the correct length.
 # window + subwindow origins need to be similar I guess?
-noecho
+
+curs_set(0)	# Gets rid of blinking cursor.
 init_screen
 start_color
 # Determines the colors in the 'attron' below
