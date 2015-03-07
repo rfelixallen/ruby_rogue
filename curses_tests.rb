@@ -48,9 +48,19 @@ clear
 setpos(0,0)
 i = 0
 while i < cols do
-	addch('*')
+	addch('-')
 	i += 1
 	setpos(0,i)
+end
+refresh
+
+# Set West Border
+setpos(1,0)
+i = 0
+while i < lines do
+	addch('|')
+	i += 1
+	setpos(i,0)
 end
 refresh
 
@@ -58,7 +68,7 @@ refresh
 setpos(1,(cols - 1))
 i = 0
 while i < lines do
-	addch('*')
+	addch('|')
 	i += 1
 	setpos(i,(cols-1))
 end
@@ -68,19 +78,9 @@ refresh
 setpos((lines - 1),0)
 i = 0
 while i < cols do
-	addch('*')
+	addch('-')
 	i += 1
 	setpos((lines - 1),i)
-end
-refresh
-
-# Set West Border
-setpos(0,0)
-i = 0
-while i < lines do
-	addch('*')
-	i += 1
-	setpos(i,0)
 end
 refresh
 
