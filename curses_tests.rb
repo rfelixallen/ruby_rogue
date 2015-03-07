@@ -3,11 +3,26 @@ include Curses
 
 init_screen # Begin the standard screen.
 
+# Begin the color test.
+start_color
+init_pair(1,COLOR_BLUE,COLOR_WHITE)
+setpos((lines - 5) / 2, (cols - 10) / 2)
+addstr("Color Test")
+refresh
+getch
+
+setpos((lines - 5) / 2, (cols - 10) / 2) 
+#attron(color_pair(COLOR_RED)|A_NORMAL)
+addstr("Can you believe these COLORS?!")
+refresh
+getch
+clear
+
+# Begin the corner test.
 setpos((lines - 5) / 2, (cols - 10) / 2)
 addstr("Corner Test")
 refresh
 getch
-flash
 
 # Test putting numbers in corner with a delay between each number.
 setpos(0,0)
@@ -37,7 +52,6 @@ setpos((lines - 5) / 2, (cols - 10) / 2)
 addstr("Border Test")
 refresh
 getch
-flash
 clear
 
 # Set North Border
