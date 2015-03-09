@@ -27,6 +27,7 @@ getch
 # Generate terrain
 max_lines.times do |i|
 	i.times do |j|
+		# if i || j == 0 || max, skip
 		x = j / max_cols
 		y = i / max_lines
 
