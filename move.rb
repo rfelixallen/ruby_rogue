@@ -13,17 +13,21 @@ start_color
 init_pair(COLOR_BLUE,COLOR_BLUE,COLOR_BLACK) 
 
 # Initialize the main window
-win = Window.new(20,20,0,0)
+max_lines = 40 # I set this because lines/cols were janky to work with.
+max_cols = 40
+
+win = Window.new(max_lines,max_cols,0,0)
 win.box("|", "-")
 win.refresh
 getch
 
 # Initialize the sub window
-viewp = win.subwin(20, 20, 0, 0)
+viewp = win.subwin(max_lines,max_cols, 0, 0)
 viewp.setpos(px, py)  # Add player as a test
 viewp.addstr("#{p}")
 viewp.refresh
 
+# I could not keyboard input to work, use wasd instead
 while input = getch
     case input
     when 'w'
@@ -34,14 +38,14 @@ while input = getch
 	    	viewp.addstr("#{p}")
     	viewp.refresh
     when 's'
-    	px += 1 if px < 18
+    	px += 1 if px < (max_lines - 2)
 		    viewp.setpos(px - 1, py)
 	    	viewp.addstr(" ")
 	    	viewp.setpos(px, py)
 	    	viewp.addstr("#{p}")
     	viewp.refresh
     when 'd'
-    	py += 1 if py < 18
+    	py += 1 if py < (max_cols - 2)
 		    viewp.setpos(px, py - 1)
 	    	viewp.addstr(" ")
 			viewp.setpos(px, py)
@@ -56,9 +60,8 @@ while input = getch
 		viewp.refresh
     when 'q'
     	break
-    when 'w'
-    	flash
     else
+    	flash
     	viewp.refresh
     end
 end
