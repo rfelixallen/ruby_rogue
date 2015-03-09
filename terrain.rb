@@ -24,14 +24,13 @@ viewp = win.subwin(max_lines,max_cols, 0, 0)
 viewp.refresh
 getch
 
-=begin
-# Generate terrain with Perlin Noise
-max_lines.each do |i|
-	i.each do |j|
+# Generate terrain
+max_lines.times do |i|
+	i.times do |j|
 		x = j / max_cols
 		y = i / max_lines
 
-		n = 0..2
+		n = rand(0..2)
 
 		if n == 0
 			viewp.setpos(i,j)
@@ -48,4 +47,5 @@ max_lines.each do |i|
 		end
 	end
 end
-=end
+
+getch
