@@ -28,25 +28,28 @@ getch
 # Generate terrain
 i = 1
 j = 1
-while i < max_lines
-	while j < max_cols
+	while i < max_lines - 1
 		# if i || j == 0 || max, skip
 		n = rand(0..2)
-
-		if n == 0
-			viewp.setpos(i,j)
-			viewp.addstr(" ")
-			viewp.refresh
-		elsif n == 1
-			viewp.setpos(i,j)
-			viewp.addstr("#")
-			viewp.refresh
+		if j == max_cols - 1
+			i += 1
+			j = 1
 		else
-			viewp.setpos(i,j)
-			viewp.addstr("~")
-			viewp.refresh
+			if n == 0
+				viewp.setpos(i,j)
+				viewp.addstr(" ")
+				viewp.refresh
+			elsif n == 1
+				viewp.setpos(i,j)
+				viewp.addstr("#")
+				viewp.refresh
+			else
+				viewp.setpos(i,j)
+				viewp.addstr("~")
+				viewp.refresh
+			end
+			j += 1
 		end
 	end
-end
 
 getch
