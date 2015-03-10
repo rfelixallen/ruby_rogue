@@ -1,7 +1,34 @@
 require 'curses'
 include Curses
-
 # This is to test adding Terrain to a map.
+
+def simple_generate(viewp, max_lines, max_cols)
+	i = 1
+	j = 1
+	while i < max_lines - 1
+		# if i || j == 0 || max, skip
+		n = rand(0..2)
+		if j == max_cols - 1
+			i += 1
+			j = 1
+		else
+			if n == 0
+				viewp.setpos(i,j)
+				viewp.addstr(" ")
+				viewp.refresh
+			elsif n == 1
+				viewp.setpos(i,j)
+				viewp.addstr("#")
+				viewp.refresh
+			else
+				viewp.setpos(i,j)
+				viewp.addstr("~")
+				viewp.refresh
+			end
+			j += 1
+		end
+	end
+end
 
 max_lines = 40 # I set this because lines/cols were janky to work with.
 max_cols = 40
@@ -26,30 +53,7 @@ viewp.refresh
 getch
 
 # Generate terrain
-i = 1
-j = 1
-	while i < max_lines - 1
-		# if i || j == 0 || max, skip
-		n = rand(0..2)
-		if j == max_cols - 1
-			i += 1
-			j = 1
-		else
-			if n == 0
-				viewp.setpos(i,j)
-				viewp.addstr(" ")
-				viewp.refresh
-			elsif n == 1
-				viewp.setpos(i,j)
-				viewp.addstr("#")
-				viewp.refresh
-			else
-				viewp.setpos(i,j)
-				viewp.addstr("~")
-				viewp.refresh
-			end
-			j += 1
-		end
-	end
+simple_generate(viewp, max_lines, max_cols)
+viewp.refresh
 
 getch
