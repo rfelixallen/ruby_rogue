@@ -1,3 +1,7 @@
+# TODO
+# Make subwindows to create different HUD screens.
+# i.e. main view, inventory, menu bar, etc
+
 require 'curses'
 include Curses
 
@@ -16,7 +20,7 @@ init_pair(COLOR_RED,COLOR_RED,COLOR_BLACK)
 
 # test_window = Window.new(20, 20, (lines - 10) / 2, (cols - 10) / 2)
 test_window = Window.new(20, 20, 0, 0)
-test_window.box("*", "@")
+test_window.box("|", "-")
 test_window.refresh
 getch
 # winder = test_window.subwin(20, 20, (lines - 10) / 2, (cols - 10) / 2)

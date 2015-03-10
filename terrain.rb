@@ -1,3 +1,7 @@
+# TODO
+# Add a perlin noise algorithim
+
+require 'perlin_noise'
 require 'curses'
 include Curses
 # This is to test adding Terrain to a map.
@@ -47,6 +51,10 @@ def building(viewp, max_lines, max_cols)
 	viewp.refresh
 end
 
+def perlin_generate(viewp, max_lines, max_cols)
+
+end
+
 max_lines = 40 # I set this because lines/cols were janky to work with.
 max_cols = 40
 grid = [0,0]
@@ -70,7 +78,8 @@ viewp.refresh
 getch
 
 # Generate terrain
-#simple_generate(viewp, max_lines, max_cols)
-building(viewp, max_lines, max_cols)
+ simple_generate(viewp, max_lines, max_cols)
+# building(viewp, max_lines, max_cols)
+
 
 getch
