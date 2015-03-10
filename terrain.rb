@@ -5,6 +5,7 @@ include Curses
 
 max_lines = 40 # I set this because lines/cols were janky to work with.
 max_cols = 40
+grid = [0,0]
 
 init_screen
 crmode # Tell curses to only accept 1 character input
@@ -25,12 +26,11 @@ viewp.refresh
 getch
 
 # Generate terrain
-max_lines.times do |i|
-	i.times do |j|
+i = 1
+j = 1
+while i < max_lines
+	while j < max_cols
 		# if i || j == 0 || max, skip
-		x = j / max_cols
-		y = i / max_lines
-
 		n = rand(0..2)
 
 		if n == 0
