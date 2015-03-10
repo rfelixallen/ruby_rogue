@@ -3,6 +3,7 @@ include Curses
 # This is to test adding Terrain to a map.
 
 def simple_generate(viewp, max_lines, max_cols)
+	# Fill in all spaces with random 1-3 tiles.
 	i = 1
 	j = 1
 	while i < max_lines - 1
@@ -30,6 +31,22 @@ def simple_generate(viewp, max_lines, max_cols)
 	end
 end
 
+def building(viewp, max_lines, max_cols)
+	i = 1
+	viewp.setpos(max_lines / 2, max_cols / 2)
+	viewp.addstr("|=======|")
+	while i < 8
+		viewp.setpos(((max_lines / 2) + i), max_cols / 2)
+		viewp.addstr("|       |")
+		i += 1
+	end
+	viewp.setpos(((max_lines / 2) + 8), max_cols / 2)
+	viewp.addstr("|==b d==|")
+	viewp.setpos(((max_lines / 2) + 4), max_cols / 2)
+	viewp.addstr("|   H   |")
+	viewp.refresh
+end
+
 max_lines = 40 # I set this because lines/cols were janky to work with.
 max_cols = 40
 grid = [0,0]
@@ -53,7 +70,7 @@ viewp.refresh
 getch
 
 # Generate terrain
-simple_generate(viewp, max_lines, max_cols)
-viewp.refresh
+#simple_generate(viewp, max_lines, max_cols)
+building(viewp, max_lines, max_cols)
 
 getch
