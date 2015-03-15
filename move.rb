@@ -4,12 +4,25 @@ include Curses
 # TODO
 # Center viewport on the character, and make the window bigger than the viewport.
 
+class Character
+	attr_accessor :px, :py, :symb
+	def initialize(px, py)
+		@symb = '@'
+		@px = px 
+		@py = py
+	end
+	def bio
+		puts "Player has $#{money} and #{items}.\n"
+	end
+end
+
 def center(x,y)
+
 end
 
 max_lines = 40 # I set this because lines/cols were janky to work with.
 max_cols = 40
-
+=begin
 p = '@'
 px = 2
 py = 2
@@ -20,7 +33,7 @@ my = max_cols - 4
 def monster_move
 	viewp.setpos(px - mx, p)
 end
-
+=end
 init_screen
 crmode # Tell curses to only accept 1 character input
 noecho # Inputted characters wont show on the screen
@@ -36,14 +49,16 @@ getch
 
 # Initialize the sub window
 viewp = win.subwin(max_lines,max_cols, 0, 0)
-viewp.setpos(px, py)  # Add player as a test
-viewp.addstr("#{p}")
-viewp.setpos(mx, my) # Add monster
-viewp.addstr("#{monster}")
+p = Character.new(2,2)
+viewp.setpos(p.px, p.py)  # Add player as a test
+viewp.addstr("#{p.symb}")
+# viewp.setpos(mx, my) # Add monster
+# viewp.addstr("#{monster}")
 viewp.refresh
 
 # I could not keyboard input to work, use wasd instead
 while input = getch
+    # viewp.center(p)
     case input
     when 'w'
     	px -= 1 if px > 1
