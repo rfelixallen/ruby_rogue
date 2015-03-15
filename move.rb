@@ -61,32 +61,32 @@ while input = getch
     # viewp.center(p)
     case input
     when 'w'
-    	px -= 1 if px > 1
-	    	viewp.setpos(px + 1, py)
+    	p.px -= 1 if p.px > 1
+	    	viewp.setpos(p.px + 1, p.py)
     		viewp.addstr("\"") # Looks like footprints
-	    	viewp.setpos(px, py)
-	    	viewp.addstr("#{p}")
+	    	viewp.setpos(p.px, p.py)
+	    	viewp.addstr("#{p.symb}")
     	viewp.refresh
     when 's'
-    	px += 1 if px < ((max_lines * 2) - 2)
-		    viewp.setpos(px - 1, py)
+    	p.px += 1 if p.px < ((max_lines * 2) - 2)
+		    viewp.setpos(p.px - 1, p.py)
 	    	viewp.addstr("\"") # Looks like footprints
-	    	viewp.setpos(px, py)
-	    	viewp.addstr("#{p}")
+	    	viewp.setpos(p.px, p.py)
+	    	viewp.addstr("#{p.symb}")
     	viewp.refresh
     when 'd'
-    	py += 1 if py < ((max_cols * 2) - 2)
-		    viewp.setpos(px, py - 1)
+    	p.py += 1 if p.py < ((max_cols * 2) - 2)
+		    viewp.setpos(p.px, p.py - 1)
 	    	viewp.addstr("\"") # Looks like footprints
-			viewp.setpos(px, py)
-			viewp.addstr("#{p}")
+	    	viewp.setpos(p.px, p.py)
+	    	viewp.addstr("#{p.symb}")
 		viewp.refresh
 	when 'a'
-    	py -= 1 if py > 1
-		    viewp.setpos(px, py + 1)
+    	p.py -= 1 if p.py > 1
+		    viewp.setpos(p.px, p.py + 1)
 	    	viewp.addstr("\"") # Looks like footprints
-			viewp.setpos(px, py)
-			viewp.addstr("#{p}")
+	    	viewp.setpos(p.px, p.py)
+	    	viewp.addstr("#{p.symb}")
 		viewp.refresh
     when 'q'
     	break
