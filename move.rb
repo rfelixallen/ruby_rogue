@@ -13,11 +13,36 @@ class Character
 	end
 end
 
-def center(subwin,px,py)
+def center(subwin,px,py,max_lines,max_cols)
 	# Get player x,y 
 	# Calculate player x,y as center
 	# Set r,c to be the top left corner of the window
 	# Set move(r,c)
+	r = px - (max_lines / 2)	# get player x and subtract it from the half point
+	c = py - (max_cols / 2)		# get player y and subtract it from the half point
+	h = subwin.maxx				# get current subwindow max x
+	w = subwin.maxy				# get current subwindow max y
+
+	# if c is greater than max_cols
+	if c + max_cols >= w
+		delta = w - (c + max_cols)
+		cc = c + delta
+	else
+		cc = c
+	end
+	if r + max_lines >= h
+		delta = h - (r + max_lines)
+		rr = r + delta
+	else
+		rr = r
+	end
+	if r < 0
+		rr = 0
+	end
+	if c < 0
+		cc = 0
+	end
+
 	subwin.move(r, c)
 end
 
@@ -46,7 +71,6 @@ viewp.refresh
 
 # I could not keyboard input to work, use wasd instead
 while input = getch
-    # viewp.center(p)
     case input
     when 'w'
     	p.px -= 1 if p.px > 1
@@ -54,6 +78,7 @@ while input = getch
     		viewp.addstr("\"") # Looks like footprints
 	    	viewp.setpos(p.px, p.py)
 	    	viewp.addstr("#{p.symb}")
+	    	center(viewp,p.px,p.py,max_lines,max_cols)
     	viewp.refresh
     when 's'
     	p.px += 1 if p.px < ((max_lines * 2) - 2)
@@ -61,6 +86,7 @@ while input = getch
 	    	viewp.addstr("\"") # Looks like footprints
 	    	viewp.setpos(p.px, p.py)
 	    	viewp.addstr("#{p.symb}")
+	    	center(viewp,p.px,p.py,max_lines,max_cols)
     	viewp.refresh
     when 'd'
     	p.py += 1 if p.py < ((max_cols * 2) - 2)
@@ -68,6 +94,7 @@ while input = getch
 	    	viewp.addstr("\"") # Looks like footprints
 	    	viewp.setpos(p.px, p.py)
 	    	viewp.addstr("#{p.symb}")
+	    	center(viewp,p.px,p.py,max_lines,max_cols)
 		viewp.refresh
 	when 'a'
     	p.py -= 1 if p.py > 1
@@ -75,6 +102,7 @@ while input = getch
 	    	viewp.addstr("\"") # Looks like footprints
 	    	viewp.setpos(p.px, p.py)
 	    	viewp.addstr("#{p.symb}")
+	    	center(viewp,p.px,p.py,max_lines,max_cols)
 		viewp.refresh
     when 'q'
     	break
