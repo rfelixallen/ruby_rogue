@@ -97,6 +97,7 @@ viewp = win.subwin(win.maxx / 2, win.maxy / 2, 0, 0)
 p = Character.new(start_x,start_y)
 win.setpos(p.px, p.py)  # Add player as a test
 win.addstr("#{p.symb}")
+center(viewp,p.px,p.py,win.maxx,win.maxy)
 win.refresh
 viewp.refresh
 
