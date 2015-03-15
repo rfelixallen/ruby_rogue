@@ -65,43 +65,43 @@ getch
 # Initialize the sub window
 viewp = win.subwin(max_lines,max_cols, 0, 0)
 p = Character.new(2,2)
-viewp.setpos(p.px, p.py)  # Add player as a test
-viewp.addstr("#{p.symb}")
-viewp.refresh
+win.setpos(p.px, p.py)  # Add player as a test
+win.addstr("#{p.symb}")
+win.refresh
 
 # I could not keyboard input to work, use wasd instead
 while input = getch
     case input
     when 'w'
     	p.px -= 1 if p.px > 1
-	    	viewp.setpos(p.px + 1, p.py)
-    		viewp.addstr("\"") # Looks like footprints
-	    	viewp.setpos(p.px, p.py)
-	    	viewp.addstr("#{p.symb}")
+	    	win.setpos(p.px + 1, p.py)
+    		win.addstr("\"") # Looks like footprints
+	    	win.setpos(p.px, p.py)
+	    	win.addstr("#{p.symb}")
 	    	center(viewp,p.px,p.py,max_lines,max_cols)
     	viewp.refresh
     when 's'
     	p.px += 1 if p.px < ((max_lines * 2) - 2)
-		    viewp.setpos(p.px - 1, p.py)
-	    	viewp.addstr("\"") # Looks like footprints
-	    	viewp.setpos(p.px, p.py)
-	    	viewp.addstr("#{p.symb}")
+		    win.setpos(p.px - 1, p.py)
+	    	win.addstr("\"") # Looks like footprints
+	    	win.setpos(p.px, p.py)
+	    	win.addstr("#{p.symb}")
 	    	center(viewp,p.px,p.py,max_lines,max_cols)
     	viewp.refresh
     when 'd'
     	p.py += 1 if p.py < ((max_cols * 2) - 2)
-		    viewp.setpos(p.px, p.py - 1)
-	    	viewp.addstr("\"") # Looks like footprints
-	    	viewp.setpos(p.px, p.py)
-	    	viewp.addstr("#{p.symb}")
+		    win.setpos(p.px, p.py - 1)
+	    	win.addstr("\"") # Looks like footprints
+	    	win.setpos(p.px, p.py)
+	    	win.addstr("#{p.symb}")
 	    	center(viewp,p.px,p.py,max_lines,max_cols)
 		viewp.refresh
 	when 'a'
     	p.py -= 1 if p.py > 1
-		    viewp.setpos(p.px, p.py + 1)
-	    	viewp.addstr("\"") # Looks like footprints
-	    	viewp.setpos(p.px, p.py)
-	    	viewp.addstr("#{p.symb}")
+		    win.setpos(p.px, p.py + 1)
+	    	win.addstr("\"") # Looks like footprints
+	    	win.setpos(p.px, p.py)
+	    	win.addstr("#{p.symb}")
 	    	center(viewp,p.px,p.py,max_lines,max_cols)
 		viewp.refresh
     when 'q'
