@@ -12,4 +12,3 @@ noise = Perlin::Noise.new 1, :interval => 200 # 1 is the dimension, interval is 
 		puts '@' * (noise[x] * 60).floor
 	end
 end
-

@@ -1,6 +1,9 @@
 require 'curses'
 include Curses
 
+# TODO
+# Refactor out as much as I can to other ruby scripts
+
 def center_message(message)
   viewport.setpos((lines - 5) / 2, (cols - 10) / 2)
   viewport.addstr("#{message}")
@@ -16,14 +19,14 @@ init_screen
 
 world = Window.new(100, 100, 100, 100)
 world.box("|", "-")
-viewport = subwin(world,5, 5, (lines - 5) / 2, (cols - 10) / 2)
+viewport = world.subwin(5, 5, (lines - 5) / 2, (cols - 10) / 2)
 
 viewport.refresh
 viewport.getch
 
 
 begin
-  crmode
+  crmode # Tell curses to only accept 1 character input
 
   #show_message("Hello, World!")
 

@@ -4,6 +4,9 @@ include Curses
 # TODO
 # Center viewport on the character, and make the window bigger than the viewport.
 
+def center(x,y)
+end
+
 max_lines = 40 # I set this because lines/cols were janky to work with.
 max_cols = 40
 
@@ -45,28 +48,28 @@ while input = getch
     when 'w'
     	px -= 1 if px > 1
 	    	viewp.setpos(px + 1, py)
-    		viewp.delch
+    		viewp.addstr("\"") # Looks like footprints
 	    	viewp.setpos(px, py)
 	    	viewp.addstr("#{p}")
     	viewp.refresh
     when 's'
     	px += 1 if px < ((max_lines * 2) - 2)
 		    viewp.setpos(px - 1, py)
-	    	viewp.delch
+	    	viewp.addstr("\"") # Looks like footprints
 	    	viewp.setpos(px, py)
 	    	viewp.addstr("#{p}")
     	viewp.refresh
     when 'd'
     	py += 1 if py < ((max_cols * 2) - 2)
 		    viewp.setpos(px, py - 1)
-	    	viewp.delch
+	    	viewp.addstr("\"") # Looks like footprints
 			viewp.setpos(px, py)
 			viewp.addstr("#{p}")
 		viewp.refresh
 	when 'a'
     	py -= 1 if py > 1
 		    viewp.setpos(px, py + 1)
-	    	viewp.delch
+	    	viewp.addstr("\"") # Looks like footprints
 			viewp.setpos(px, py)
 			viewp.addstr("#{p}")
 		viewp.refresh

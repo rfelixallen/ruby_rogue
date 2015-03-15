@@ -1,6 +1,7 @@
 # TODO
 # Make subwindows to create different HUD screens.
-# i.e. main view, inventory, menu bar, etc
+#   i.e. main view, inventory, menu bar, etc
+# Launch new main window in seperate terminal window
 
 require 'curses'
 include Curses
