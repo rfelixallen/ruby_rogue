@@ -11,29 +11,19 @@ class Character
 		@px = px 
 		@py = py
 	end
-	def bio
-		puts "Player has $#{money} and #{items}.\n"
-	end
 end
 
-def center(x,y)
-
+def center(subwin,px,py)
+	# Get player x,y 
+	# Calculate player x,y as center
+	# Set r,c to be the top left corner of the window
+	# Set move(r,c)
+	subwin.move(r, c)
 end
 
 max_lines = 40 # I set this because lines/cols were janky to work with.
 max_cols = 40
-=begin
-p = '@'
-px = 2
-py = 2
 
-monster = 'M'
-mx = max_lines - 4
-my = max_cols - 4
-def monster_move
-	viewp.setpos(px - mx, p)
-end
-=end
 init_screen
 crmode # Tell curses to only accept 1 character input
 noecho # Inputted characters wont show on the screen
@@ -52,8 +42,6 @@ viewp = win.subwin(max_lines,max_cols, 0, 0)
 p = Character.new(2,2)
 viewp.setpos(p.px, p.py)  # Add player as a test
 viewp.addstr("#{p.symb}")
-# viewp.setpos(mx, my) # Add monster
-# viewp.addstr("#{monster}")
 viewp.refresh
 
 # I could not keyboard input to work, use wasd instead
