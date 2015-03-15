@@ -3,6 +3,8 @@ include Curses
 
 # TODO
 # Center viewport on the character, and make the window bigger than the viewport.
+#   Currently, the viewport moves.
+#   Need to get the viewport to stay, and everyone else moves
 
 class Character
 	attr_accessor :px, :py, :symb
@@ -62,9 +64,13 @@ win.box("|", "-")
 win.refresh
 getch
 
+# Begin player in the center of the world
+start_x = win.maxx / 2
+start_y = win.maxy / 2
+
 # Initialize the sub window
 viewp = win.subwin(max_lines,max_cols, 0, 0)
-p = Character.new(2,2)
+p = Character.new(start_x,start_y)
 win.setpos(p.px, p.py)  # Add player as a test
 win.addstr("#{p.symb}")
 win.refresh
@@ -78,7 +84,7 @@ while input = getch
     		win.addstr("\"") # Looks like footprints
 	    	win.setpos(p.px, p.py)
 	    	win.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,max_lines,max_cols)
+	    	center(viewp,p.px,p.py,win.maxx,win.maxy)
     	viewp.refresh
     when 's'
     	p.px += 1 if p.px < ((max_lines * 2) - 2)
@@ -86,7 +92,7 @@ while input = getch
 	    	win.addstr("\"") # Looks like footprints
 	    	win.setpos(p.px, p.py)
 	    	win.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,max_lines,max_cols)
+	    	center(viewp,p.px,p.py,win.maxx,win.maxy)
     	viewp.refresh
     when 'd'
     	p.py += 1 if p.py < ((max_cols * 2) - 2)
@@ -94,7 +100,7 @@ while input = getch
 	    	win.addstr("\"") # Looks like footprints
 	    	win.setpos(p.px, p.py)
 	    	win.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,max_lines,max_cols)
+	    	center(viewp,p.px,p.py,win.maxx,win.maxy)
 		viewp.refresh
 	when 'a'
     	p.py -= 1 if p.py > 1
@@ -102,7 +108,7 @@ while input = getch
 	    	win.addstr("\"") # Looks like footprints
 	    	win.setpos(p.px, p.py)
 	    	win.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,max_lines,max_cols)
+	    	center(viewp,p.px,p.py,win.maxx,win.maxy)
 		viewp.refresh
     when 'q'
     	break
