@@ -19,7 +19,25 @@ def mvwprintw(window, y, x, symb)
 end
 
 def borders(field,score,score_size)
+	i = 0
+	while i < (lines - 1) do
+		mvwprintw(field, i, 0, "|")
+		mvwprintw(field, i, cols - 1, "|")
+		i += 1
+	end
+	field.refresh
+	getch
 
+	i = 0
+	while i <= cols - 1 do
+		mvwprintw(field, 0, i, "+")
+		mvwprintw(field, lines - 1, i, "+")
+		i += 1
+	end
+	field.refresh
+	getch
+
+=begin
 	# Set West Border
 	field.setpos(1,0)
 	i = 1
@@ -63,7 +81,9 @@ def borders(field,score,score_size)
 	end
 	field.refresh
 	getch
+=end
 #####################################################
+=begin
 	# Set North Border
 	score.setpos(score_size,0)
 	i = 0
@@ -85,11 +105,20 @@ def borders(field,score,score_size)
 	end
 	score.refresh
 	getch
-
+=end
 	i = 0
-	while i < (lines - 1)
+	while i < (lines - 1) do
 		mvwprintw(score, i, 0, "|")
 		mvwprintw(score, i, cols - 1, "|")
+		i += 1
+	end
+	score.refresh
+	getch
+
+	i = 0
+	while i <= cols - 1 do
+		mvwprintw(score, 0, i, "+")
+		mvwprintw(score, score_size - 1, i, "+")
 		i += 1
 	end
 	score.refresh
