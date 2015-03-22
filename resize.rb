@@ -26,16 +26,16 @@ def borders(field,score,score_size)
 		i += 1
 	end
 	field.refresh
-	getch
+	#getch
 
 	i = 0
 	while i <= cols - 1 do
 		mvwprintw(field, 0, i, "+")
-		mvwprintw(field, lines - 1, i, "+")
+		#mvwprintw(field, lines - 1, i, "+")
 		i += 1
 	end
 	field.refresh
-	getch
+	#getch
 
 =begin
 	# Set West Border
@@ -113,7 +113,7 @@ def borders(field,score,score_size)
 		i += 1
 	end
 	score.refresh
-	getch
+	#getch
 
 	i = 0
 	while i <= cols - 1 do
@@ -122,7 +122,7 @@ def borders(field,score,score_size)
 		i += 1
 	end
 	score.refresh
-	getch
+	#getch
 
 =begin
 	# Set West Border
