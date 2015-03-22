@@ -13,6 +13,97 @@ def clearx(field,score)
 	score.clear
 end
 
+def borders(field,score,score_size)
+
+	# Set West Border
+	field.setpos(1,0)
+	i = 1
+	while i < lines - score_size do
+		field.addch('|')
+		i += 1
+		field.setpos(i,0)
+	end
+	field.refresh
+	getch
+
+	# Set East Border
+	field.setpos(1,(cols - 1))
+	i = 1
+	while i < lines - score_size do
+		field.addch('|')
+		i += 1
+		field.setpos(i,(cols-1))
+	end
+	field.refresh
+	getch
+
+	# Set North Border
+	field.setpos(0,0)
+	i = 0
+	while i < cols do
+		field.addch('+')
+		i += 1
+		field.setpos(0,i)
+	end
+	field.refresh
+	getch
+
+	# Set South Border
+	field.setpos((lines - score_size),0)
+	i = 0
+	while i < cols do
+		field.addch('+')
+		i += 1
+		field.setpos((lines - score_size),i)
+	end
+	field.refresh
+	getch
+
+	# Set North Border
+	score.setpos(score_size,0)
+	i = 0
+	while i < cols do
+		score.addch('+')
+		i += 1
+		score.setpos(score_size,i)
+	end
+	score.refresh
+	getch
+
+	# Set South Border
+	score.setpos(lines,0)
+	i = 0
+	while i < cols do
+		score.addch('+')
+		i += 1
+		score.setpos(lines,i)
+	end
+	score.refresh
+	getch
+
+	# Set West Border
+	score.setpos(lines - score_size,0)
+	i = 0
+	while i < lines - score_size do
+		score.addch('|')
+		i += 1
+		score.setpos(i,0)
+	end
+	score.refresh
+	getch
+
+	# Set East Border
+	score.setpos(lines - score_size,cols)
+	i = 0
+	while i < lines - score_size do
+		score.addch('|')
+		i += 1
+		score.setpos(i,(cols))
+	end
+	score.refresh
+	getch
+end
+
 parent_x = 0
 parent_y = 0
 score_size = 3
@@ -33,8 +124,9 @@ clear
 
 field = stdscr.subwin(parent_y - score_size, parent_x, 0, 0)
 score = stdscr.subwin(score_size, parent_x, parent_y - score_size, 0)
-field.box("|", "-") #box doesnt resize well
-score.box("|", "-")
+#field.box("|", "-") #box doesnt resize well
+#score.box("|", "-")
+borders(field,score,score_size)
 refresh
 getch
 
@@ -64,7 +156,7 @@ while 1
 
 		field.setpos((lines - 5) / 2, (cols - 10) / 2)
 		field.addstr("x = #{parent_x}, y = #{parent_y}")
-
+		borders(field,score,score_size)
 		refreshx(field,score)
 	end
 	refreshx(field,score)
