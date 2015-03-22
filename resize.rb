@@ -13,6 +13,11 @@ def clearx(field,score)
 	score.clear
 end
 
+def mvwprintw(window, y, x, symb)
+	window.setpos(y,x)
+	window.addch("#{symb}")
+end
+
 def borders(field,score,score_size)
 
 	# Set West Border
@@ -49,12 +54,12 @@ def borders(field,score,score_size)
 	getch
 
 	# Set South Border
-	field.setpos((lines - 1),0)
+	field.setpos(field.maxx,0)
 	i = 0
 	while i < cols do
 		field.addch('+')
 		i += 1
-		field.setpos((lines - 1),i)
+		field.setpos(field.maxx,i)
 	end
 	field.refresh
 	getch
@@ -81,27 +86,38 @@ def borders(field,score,score_size)
 	score.refresh
 	getch
 
+	i = 0
+	while i < (lines - 1)
+		mvwprintw(score, i, 0, "|")
+		mvwprintw(score, i, cols - 1, "|")
+		i += 1
+	end
+	score.refresh
+	getch
+
+=begin
 	# Set West Border
 	score.setpos(1,0)
 	i = 1
-	while i < lines do
+	#while i < lines do
 		score.addch('|')
-		i += 1
+	#	i += 1
 		score.setpos(i,0)
-	end
+	#end
 	score.refresh
 	getch
 
 	# Set East Border
 	score.setpos(1, cols - 1)
 	i = 1
-	while i < lines  do
+	#while i < lines do
 		score.addch('|')
-		i += 1
+	#	i += 1
 		score.setpos(i,(cols - 1))
-	end
+	#end
 	score.refresh
 	getch
+=end
 end
 
 parent_x = 0
@@ -156,6 +172,10 @@ while 1
 
 		field.setpos((lines - 5) / 2, (cols - 10) / 2)
 		field.addstr("x = #{parent_x}, y = #{parent_y}")
+		field.setpos(1,1)
+		field.addstr("Field") 
+		score.setpos(1,1)
+		score.addstr("Score")
 		borders(field,score,score_size)
 		refreshx(field,score)
 	end
