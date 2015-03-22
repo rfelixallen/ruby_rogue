@@ -49,16 +49,16 @@ def borders(field,score,score_size)
 	getch
 
 	# Set South Border
-	field.setpos((lines - score_size),0)
+	field.setpos((lines - 1),0)
 	i = 0
 	while i < cols do
 		field.addch('+')
 		i += 1
-		field.setpos((lines - score_size),i)
+		field.setpos((lines - 1),i)
 	end
 	field.refresh
 	getch
-
+#####################################################
 	# Set North Border
 	score.setpos(score_size,0)
 	i = 0
@@ -82,9 +82,9 @@ def borders(field,score,score_size)
 	getch
 
 	# Set West Border
-	score.setpos(lines - score_size,0)
-	i = 0
-	while i < lines - score_size do
+	score.setpos(1,0)
+	i = 1
+	while i < lines do
 		score.addch('|')
 		i += 1
 		score.setpos(i,0)
@@ -93,12 +93,12 @@ def borders(field,score,score_size)
 	getch
 
 	# Set East Border
-	score.setpos(lines - score_size,cols)
-	i = 0
-	while i < lines - score_size do
+	score.setpos(1, cols - 1)
+	i = 1
+	while i < lines  do
 		score.addch('|')
 		i += 1
-		score.setpos(i,(cols))
+		score.setpos(i,(cols - 1))
 	end
 	score.refresh
 	getch
