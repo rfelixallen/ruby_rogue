@@ -17,7 +17,7 @@ class Character
 		@py = py
 	end
 end
-
+=begin
 def center(subwin,px,py,max_lines,max_cols)
 	# Get player x,y 
 	# Calculate player x,y as center of viewport
@@ -51,7 +51,7 @@ def center(subwin,px,py,max_lines,max_cols)
 
 	subwin.move(r, c)
 end
-
+=end
 # Fill in all spaces with a single character.
 def simple_generate(window)
 	x = window.maxx
@@ -100,8 +100,6 @@ end
 ################################################################################
 # Global Variables
 ################################################################################
-max_lines = 40 # I set this because lines/cols were janky to work with.
-max_cols = 40
 
 # Set up screens
 init_screen # Begin Curses
@@ -141,33 +139,31 @@ game_map.addstr("#{p.symb}")
 game_map.refresh
 viewp.refresh
 
-
-
 # I could not keyboard input to work, use wasd instead
 while input = getch
     case input
-    when 'w'
+    when 'w' # move up
     	p.px -= 1 if p.px > 1
 	    	mvwprintw(game_map, p.px + 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	viewp.refresh
     	game_map.refresh
-    when 's'
-    	p.px += 1 if p.px < ((max_lines * 2) - 2)
+    when 's' # move down
+    	p.px += 1 if p.px < (game_map.maxx - 2)
 	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	viewp.refresh
     	game_map.refresh
-    when 'd'
-    	p.py += 1 if p.py < ((max_cols * 2) - 2)
+    when 'd' # move right
+    	p.py += 1 if p.py < (game_map.maxy - 2)
 	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
 		viewp.refresh
     	game_map.refresh
-	when 'a'
+	when 'a' # move left
     	p.py -= 1 if p.py > 1
 	    	mvwprintw(game_map, p.px, p.py + 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
