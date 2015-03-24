@@ -63,11 +63,10 @@ def simple_generate(window)
 			mvwprintw(window, j, i, "~")
 			window.refresh
 			i += 1
-			if i >= x - 1
+			if i >= x - 1 && j < y - 1
 				j += 1
 				i = 1
-			end
-			if j >= y -1
+			else
 				break
 			end
 		end
@@ -84,14 +83,14 @@ end
 def borders(subwindow)
 	subwindow.clear
 	i = 0
-	while i <= (lines - 1) do
+	while i <= (subwindow.maxx - 1) do
 		mvwprintw(subwindow, i, 0, "|")
 		mvwprintw(subwindow, i, cols - 1, "|")
 		i += 1
 	end
 
 	j = 0
-	while j <= (cols - 1) do
+	while j <= (subwindow.maxy - 1) do
 		mvwprintw(subwindow, 0, j, "+")
 		mvwprintw(subwindow, lines - 1, j, "+")
 		j += 1
@@ -138,7 +137,7 @@ getch
 p = Character.new(start_x,start_y)
 game_map.setpos(p.px, p.py)  # Add player as a test
 game_map.addstr("#{p.symb}")
-center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
 game_map.refresh
 viewp.refresh
 
@@ -153,7 +152,7 @@ while input = getch
     		game_map.addstr("\"") # Looks like footprints
 	    	game_map.setpos(p.px, p.py)
 	    	game_map.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	#viewp.refresh
     	game_map.refresh
     when 's'
@@ -162,7 +161,7 @@ while input = getch
 	    	game_map.addstr("\"") # Looks like footprints
 	    	game_map.setpos(p.px, p.py)
 	    	game_map.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	#viewp.refresh
     	game_map.refresh
     when 'd'
@@ -171,7 +170,7 @@ while input = getch
 	    	game_map.addstr("\"") # Looks like footprints
 	    	game_map.setpos(p.px, p.py)
 	    	game_map.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
 		#viewp.refresh
     	game_map.refresh
 	when 'a'
@@ -180,7 +179,7 @@ while input = getch
 	    	game_map.addstr("\"") # Looks like footprints
 	    	game_map.setpos(p.px, p.py)
 	    	game_map.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
 		#viewp.refresh
     	game_map.refresh
     when 'q'
