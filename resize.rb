@@ -23,20 +23,24 @@ def borders(field,score,score_size)
 	while i < (lines - 1) do
 		mvwprintw(field, i, 0, "|")
 		mvwprintw(field, i, cols - 1, "|")
+		mvwprintw(score, i, 0, "|")
+		mvwprintw(score, i, cols - 1, "|")
 		i += 1
 	end
-	field.refresh
+	refreshx(field,score)
 	#getch
 
 	i = 0
 	while i <= cols - 1 do
 		mvwprintw(field, 0, i, "+")
-		#mvwprintw(field, lines - 1, i, "+")
+		mvwprintw(field, lines - 1, i, "+")
+		mvwprintw(score, 0, i, "+")
+		mvwprintw(score, score_size - 1, i, "+")
 		i += 1
 	end
-	field.refresh
+	refreshx(field,score)
 	#getch
-
+=begin
 	i = 0
 	while i < (lines - 1) do
 		mvwprintw(score, i, 0, "|")
@@ -53,6 +57,7 @@ def borders(field,score,score_size)
 		i += 1
 	end
 	score.refresh
+=end
 end
 
 parent_x = 0
