@@ -18,27 +18,33 @@ def mvwprintw(window, y, x, symb)
 	window.addch("#{symb}")
 end
 
-def borders(field,score,score_size)
+def borders(field)
+	field.clear
 	i = 0
-	while i < (lines - 1) do
+	while i <= (lines - 1) do
 		mvwprintw(field, i, 0, "|")
 		mvwprintw(field, i, cols - 1, "|")
-		mvwprintw(score, i, 0, "|")
-		mvwprintw(score, i, cols - 1, "|")
+		#mvwprintw(score, i, 0, "|")
+		#mvwprintw(score, i, cols - 1, "|")
 		i += 1
 	end
-	refreshx(field,score)
+	#refreshx(field,score)
+	#field.refresh
 	#getch
 
-	i = 0
-	while i <= cols - 1 do
-		mvwprintw(field, 0, i, "+")
-		mvwprintw(field, lines - 1, i, "+")
-		mvwprintw(score, 0, i, "+")
-		mvwprintw(score, score_size - 1, i, "+")
-		i += 1
+	j = 0
+	while j <= (cols - 1) do
+		mvwprintw(field, 0, j, "+")
+		mvwprintw(field, lines - 1, j, "+")
+		#mvwprintw(score, 0, i, "+")
+		#mvwprintw(score, score_size - 1, i, "+")
+		j += 1
 	end
-	refreshx(field,score)
+	
+	field.setpos(1,1)
+	field.addstr("Field") 
+	#refreshx(field,score)
+	field.refresh
 	#getch
 =begin
 	i = 0
@@ -62,7 +68,7 @@ end
 
 parent_x = 0
 parent_y = 0
-score_size = 3
+#score_size = 3
 
 init_screen
 noecho
@@ -78,22 +84,24 @@ refresh
 getch
 clear
 
-field = stdscr.subwin(parent_y - score_size, parent_x, 0, 0)
-score = stdscr.subwin(score_size, parent_x, parent_y - score_size, 0)
+field = stdscr.subwin(parent_y, parent_x, 0, 0)
+#score = stdscr.subwin(score_size, parent_x, parent_y - score_size, 0)
 #field.box("|", "-") #box doesnt resize well
 #score.box("|", "-")
-borders(field,score,score_size)
+#borders(field,score,score_size)
+borders(field)
 refresh
 getch
 
 # Label the subwindows
 field.setpos(1,1)
 field.addstr("Field") 
-score.setpos(1,1)
-score.addstr("Score")
+#score.setpos(1,1)
+#score.addstr("Score")
 field.setpos((lines - 5) / 2, (cols - 10) / 2)
 field.addstr("x = #{parent_x}, y = #{parent_y}")
-refreshx(field,score)
+#refreshx(field,score)
+field.refresh
 getch
 
 while 1
@@ -101,30 +109,31 @@ while 1
 	new_x = stdscr.maxx
 
 	if (new_y != parent_y || new_x != parent_x)
-		clearx(field,score)
+		#clearx(field,score)
+		field.clear
 
 		parent_x = new_x
 		parent_y = new_y
 
-		field.resize(new_y - score_size, new_x)
-		score.resize(score_size, new_x)
-		score.move(new_y - score_size, 0)
-
+		field.resize(new_y, new_x)
+		#score.resize(score_size, new_x)
+		#score.move(new_y - score_size, 0)
+		borders(field)
 		field.setpos((lines - 5) / 2, (cols - 10) / 2)
 		field.addstr("x = #{parent_x}, y = #{parent_y}")
-		field.setpos(1,1)
-		field.addstr("Field") 
-		score.setpos(1,1)
-		score.addstr("Score")
-		borders(field,score,score_size)
-		refreshx(field,score)
+		#score.setpos(1,1)
+		#score.addstr("Score")
+
+		#refreshx(field,score)
+		field.refresh
 	end
-	refreshx(field,score)
+	#refreshx(field,score)
+	field.refresh
 end
 
-score.close # free up memory
-refresh
-getch
+#score.close # free up memory
+#refresh
+#getch
 field.close # free up memory
 refresh
 getch
