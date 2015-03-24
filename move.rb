@@ -118,9 +118,9 @@ start_color
 init_pair(COLOR_BLUE,COLOR_BLUE,COLOR_BLACK) 
 
 # Initialize the Game Map
-win = Window.new(80,80,0,0) # Make the window lines/cols the same for subwindow to make the border look nice
-simple_generate(win)
-win.refresh
+game_map = Window.new(80,80,0,0) # Make the window lines/cols the same for subwindow to make the border look nice
+simple_generate(game_map)
+game_map.refresh
 getch
 
 # Set variables equal to current terminal screen size
@@ -128,16 +128,17 @@ parent_x = stdscr.maxx
 parent_y = stdscr.maxy
 
 # Set player starting position
-start_x = win.maxx / 2
-start_y = win.maxy / 2
+start_x = game_map.maxx / 2
+start_y = game_map.maxy / 2
 
 # Initialize the viewport, a subwindow of Standard Screen
 viewp = stdscr.subwin(parent_x, parent_y, 0, 0)
+borders(viewp)
 p = Character.new(start_x,start_y)
-win.setpos(p.px, p.py)  # Add player as a test
-win.addstr("#{p.symb}")
-center(viewp,p.px,p.py,win.maxx,win.maxy)
-win.refresh
+game_map.setpos(p.px, p.py)  # Add player as a test
+game_map.addstr("#{p.symb}")
+center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+game_map.refresh
 viewp.refresh
 
 
@@ -147,40 +148,40 @@ while input = getch
     case input
     when 'w'
     	p.px -= 1 if p.px > 1
-	    	win.setpos(p.px + 1, p.py)
-    		win.addstr("\"") # Looks like footprints
-	    	win.setpos(p.px, p.py)
-	    	win.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,win.maxx,win.maxy)
+	    	game_map.setpos(p.px + 1, p.py)
+    		game_map.addstr("\"") # Looks like footprints
+	    	game_map.setpos(p.px, p.py)
+	    	game_map.addstr("#{p.symb}")
+	    	center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	#viewp.refresh
-    	win.refresh
+    	game_map.refresh
     when 's'
     	p.px += 1 if p.px < ((max_lines * 2) - 2)
-		    win.setpos(p.px - 1, p.py)
-	    	win.addstr("\"") # Looks like footprints
-	    	win.setpos(p.px, p.py)
-	    	win.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,win.maxx,win.maxy)
+		    game_map.setpos(p.px - 1, p.py)
+	    	game_map.addstr("\"") # Looks like footprints
+	    	game_map.setpos(p.px, p.py)
+	    	game_map.addstr("#{p.symb}")
+	    	center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	#viewp.refresh
-    	win.refresh
+    	game_map.refresh
     when 'd'
     	p.py += 1 if p.py < ((max_cols * 2) - 2)
-		    win.setpos(p.px, p.py - 1)
-	    	win.addstr("\"") # Looks like footprints
-	    	win.setpos(p.px, p.py)
-	    	win.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,win.maxx,win.maxy)
+		    game_map.setpos(p.px, p.py - 1)
+	    	game_map.addstr("\"") # Looks like footprints
+	    	game_map.setpos(p.px, p.py)
+	    	game_map.addstr("#{p.symb}")
+	    	center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
 		#viewp.refresh
-    	win.refresh
+    	game_map.refresh
 	when 'a'
     	p.py -= 1 if p.py > 1
-		    win.setpos(p.px, p.py + 1)
-	    	win.addstr("\"") # Looks like footprints
-	    	win.setpos(p.px, p.py)
-	    	win.addstr("#{p.symb}")
-	    	center(viewp,p.px,p.py,win.maxx,win.maxy)
+		    game_map.setpos(p.px, p.py + 1)
+	    	game_map.addstr("\"") # Looks like footprints
+	    	game_map.setpos(p.px, p.py)
+	    	game_map.addstr("#{p.symb}")
+	    	center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
 		#viewp.refresh
-    	win.refresh
+    	game_map.refresh
     when 'q'
     	break
     else
@@ -190,4 +191,4 @@ while input = getch
 end
 
 
-#win.close # Quit the program
+#game_map.close # Quit the program
