@@ -60,8 +60,7 @@ def simple_generate(window)
 	j = 1
 	while j < y - 1
 		while i < x - 1
-			window.setpos(j,i)
-			window.addstr("~")
+			mvwprintw(window, j, i, "~")
 			window.refresh
 			i += 1
 			if i >= x - 1
@@ -112,28 +111,30 @@ noecho # Inputted characters wont show on the screen
 curs_set(0)	# Gets rid of blinking cursor
 
 stdscr # Initialize default Standard Screen
+# Set variables equal to current terminal screen size
+parent_x = stdscr.maxx
+parent_y = stdscr.maxy
 
 # Activate Colors
 start_color
 init_pair(COLOR_BLUE,COLOR_BLUE,COLOR_BLACK) 
 
 # Initialize the Game Map
-game_map = Window.new(80,80,0,0) # Make the window lines/cols the same for subwindow to make the border look nice
-simple_generate(game_map)
-game_map.refresh
-getch
-
-# Set variables equal to current terminal screen size
-parent_x = stdscr.maxx
-parent_y = stdscr.maxy
+game_map = Window.new(parent_x, parent_y,0,0)
 
 # Set player starting position
 start_x = game_map.maxx / 2
 start_y = game_map.maxy / 2
 
 # Initialize the viewport, a subwindow of Standard Screen
-viewp = stdscr.subwin(parent_x, parent_y, 0, 0)
+viewp = game_map.subwin(parent_x, parent_y, 0, 0)
 borders(viewp)
+getch
+
+simple_generate(game_map)
+game_map.refresh
+getch
+
 p = Character.new(start_x,start_y)
 game_map.setpos(p.px, p.py)  # Add player as a test
 game_map.addstr("#{p.symb}")
