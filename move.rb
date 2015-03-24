@@ -148,39 +148,31 @@ while input = getch
     case input
     when 'w'
     	p.px -= 1 if p.px > 1
-	    	game_map.setpos(p.px + 1, p.py)
-    		game_map.addstr("\"") # Looks like footprints
-	    	game_map.setpos(p.px, p.py)
-	    	game_map.addstr("#{p.symb}")
+	    	mvwprintw(game_map, p.px + 1, p.py, "\"") # Looks like footprints
+    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	#viewp.refresh
+    	viewp.refresh
     	game_map.refresh
     when 's'
     	p.px += 1 if p.px < ((max_lines * 2) - 2)
-		    game_map.setpos(p.px - 1, p.py)
-	    	game_map.addstr("\"") # Looks like footprints
-	    	game_map.setpos(p.px, p.py)
-	    	game_map.addstr("#{p.symb}")
+	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
+    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	#viewp.refresh
+    	viewp.refresh
     	game_map.refresh
     when 'd'
     	p.py += 1 if p.py < ((max_cols * 2) - 2)
-		    game_map.setpos(p.px, p.py - 1)
-	    	game_map.addstr("\"") # Looks like footprints
-	    	game_map.setpos(p.px, p.py)
-	    	game_map.addstr("#{p.symb}")
+	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
+    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-		#viewp.refresh
+		viewp.refresh
     	game_map.refresh
 	when 'a'
     	p.py -= 1 if p.py > 1
-		    game_map.setpos(p.px, p.py + 1)
-	    	game_map.addstr("\"") # Looks like footprints
-	    	game_map.setpos(p.px, p.py)
-	    	game_map.addstr("#{p.symb}")
+	    	mvwprintw(game_map, p.px, p.py + 1, "\"") # Looks like footprints
+    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-		#viewp.refresh
+		viewp.refresh
     	game_map.refresh
     when 'q'
     	break
