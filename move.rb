@@ -52,8 +52,8 @@ def center(subwin,px,py,max_lines,max_cols)
 	subwin.move(r, c)
 end
 
+# Fill in all spaces with a single character.
 def simple_generate(window)
-	# Fill in all spaces with random 1-3 tiles.
 	x = window.maxx
 	y = window.maxy
 	i = 1
@@ -73,6 +73,31 @@ def simple_generate(window)
 			end
 		end
 	end
+end
+
+# Move cursor to position in a window and add a character
+def mvwprintw(window, y, x, symb)
+	window.setpos(y,x)
+	window.addch("#{symb}")
+end
+
+# Update Screen borders
+def borders(subwindow)
+	subwindow.clear
+	i = 0
+	while i <= (lines - 1) do
+		mvwprintw(subwindow, i, 0, "|")
+		mvwprintw(subwindow, i, cols - 1, "|")
+		i += 1
+	end
+
+	j = 0
+	while j <= (cols - 1) do
+		mvwprintw(subwindow, 0, j, "+")
+		mvwprintw(subwindow, lines - 1, j, "+")
+		j += 1
+	end
+	subwindow.refresh
 end
 ################################################################################
 # Global Variables
@@ -98,10 +123,11 @@ simple_generate(win)
 win.refresh
 getch
 
+# Set variables equal to current terminal screen size
 parent_x = stdscr.maxx
 parent_y = stdscr.maxy
 
-# Begin player in the center of the world
+# Set player starting position
 start_x = win.maxx / 2
 start_y = win.maxy / 2
 
