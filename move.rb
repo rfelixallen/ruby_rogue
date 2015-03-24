@@ -3,8 +3,9 @@ include Curses
 
 # TODO
 # Center viewport on the character, and make the window bigger than the viewport.
-#   Currently, the viewport moves.
-#   Need to get the viewport to stay, and everyone else moves
+#   Viewport is locked in place, and not following player.
+#  Problem somewhere with stdscr, window, subwindow
+#  Should be able to resize window to terminal with stdscr
 
 class Character
 	attr_accessor :px, :py, :symb
@@ -17,7 +18,8 @@ end
 
 def center(subwin,px,py,max_lines,max_cols)
 	# Get player x,y 
-	# Calculate player x,y as center
+	# Calculate player x,y as center of viewport
+	# player updates move in world. world shifts in viewport
 	# Set r,c to be the top left corner of the window
 	# Set move(r,c)
 	r = px - (max_lines / 2)	# get player x and subtract it from the half point of window
