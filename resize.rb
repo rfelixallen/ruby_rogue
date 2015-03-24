@@ -37,75 +37,6 @@ def borders(field,score,score_size)
 	field.refresh
 	#getch
 
-=begin
-	# Set West Border
-	field.setpos(1,0)
-	i = 1
-	while i < lines - score_size do
-		field.addch('|')
-		i += 1
-		field.setpos(i,0)
-	end
-	field.refresh
-	getch
-
-	# Set East Border
-	field.setpos(1,(cols - 1))
-	i = 1
-	while i < lines - score_size do
-		field.addch('|')
-		i += 1
-		field.setpos(i,(cols-1))
-	end
-	field.refresh
-	getch
-
-	# Set North Border
-	field.setpos(0,0)
-	i = 0
-	while i < cols do
-		field.addch('+')
-		i += 1
-		field.setpos(0,i)
-	end
-	field.refresh
-	getch
-
-	# Set South Border
-	field.setpos(field.maxx,0)
-	i = 0
-	while i < cols do
-		field.addch('+')
-		i += 1
-		field.setpos(field.maxx,i)
-	end
-	field.refresh
-	getch
-=end
-#####################################################
-=begin
-	# Set North Border
-	score.setpos(score_size,0)
-	i = 0
-	while i < cols do
-		score.addch('+')
-		i += 1
-		score.setpos(score_size,i)
-	end
-	score.refresh
-	getch
-
-	# Set South Border
-	score.setpos(lines,0)
-	i = 0
-	while i < cols do
-		score.addch('+')
-		i += 1
-		score.setpos(lines,i)
-	end
-	score.refresh
-	getch
-=end
 	i = 0
 	while i < (lines - 1) do
 		mvwprintw(score, i, 0, "|")
@@ -122,31 +53,6 @@ def borders(field,score,score_size)
 		i += 1
 	end
 	score.refresh
-	#getch
-
-=begin
-	# Set West Border
-	score.setpos(1,0)
-	i = 1
-	#while i < lines do
-		score.addch('|')
-	#	i += 1
-		score.setpos(i,0)
-	#end
-	score.refresh
-	getch
-
-	# Set East Border
-	score.setpos(1, cols - 1)
-	i = 1
-	#while i < lines do
-		score.addch('|')
-	#	i += 1
-		score.setpos(i,(cols - 1))
-	#end
-	score.refresh
-	getch
-=end
 end
 
 parent_x = 0
