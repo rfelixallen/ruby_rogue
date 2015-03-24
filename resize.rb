@@ -40,16 +40,20 @@ parent_y = stdscr.maxy # Gets y of terminal screen
 parent_x = stdscr.maxx # Gets x of terminal screen
 field = stdscr.subwin(parent_y, parent_x, 0, 0)
 borders(field)
+field.setpos(lines / 2, cols  / 2)
+field.addstr("x = #{parent_x}, y = #{parent_y}")
 refresh
 getch
 
 # Label the subwindows
+=begin
 field.setpos(1,1)
 field.addstr("Field") 
 field.setpos(lines / 2, cols / 2)
 field.addstr("Subwinow and borders drawn!")
 field.refresh
 getch
+=end
 
 while 1
 	new_y = stdscr.maxy
