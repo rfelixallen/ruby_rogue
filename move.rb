@@ -1,12 +1,14 @@
 require 'curses'
 include Curses
-
+################################################################################
 # TODO
 # Center viewport on the character, and make the window bigger than the viewport.
 #   Viewport is locked in place, and not following player.
 #  Problem somewhere with stdscr, window, subwindow
 #  Should be able to resize window to terminal with stdscr
-
+################################################################################
+# Class & Methods
+################################################################################
 class Character
 	attr_accessor :px, :py, :symb
 	def initialize(px, py)
@@ -72,36 +74,47 @@ def simple_generate(window)
 		end
 	end
 end
-
+################################################################################
+# Global Variables
+################################################################################
 max_lines = 40 # I set this because lines/cols were janky to work with.
 max_cols = 40
 
-init_screen
+# Set up screens
+init_screen # Begin Curses
 crmode # Tell curses to only accept 1 character input
 noecho # Inputted characters wont show on the screen
 curs_set(0)	# Gets rid of blinking cursor
+
+stdscr # Initialize default Standard Screen
+
+# Activate Colors
 start_color
 init_pair(COLOR_BLUE,COLOR_BLUE,COLOR_BLACK) 
 
-# Initialize the main window
+# Initialize the Game Map
 win = Window.new(80,80,0,0) # Make the window lines/cols the same for subwindow to make the border look nice
-win.box("|", "-")
 simple_generate(win)
 win.refresh
 getch
+
+parent_x = stdscr.maxx
+parent_y = stdscr.maxy
 
 # Begin player in the center of the world
 start_x = win.maxx / 2
 start_y = win.maxy / 2
 
-# Initialize the sub window
-viewp = win.subwin(win.maxx / 2, win.maxy / 2, 0, 0)
+# Initialize the viewport, a subwindow of Standard Screen
+viewp = stdscr.subwin(parent_x, parent_y, 0, 0)
 p = Character.new(start_x,start_y)
 win.setpos(p.px, p.py)  # Add player as a test
 win.addstr("#{p.symb}")
 center(viewp,p.px,p.py,win.maxx,win.maxy)
 win.refresh
 viewp.refresh
+
+
 
 # I could not keyboard input to work, use wasd instead
 while input = getch
