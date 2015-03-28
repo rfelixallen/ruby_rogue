@@ -61,17 +61,15 @@ end
 
 # Fill in all spaces with a single character.
 def simple_generate(window)
-	x_lines = window.maxx
-	y_columns = window.maxy
 	i = 1
 	j = 1
-	while i < x_lines - 1
-		while j < y_columns - 1
+	while i < window.maxx - 1
+		while j < window.maxy - 1
 			mvwprintw(window, j, i, "~")
 			window.refresh
 			j += 1
-			if  j < y_columns - 1
-				#&& i < x_lines - 1
+			if  j < window.maxy - 1
+				#&& i < window.maxx - 1
 				i += 1
 				j = 1
 			else
