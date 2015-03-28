@@ -62,24 +62,27 @@ noecho
 curs_set(0)
 stdscr # initialize stdscr? Might be active by default
 
+# Welcome Streen
+setpos(lines / 2, cols  / 2)
+addstr("Welcome to Move!")
+refresh
+getch
+
 parent_y = stdscr.maxy # Gets y of terminal screen
 parent_x = stdscr.maxx # Gets x of terminal screen
 field = stdscr.subwin(parent_y, parent_x, 0, 0)
 game_map = stdscr.subwin(parent_y, parent_x, 0, 0)
+
 borders(field)
 field.setpos(lines / 2, cols  / 2)
 field.addstr("x = #{parent_x}, y = #{parent_y}")
-#mvwprintw(field,lines / 2, cols  / 2,"x = #{parent_x}, y = #{parent_y}")
-refresh
-getch
 
 p = Character.new(3, 3)
-game_map.setpos(p.px, p.py)  # Add player as a test
-game_map.addstr("#{p.symb}")
-#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 game_map.refresh
 
 while 1
+	# Resize window to the terminal screen
 	new_y = stdscr.maxy
 	new_x = stdscr.maxx
 
@@ -135,6 +138,10 @@ while 1
     end
 end
 
+field.clear
+field.setpos(lines / 2, cols  / 2)
+field.addstr("Good Bye!")
+field.refresh
 field.close # free up memory
 refresh
 getch
