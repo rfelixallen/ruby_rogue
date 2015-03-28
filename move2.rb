@@ -27,6 +27,7 @@ def borders(field)
 	field.refresh
 end
 
+=begin
 def resize_border(window,parent_x,parent_y)
 	new_y = stdscr.maxy
 	new_x = stdscr.maxx
@@ -45,6 +46,7 @@ def resize_border(window,parent_x,parent_y)
 	end
 	window.refresh
 end
+=end
 
 init_screen
 noecho
@@ -62,7 +64,22 @@ refresh
 getch
 
 while 1
-	resize_border(field,parent_x,parent_y)
+	new_y = stdscr.maxy
+	new_x = stdscr.maxx
+
+	if (new_y != parent_y || new_x != parent_x)
+		field.clear
+
+		parent_x = new_x
+		parent_y = new_y
+
+		field.resize(new_y, new_x)
+		borders(field)
+		field.setpos(lines / 2, cols  / 2)
+		field.addstr("x = #{parent_x}, y = #{parent_y}")
+		field.refresh
+	end
+	field.refresh
 end
 
 field.close # free up memory
