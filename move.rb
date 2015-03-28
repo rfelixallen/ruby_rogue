@@ -60,10 +60,10 @@ def simple_generate(window)
 	j = 1
 	while j < y - 1
 		while i < x - 1
-			mvwprintw(window, j, i, "~")
+			mvwprintw(window, i, j, "~")
 			window.refresh
 			i += 1
-			if i >= x - 1 && j < y - 1
+			if i == x - 1 && j < y - 1
 				j += 1
 				i = 1
 			else
@@ -74,8 +74,8 @@ def simple_generate(window)
 end
 
 # Move cursor to position in a window and add a character
-def mvwprintw(window, y, x, symb)
-	window.setpos(y,x)
+def mvwprintw(window, x, y, symb)
+	window.setpos(x,y)
 	window.addch("#{symb}")
 end
 
@@ -84,15 +84,15 @@ def borders(subwindow)
 	subwindow.clear
 	i = 0
 	while i <= (subwindow.maxx - 1) do
-		mvwprintw(subwindow, i, 0, "|")
-		mvwprintw(subwindow, i, cols - 1, "|")
+		mvwprintw(subwindow, 0, i, "|")
+		mvwprintw(subwindow, cols - 1, i, "|")
 		i += 1
 	end
 
 	j = 0
 	while j <= (subwindow.maxy - 1) do
-		mvwprintw(subwindow, 0, j, "+")
-		mvwprintw(subwindow, lines - 1, j, "+")
+		mvwprintw(subwindow, j, 0, "+")
+		mvwprintw(subwindow, j, lines - 1, "+")
 		j += 1
 	end
 	subwindow.refresh
@@ -113,8 +113,10 @@ stdscr # Initialize default Standard Screen
 #init_pair(COLOR_BLUE,COLOR_BLUE,COLOR_BLACK) 
 
 # Initialize the Game Map
-game_map = Window.new(stdscr.maxx, stdscr.maxy,0,0)
-
+getch
+#game_map = Window.new(stdscr.maxx, stdscr.maxy,0,0)
+game_map = Window.new(40, 60,0,0)
+getch
 # Initialize the viewport, a subwindow of Standard Screen
 #viewp = game_map.subwin(parent_x, parent_y, 0, 0)
 #borders(viewp)
