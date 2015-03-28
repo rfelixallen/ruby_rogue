@@ -52,31 +52,33 @@ def center(subwin,px,py,max_lines,max_cols)
 	subwin.move(r, c)
 end
 =end
-# Fill in all spaces with a single character.
-def simple_generate(window)
-	x = window.maxx
-	y = window.maxy
-	i = 1
-	j = 1
-	while j < y - 1
-		while i < x - 1
-			mvwprintw(window, i, j, "~")
-			window.refresh
-			i += 1
-			if i == x - 1 && j < y - 1
-				j += 1
-				i = 1
-			else
-				break
-			end
-		end
-	end
-end
 
 # Move cursor to position in a window and add a character
 def mvwprintw(window, x, y, symb)
 	window.setpos(x,y)
 	window.addch("#{symb}")
+end
+
+# Fill in all spaces with a single character.
+def simple_generate(window)
+	x_lines = window.maxx
+	y_columns = window.maxy
+	i = 1
+	j = 1
+	while i < x_lines - 1
+		while j < y_columns - 1
+			mvwprintw(window, j, i, "~")
+			window.refresh
+			j += 1
+			if  j < y_columns - 1
+				#&& i < x_lines - 1
+				i += 1
+				j = 1
+			else
+				break
+			end
+		end
+	end
 end
 
 # Update Screen borders
