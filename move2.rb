@@ -1,6 +1,12 @@
 require 'curses'
 include Curses
-
+##################################################################################
+# TODO																			 #
+# Center viewport on the character, and make the window bigger than the viewport.#
+# 																				 #
+##################################################################################
+# Class & Methods																 #
+##################################################################################
 class Character
 	attr_accessor :px, :py, :symb
 	def initialize(px, py)
@@ -51,6 +57,10 @@ def simple_generate(window)
 	end
 end
 
+#################################################################################
+# Initialize 																 	#
+#################################################################################
+
 init_screen
 noecho
 curs_set(0)
@@ -80,6 +90,10 @@ field.addstr("map x = #{game_map.maxx}, map y = #{game_map.maxy}")
 p = Character.new(3, 3)
 mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 game_map.refresh
+
+#################################################################################
+# Game Loop 																 	#
+#################################################################################
 
 while 1
 	# Resize window to the terminal screen
@@ -112,30 +126,26 @@ while 1
 	    	mvwprintw(game_map, p.px + 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	#viewp.refresh
     	game_map.refresh
     when 's' # move down
     	p.px += 1 if p.px < (game_map.maxy - 2)
 	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	#viewp.refresh
     	game_map.refresh
     when 'd' # move right
     	p.py += 1 if p.py < (game_map.maxx - 2)
 	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-		#viewp.refresh
     	game_map.refresh
 	when 'a' # move left
     	p.py -= 1 if p.py > 1
 	    	mvwprintw(game_map, p.px, p.py + 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-		#viewp.refresh
     	game_map.refresh
-    when 'q'
+    when 'q' # Quit Game
     	break
     else
     	flash
