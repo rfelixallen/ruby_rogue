@@ -1,5 +1,7 @@
 # TODO
 # Add a perlin noise algorithim
+# Make Terrain Snowy white
+# Add time of day, and make colors change based on time
 
 require 'perlin_noise'
 require 'curses'
@@ -15,9 +17,8 @@ def lerp(t,a,b)
 end
 
 def grad(hash,x,y,z)
-	int h = hash & 15;
-	// Convert lower 4 bits of hash inot 12 gradient directions
-	double u = h < 8 ? x : y,
+	h = hash & 15
+	u = h < 8 ? x : y,
 		   v = h < 4 ? y : h == 12 || h == 14 ? x : z;
 	return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 end
