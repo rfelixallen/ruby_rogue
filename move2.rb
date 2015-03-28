@@ -1,6 +1,15 @@
 require 'curses'
 include Curses
 
+class Character
+	attr_accessor :px, :py, :symb
+	def initialize(px, py)
+		@symb = '@'
+		@px = px 
+		@py = py
+	end
+end
+
 def mvwprintw(window, x, y, symb)
 	window.setpos(x,y)
 	window.addch("#{symb}")
@@ -56,12 +65,19 @@ stdscr # initialize stdscr? Might be active by default
 parent_y = stdscr.maxy # Gets y of terminal screen
 parent_x = stdscr.maxx # Gets x of terminal screen
 field = stdscr.subwin(parent_y, parent_x, 0, 0)
+game_map = stdscr.subwin(parent_y, parent_x, 0, 0)
 borders(field)
 field.setpos(lines / 2, cols  / 2)
 field.addstr("x = #{parent_x}, y = #{parent_y}")
 #mvwprintw(field,lines / 2, cols  / 2,"x = #{parent_x}, y = #{parent_y}")
 refresh
 getch
+
+p = Character.new(3, 3)
+game_map.setpos(p.px, p.py)  # Add player as a test
+game_map.addstr("#{p.symb}")
+#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+game_map.refresh
 
 while 1
 	new_y = stdscr.maxy
@@ -80,6 +96,43 @@ while 1
 		field.refresh
 	end
 	field.refresh
+
+	input = getch
+	case input
+    when 'w' # move up
+    	p.px -= 1 if p.px > 1
+	    	mvwprintw(game_map, p.px + 1, p.py, "\"") # Looks like footprints
+    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+    	#viewp.refresh
+    	game_map.refresh
+    when 's' # move down
+    	p.px += 1 if p.px < (game_map.maxx - 2)
+	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
+    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+    	#viewp.refresh
+    	game_map.refresh
+    when 'd' # move right
+    	p.py += 1 if p.py < (game_map.maxy - 2)
+	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
+    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+		#viewp.refresh
+    	game_map.refresh
+	when 'a' # move left
+    	p.py -= 1 if p.py > 1
+	    	mvwprintw(game_map, p.px, p.py + 1, "\"") # Looks like footprints
+    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+		#viewp.refresh
+    	game_map.refresh
+    when 'q'
+    	break
+    else
+    	flash
+    	#viewp.refresh
+    end
 end
 
 field.close # free up memory
