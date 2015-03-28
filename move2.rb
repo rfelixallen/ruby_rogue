@@ -94,6 +94,7 @@ while 1
 
 		field.resize(new_y, new_x)
 		borders(field)
+		simple_generate(game_map)
 		field.setpos(lines / 2, cols  / 2)
 		field.addstr("x = #{parent_x}, y = #{parent_y}")
 		field.setpos((lines / 2) + 1, cols  / 2)
