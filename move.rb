@@ -111,7 +111,9 @@ stdscr # Initialize default Standard Screen
 # Initialize the Game Map
 getch
 #game_map = Window.new(stdscr.maxx, stdscr.maxy,0,0)
-game_map = Window.new(40, 60,0,0)
+max_x = 40
+max_y = 40
+game_map = Window.new(max_x, max_y,0,0)
 getch
 # Initialize the viewport, a subwindow of Standard Screen
 #viewp = game_map.subwin(parent_x, parent_y, 0, 0)
@@ -140,14 +142,14 @@ while input = getch
     	#viewp.refresh
     	game_map.refresh
     when 's' # move down
-    	p.px += 1 if p.px < (game_map.maxx - 2)
+    	p.px += 1 if p.px < (max_x - 1)
 	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	#viewp.refresh
     	game_map.refresh
     when 'd' # move right
-    	p.py += 1 if p.py < (game_map.maxy - 2)
+    	p.py += 1 if p.py < (max_y - 1)
 	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
