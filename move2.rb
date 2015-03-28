@@ -97,6 +97,8 @@ while 1
 		field.setpos(lines / 2, cols  / 2)
 		field.addstr("x = #{parent_x}, y = #{parent_y}")
 		field.refresh
+		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+		game_map.refresh
 	end
 	field.refresh
 
@@ -134,7 +136,7 @@ while 1
     	break
     else
     	flash
-    	#viewp.refresh
+    	game_map.refresh
     end
 end
 
