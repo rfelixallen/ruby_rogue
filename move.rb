@@ -106,38 +106,30 @@ init_screen # Begin Curses
 crmode # Tell curses to only accept 1 character input
 noecho # Inputted characters wont show on the screen
 curs_set(0)	# Gets rid of blinking cursor
-
 stdscr # Initialize default Standard Screen
-# Set variables equal to current terminal screen size
-parent_x = stdscr.maxx
-parent_y = stdscr.maxy
 
 # Activate Colors
-start_color
-init_pair(COLOR_BLUE,COLOR_BLUE,COLOR_BLACK) 
+#start_color
+#init_pair(COLOR_BLUE,COLOR_BLUE,COLOR_BLACK) 
 
 # Initialize the Game Map
-game_map = Window.new(parent_x, parent_y,0,0)
-
-# Set player starting position
-start_x = game_map.maxx / 2
-start_y = game_map.maxy / 2
+game_map = Window.new(stdscr.maxx, stdscr.maxy,0,0)
 
 # Initialize the viewport, a subwindow of Standard Screen
-viewp = game_map.subwin(parent_x, parent_y, 0, 0)
-borders(viewp)
-getch
+#viewp = game_map.subwin(parent_x, parent_y, 0, 0)
+#borders(viewp)
+#getch
 
 simple_generate(game_map)
 game_map.refresh
 getch
 
-p = Character.new(start_x,start_y)
+p = Character.new(game_map.maxx / 2, game_map.maxy / 2)
 game_map.setpos(p.px, p.py)  # Add player as a test
 game_map.addstr("#{p.symb}")
 #center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
 game_map.refresh
-viewp.refresh
+#viewp.refresh
 
 # I could not keyboard input to work, use wasd instead
 while input = getch
@@ -147,34 +139,34 @@ while input = getch
 	    	mvwprintw(game_map, p.px + 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	viewp.refresh
+    	#viewp.refresh
     	game_map.refresh
     when 's' # move down
     	p.px += 1 if p.px < (game_map.maxx - 2)
 	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	viewp.refresh
+    	#viewp.refresh
     	game_map.refresh
     when 'd' # move right
     	p.py += 1 if p.py < (game_map.maxy - 2)
 	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-		viewp.refresh
+		#viewp.refresh
     	game_map.refresh
 	when 'a' # move left
     	p.py -= 1 if p.py > 1
 	    	mvwprintw(game_map, p.px, p.py + 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-		viewp.refresh
+		#viewp.refresh
     	game_map.refresh
     when 'q'
     	break
     else
     	flash
-    	viewp.refresh
+    	#viewp.refresh
     end
 end
 
