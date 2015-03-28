@@ -36,27 +36,6 @@ def borders(field)
 	field.refresh
 end
 
-=begin
-def resize_border(window,parent_x,parent_y)
-	new_y = stdscr.maxy
-	new_x = stdscr.maxx
-
-	if (new_y != parent_y || new_x != parent_x)
-		window.clear
-
-		parent_x = new_x
-		parent_y = new_y
-
-		window.resize(new_y, new_x)
-		borders(window)
-		window.setpos(lines / 2, cols  / 2)
-		window.addstr("x = #{parent_x}, y = #{parent_y}")
-		window.refresh
-	end
-	window.refresh
-end
-=end
-
 init_screen
 noecho
 curs_set(0)
