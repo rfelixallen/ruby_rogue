@@ -36,6 +36,21 @@ def borders(field)
 	field.refresh
 end
 
+def simple_generate(window)
+	i = 1
+	max_x = window.maxx
+	max_y = window.maxy
+	while i < max_x
+		j = 1
+		while j < max_y
+			mvwprintw(window, i, j, "~")
+			window.refresh
+			j += 1
+		end
+		i += 1
+	end
+end
+
 init_screen
 noecho
 curs_set(0)
@@ -44,17 +59,23 @@ stdscr # initialize stdscr? Might be active by default
 # Welcome Streen
 setpos(lines / 2, cols  / 2)
 addstr("Welcome to Move!")
+setpos((lines / 2) + 1, cols  / 2)
+addstr("x = #{stdscr.maxx}, y = #{stdscr.maxy}")
 refresh
 getch
 
-parent_y = stdscr.maxy # Gets y of terminal screen
 parent_x = stdscr.maxx # Gets x of terminal screen
-field = stdscr.subwin(parent_y, parent_x, 0, 0)
-game_map = stdscr.subwin(parent_y, parent_x, 0, 0)
+parent_y = stdscr.maxy # Gets y of terminal screen
+field = stdscr.subwin(parent_x, parent_y, 0, 0)
+game_map = field.subwin(parent_y, parent_x, 0, 0)
+
 
 borders(field)
+simple_generate(game_map)
 field.setpos(lines / 2, cols  / 2)
 field.addstr("x = #{parent_x}, y = #{parent_y}")
+field.setpos((lines / 2) + 1, cols  / 2)
+field.addstr("map x = #{game_map.maxx}, map y = #{game_map.maxy}")
 
 p = Character.new(3, 3)
 mvwprintw(game_map, p.px, p.py, "#{p.symb}")
@@ -75,6 +96,8 @@ while 1
 		borders(field)
 		field.setpos(lines / 2, cols  / 2)
 		field.addstr("x = #{parent_x}, y = #{parent_y}")
+		field.setpos((lines / 2) + 1, cols  / 2)
+		field.addstr("map x = #{game_map.maxx}, map y = #{game_map.maxy}")
 		field.refresh
 		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 		game_map.refresh
@@ -91,14 +114,14 @@ while 1
     	#viewp.refresh
     	game_map.refresh
     when 's' # move down
-    	p.px += 1 if p.px < (game_map.maxx - 2)
+    	p.px += 1 if p.px < (game_map.maxx - 1)
 	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	#viewp.refresh
     	game_map.refresh
     when 'd' # move right
-    	p.py += 1 if p.py < (game_map.maxy - 2)
+    	p.py += 1 if p.py < (game_map.maxy - 1)
 	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
