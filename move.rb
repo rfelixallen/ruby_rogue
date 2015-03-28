@@ -64,9 +64,9 @@ def simple_generate(window)
 	i = 1
 	max_x = window.maxx
 	max_y = window.maxy
-	while i < max_x
+	while i < max_y - 1
 		j = 1
-		while j < max_y
+		while j < max_x - 1
 			mvwprintw(window, i, j, "~")
 			window.refresh
 			j += 1
@@ -142,14 +142,14 @@ while input = getch
     	#viewp.refresh
     	game_map.refresh
     when 's' # move down
-    	p.px += 1 if p.px < (max_x - 1)
+    	p.px += 1 if p.px < (max_x - 2)
 	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
     	#viewp.refresh
     	game_map.refresh
     when 'd' # move right
-    	p.py += 1 if p.py < (max_y - 1)
+    	p.py += 1 if p.py < (max_y - 2)
 	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
