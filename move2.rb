@@ -112,7 +112,7 @@ getch
 
 parent_x = stdscr.maxx # Gets x of terminal screen
 parent_y = stdscr.maxy # Gets y of terminal screen
-field = stdscr.subwin(parent_y, parent_x, 0, 0)
+field = stdscr.subwin(parent_y * 2, parent_x * 2, 0, 0)
 game_map = field.subwin(parent_y, parent_x, 0, 0)
 
 
@@ -142,9 +142,9 @@ while 1
 		parent_x = new_x
 		parent_y = new_y
 
-		field.resize(new_y, new_x)
-		borders(field)
-		simple_generate(game_map)
+		field.resize(new_y, new_x) # Resizes window to terminal screen
+		borders(field) # Redraw new borders
+		simple_generate(game_map) # Put snow back on map
 		field.setpos(lines / 2, cols  / 2)
 		field.addstr("x = #{parent_x}, y = #{parent_y}")
 		field.setpos((lines / 2) + 1, cols  / 2)
