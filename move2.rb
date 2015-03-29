@@ -112,20 +112,23 @@ getch
 
 parent_x = stdscr.maxx # Gets x of terminal screen
 parent_y = stdscr.maxy # Gets y of terminal screen
-field = stdscr.subwin(parent_y * 2, parent_x * 2, 0, 0)
-game_map = field.subwin(parent_y, parent_x, 0, 0)
+field = stdscr.subwin(parent_y, parent_x, 0, 0)
+#game_map = field.subwin(parent_y, parent_x, 0, 0)
 
 
 borders(field)
-simple_generate(game_map)
+#simple_generate(game_map)
+simple_generate(field)
 field.setpos(lines / 2, cols  / 2)
 field.addstr("x = #{parent_x}, y = #{parent_y}")
 field.setpos((lines / 2) + 1, cols  / 2)
-field.addstr("map x = #{game_map.maxx}, map y = #{game_map.maxy}")
+field.addstr("map x = #{field.maxx}, map y = #{field.maxy}")
 
 p = Character.new(3, 3)
-mvwprintw(game_map, p.px, p.py, "#{p.symb}")
-game_map.refresh
+#mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+#game_map.refresh
+mvwprintw(field, p.px, p.py, "#{p.symb}")
+field.refresh
 
 #################################################################################
 # Game Loop 																 	#
@@ -144,14 +147,14 @@ while 1
 
 		field.resize(new_y, new_x) # Resizes window to terminal screen
 		borders(field) # Redraw new borders
-		simple_generate(game_map) # Put snow back on map
+		simple_generate(field) # Put snow back on map
 		field.setpos(lines / 2, cols  / 2)
 		field.addstr("x = #{parent_x}, y = #{parent_y}")
 		field.setpos((lines / 2) + 1, cols  / 2)
-		field.addstr("map x = #{game_map.maxx}, map y = #{game_map.maxy}")
+		field.addstr("map x = #{field.maxx}, map y = #{field.maxy}")
 		field.refresh
-		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
-		game_map.refresh
+		mvwprintw(field, p.px, p.py, "#{p.symb}")
+		field.refresh
 	end
 	field.refresh
 
@@ -159,33 +162,33 @@ while 1
 	case input
     when 'w' # move up
     	p.px -= 1 if p.px > 1
-	    	mvwprintw(game_map, p.px + 1, p.py, "\"") # Looks like footprints
-    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+	    	mvwprintw(field, p.px + 1, p.py, "\"") # Looks like footprints
+    		mvwprintw(field, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	game_map.refresh
+    	field.refresh
     when 's' # move down
-    	p.px += 1 if p.px < (game_map.maxy - 2)
-	    	mvwprintw(game_map, p.px - 1, p.py, "\"") # Looks like footprints
-    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+    	p.px += 1 if p.px < (field.maxy - 2)
+	    	mvwprintw(field, p.px - 1, p.py, "\"") # Looks like footprints
+    		mvwprintw(field, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	game_map.refresh
+    	field.refresh
     when 'd' # move right
-    	p.py += 1 if p.py < (game_map.maxx - 2)
-	    	mvwprintw(game_map, p.px, p.py - 1, "\"") # Looks like footprints
-    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+    	p.py += 1 if p.py < (field.maxx - 2)
+	    	mvwprintw(field, p.px, p.py - 1, "\"") # Looks like footprints
+    		mvwprintw(field, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	game_map.refresh
+    	field.refresh
 	when 'a' # move left
     	p.py -= 1 if p.py > 1
-	    	mvwprintw(game_map, p.px, p.py + 1, "\"") # Looks like footprints
-    		mvwprintw(game_map, p.px, p.py, "#{p.symb}")
+	    	mvwprintw(field, p.px, p.py + 1, "\"") # Looks like footprints
+    		mvwprintw(field, p.px, p.py, "#{p.symb}")
 	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
-    	game_map.refresh
+    	field.refresh
     when 'q' # Quit Game
     	break
     else
     	flash
-    	game_map.refresh
+    	field.refresh
     end
 end
 
