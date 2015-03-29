@@ -21,25 +21,22 @@ def mvwprintw(window, x, y, symb)
 	window.addch("#{symb}")
 end
 
-def borders(field)
-	field.clear
+def borders(window)
+	window.clear
 	i = 0
 	while i <= (lines - 1) do
-		mvwprintw(field, i, 0, "|")
-		mvwprintw(field, i, cols - 1, "|")
+		mvwprintw(window, i, 0, "|")
+		mvwprintw(window, i, cols - 1, "|")
 		i += 1
 	end
 
 	j = 0
 	while j <= (cols - 1) do
-		mvwprintw(field, 0, j, "+")
-		mvwprintw(field, lines - 1, j, "+")
+		mvwprintw(window, 0, j, "+")
+		mvwprintw(window, lines - 1, j, "+")
 		j += 1
 	end
-	
-	field.setpos(1,1)
-	field.addstr("Field") 
-	field.refresh
+	window.refresh
 end
 
 def simple_generate(window)
@@ -113,20 +110,22 @@ getch
 # Make Game Map
 parent_x = stdscr.maxx # Gets x of terminal screen
 parent_y = stdscr.maxy # Gets y of terminal screen
-field = stdscr.subwin(parent_y + 50, parent_x + 50, 0, 0)
+#field = stdscr.subwin(parent_y + 50, parent_x + 50, 0, 0)
+field = Window.new(parent_x * 2, parent_y * 2, 0, 0)
 viewp = field.subwin(parent_y, parent_x, 0, 0)
 
 # Draw borders, terrain and player
-borders(field)
+borders(viewp)
 simple_generate(field)
-field.setpos(lines / 2, cols  / 2)
-field.addstr("x = #{parent_x}, y = #{parent_y}")
-field.setpos((lines / 2) + 1, cols  / 2)
-field.addstr("map x = #{field.maxx}, map y = #{field.maxy}")
+viewp.setpos(lines / 2, cols  / 2)
+viewp.addstr("x = #{parent_x}, y = #{parent_y}")
+viewp.setpos((lines / 2) + 1, cols  / 2)
+viewp.addstr("map x = #{field.maxx}, map y = #{field.maxy}")
 
 p = Character.new(3, 3)
 mvwprintw(field, p.px, p.py, "#{p.symb}")
 field.refresh
+viewp.refresh
 
 #################################################################################
 # Game Loop 																 	#
@@ -138,23 +137,25 @@ while 1
 	new_x = stdscr.maxx
 
 	if (new_y != parent_y || new_x != parent_x)
-		field.clear
+		viewp.clear
 
 		parent_x = new_x
 		parent_y = new_y
 
-		field.resize(new_y, new_x) # Resizes window to terminal screen
-		borders(field) # Redraw new borders
+		viewp.resize(new_y, new_x) # Resizes window to terminal screen
+		borders(viewp) # Redraw new borders
 		simple_generate(field) # Put snow back on map
-		field.setpos(lines / 2, cols  / 2)
-		field.addstr("x = #{parent_x}, y = #{parent_y}")
-		field.setpos((lines / 2) + 1, cols  / 2)
-		field.addstr("map x = #{field.maxx}, map y = #{field.maxy}")
-		field.refresh
+		viewp.setpos(lines / 2, cols  / 2)
+		viewp.addstr("x = #{parent_x}, y = #{parent_y}")
+		viewp.setpos((lines / 2) + 1, cols  / 2)
+		viewp.addstr("map x = #{field.maxx}, map y = #{field.maxy}")
+		viewp.refresh
 		mvwprintw(field, p.px, p.py, "#{p.symb}")
 		field.refresh
+		viewp.refresh
 	end
 	field.refresh
+	viewp.refresh
 
 	input = getch
 	case input
