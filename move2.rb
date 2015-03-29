@@ -113,7 +113,8 @@ getch
 # Make Game Map
 parent_x = stdscr.maxx # Gets x of terminal screen
 parent_y = stdscr.maxy # Gets y of terminal screen
-field = stdscr.subwin(parent_y, parent_x, 0, 0)
+field = stdscr.subwin(parent_y + 50, parent_x + 50, 0, 0)
+viewp = field.subwin(parent_y, parent_x, 0, 0)
 
 # Draw borders, terrain and player
 borders(field)
