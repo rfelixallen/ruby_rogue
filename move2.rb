@@ -55,7 +55,7 @@ def simple_generate(window)
 end
 
 =begin
-def center(subwin,px,py)
+def center(subwin,parent,px,py)
 	# Get player x,y 
 	# Calculate player x,y as center of viewport
 	# player updates move in world. world shifts in viewport
@@ -64,21 +64,23 @@ def center(subwin,px,py)
 	# subwin = Window.new(hh,ww,rr,cc)
 	rr = subwin.begx 	#Frame Positions
 	cc = subwin.begy 	#Frame Positions
-	hh = subwin.maxx	#Frame Dimensions		# get parent max y	
-	ww = subwin.maxy	#Frame Dimensions		# get parent max x
+	hh = parent.maxx	#Frame Dimensions		# get parent max y	
+	ww = parent.maxy	#Frame Dimensions		# get parent max x
+	height = subwin.maxx
+	width = subwin.maxy
 	w = subwin 			#Get the window
 	r = px - (stdscr.maxx / 2)	# get player x and subtract it from the half point of window
 	c = py - (stdscr.maxy / 2)		# get player y and subtract it from the half point of window			
 
 	# if c is greater than max_cols
-	if c + w >= ww
-		delta = ww - (c + w)
+	if c + width >= ww
+		delta = ww - (c + width)
 		cc = c + delta
 	else
 		cc = c
 	end
-	if r + h >= max_lines
-		delta = max_lines - (r + h)
+	if r + height >= hh
+		delta = hh - (r + h)
 		rr = r + delta
 	else
 		rr = r
