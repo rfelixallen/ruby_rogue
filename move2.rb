@@ -114,7 +114,7 @@ parent_x = stdscr.maxx # Gets x of terminal screen
 parent_y = stdscr.maxy # Gets y of terminal screen
 #field = stdscr.subwin(parent_y + 50, parent_x + 50, 0, 0)
 field = Window.new(parent_x * 2, parent_y * 2, 0, 0)
-viewp = field.subwin(parent_y, parent_x, 0, 0)
+viewp = field.subwin(parent_x, parent_y, 0, 0)
 
 # Draw borders, terrain and player
 borders(viewp)
