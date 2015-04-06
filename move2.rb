@@ -54,7 +54,6 @@ def simple_generate(window)
 	end
 end
 
-=begin
 def center(subwin,parent,px,py)
 	# Get player x,y 
 	# Calculate player x,y as center of viewport
@@ -68,7 +67,6 @@ def center(subwin,parent,px,py)
 	ww = parent.maxy	#Frame Dimensions		# get parent max x
 	height = subwin.maxx
 	width = subwin.maxy
-	w = subwin 			#Get the window
 	r = px - (stdscr.maxx / 2)	# get player x and subtract it from the half point of window
 	c = py - (stdscr.maxy / 2)		# get player y and subtract it from the half point of window			
 
@@ -94,7 +92,6 @@ def center(subwin,parent,px,py)
 
 	subwin.move(rr, cc)
 end
-=end
 
 #################################################################################
 # Initialize 																 	#
@@ -169,25 +166,25 @@ while 1
     	p.px -= 1 if p.px > 1
 	    	mvwprintw(field, p.px + 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+	    	center(viewp,field,p.px,p.py)
     	field.refresh
     when 's' # move down
     	p.px += 1 if p.px < (field.maxy - 2)
 	    	mvwprintw(field, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+	    	center(viewp,field,p.px,p.py)
     	field.refresh
     when 'd' # move right
     	p.py += 1 if p.py < (field.maxx - 2)
 	    	mvwprintw(field, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+	    	center(viewp,field,p.px,p.py)
     	field.refresh
 	when 'a' # move left
     	p.py -= 1 if p.py > 1
 	    	mvwprintw(field, p.px, p.py + 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    	#center(viewp,p.px,p.py,game_map.maxx,game_map.maxy)
+	    	center(viewp,field,p.px,p.py)
     	field.refresh
     when 'q' # Quit Game
     	break
