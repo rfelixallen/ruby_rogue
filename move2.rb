@@ -67,8 +67,8 @@ def center(subwin,parent,px,py)
 	ww = parent.maxy	#Frame Dimensions		# get parent max x
 	height = subwin.maxx
 	width = subwin.maxy
-	c = px - (stdscr.maxx / 2)	# get player x and subtract it from the half point of window
-	r = py - (stdscr.maxy / 2)		# get player y and subtract it from the half point of window			
+	r = px - (stdscr.maxx / 2)	# get player x and subtract it from the half point of window
+	c = py - (stdscr.maxy / 2)		# get player y and subtract it from the half point of window			
 
 	# if c is greater than max_cols
 	if c + width >= ww
@@ -148,15 +148,14 @@ while 1
 		viewp.resize(new_y, new_x) # Resizes window to terminal screen
 		borders(viewp) # Redraw new borders
 		simple_generate(field) # Put snow back on map
-		viewp.setpos(lines / 2, cols  / 2)
-		viewp.addstr("x = #{parent_x}, y = #{parent_y}")
-		viewp.setpos((lines / 2) + 1, cols  / 2)
-		viewp.addstr("map x = #{field.maxx}, map y = #{field.maxy}")
 		viewp.refresh
 		mvwprintw(field, p.px, p.py, "#{p.symb}")
 		field.refresh
-		viewp.refresh
 	end
+	viewp.setpos(lines / 2, cols  / 2)
+	viewp.addstr("Map x = #{parent_x}, Map y = #{parent_y}")
+	viewp.setpos((lines / 2) + 1, cols  / 2)
+	viewp.addstr("Player x = #{p.px}, Player y = #{p.py}")
 	field.refresh
 	viewp.refresh
 
@@ -167,30 +166,30 @@ while 1
 	    	mvwprintw(field, p.px + 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
-    	viewp.refresh
+    	field.refresh
     when 's' # move down
     	p.px += 1 if p.px < (field.maxy - 2)
 	    	mvwprintw(field, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
-    	viewp.refresh
+    	field.refresh
     when 'd' # move right
     	p.py += 1 if p.py < (field.maxx - 2)
 	    	mvwprintw(field, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
-    	viewp.refresh
+    	field.refresh
 	when 'a' # move left
     	p.py -= 1 if p.py > 1
 	    	mvwprintw(field, p.px, p.py + 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
-    	viewp.refresh
+    	field.refresh
     when 'q' # Quit Game
     	break
     else
     	flash
-    	viewp.refresh
+    	field.refresh
     end
 end
 
