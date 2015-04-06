@@ -67,8 +67,8 @@ def center(subwin,parent,px,py)
 	ww = parent.maxy	#Frame Dimensions		# get parent max x
 	height = subwin.maxx
 	width = subwin.maxy
-	r = px - (stdscr.maxx / 2)	# get player x and subtract it from the half point of window
-	c = py - (stdscr.maxy / 2)		# get player y and subtract it from the half point of window			
+	c = px - (stdscr.maxx / 2)	# get player x and subtract it from the half point of window
+	r = py - (stdscr.maxy / 2)		# get player y and subtract it from the half point of window			
 
 	# if c is greater than max_cols
 	if c + width >= ww
@@ -78,7 +78,7 @@ def center(subwin,parent,px,py)
 		cc = c
 	end
 	if r + height >= hh
-		delta = hh - (r + h)
+		delta = hh - (r + height)
 		rr = r + delta
 	else
 		rr = r
@@ -166,31 +166,31 @@ while 1
     	p.px -= 1 if p.px > 1
 	    	mvwprintw(field, p.px + 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    	center(viewp,field,p.px,p.py)
-    	field.refresh
+	    center(viewp,field,p.px,p.py)
+    	viewp.refresh
     when 's' # move down
     	p.px += 1 if p.px < (field.maxy - 2)
 	    	mvwprintw(field, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    	center(viewp,field,p.px,p.py)
-    	field.refresh
+	    center(viewp,field,p.px,p.py)
+    	viewp.refresh
     when 'd' # move right
     	p.py += 1 if p.py < (field.maxx - 2)
 	    	mvwprintw(field, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    	center(viewp,field,p.px,p.py)
-    	field.refresh
+	    center(viewp,field,p.px,p.py)
+    	viewp.refresh
 	when 'a' # move left
     	p.py -= 1 if p.py > 1
 	    	mvwprintw(field, p.px, p.py + 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    	center(viewp,field,p.px,p.py)
-    	field.refresh
+	    center(viewp,field,p.px,p.py)
+    	viewp.refresh
     when 'q' # Quit Game
     	break
     else
     	flash
-    	field.refresh
+    	viewp.refresh
     end
 end
 
