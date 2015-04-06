@@ -109,23 +109,21 @@ setpos((lines / 2) + 1, cols  / 2)
 addstr("x = #{stdscr.maxx}, y = #{stdscr.maxy}")
 refresh
 getch
+clear
+refresh
 
 # Make Game Map
 parent_x = stdscr.maxx # Gets x of terminal screen
 parent_y = stdscr.maxy # Gets y of terminal screen
 #field = stdscr.subwin(parent_y + 50, parent_x + 50, 0, 0)
-field = Window.new(parent_x * 2, parent_y * 2, 0, 0)
-viewp = field.subwin(parent_x, parent_y, 0, 0)
+field = Window.new(parent_y * 2, parent_x * 2, 0, 0)
+viewp = field.subwin(parent_y, parent_x, 0, 0)
 
 # Draw borders, terrain and player
 borders(viewp)
 simple_generate(field)
-viewp.setpos(lines / 2, cols  / 2)
-viewp.addstr("x = #{parent_x}, y = #{parent_y}")
-viewp.setpos((lines / 2) + 1, cols  / 2)
-viewp.addstr("map x = #{field.maxx}, map y = #{field.maxy}")
 
-p = Character.new(3, 3)
+p = Character.new(5, 3)
 mvwprintw(field, p.px, p.py, "#{p.symb}")
 field.refresh
 viewp.refresh
@@ -152,9 +150,9 @@ while 1
 		mvwprintw(field, p.px, p.py, "#{p.symb}")
 		field.refresh
 	end
-	viewp.setpos(lines / 2, cols  / 2)
+	viewp.setpos(1,1)
 	viewp.addstr("Map x = #{parent_x}, Map y = #{parent_y}")
-	viewp.setpos((lines / 2) + 1, cols  / 2)
+	viewp.setpos(3,1)
 	viewp.addstr("Player x = #{p.px}, Player y = #{p.py}")
 	field.refresh
 	viewp.refresh
