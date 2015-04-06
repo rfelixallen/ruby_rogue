@@ -61,16 +61,18 @@ def center(subwin,px,py)
 	# player updates move in world. world shifts in viewport
 	# Set r,c to be the top left corner of the window
 	# Set move(r,c)
-	rr = subwin.maxx 			# get current subwindow max x
-	cc = subwin.maxy 			# get current subwindow max y
-	hh = stdscr.maxx				# get terminal max x	
-	ww = stdscr.maxy				# get terminal max y
-	r = px - (max_lines / 2)	# get player x and subtract it from the half point of window
-	c = py - (max_cols / 2)		# get player y and subtract it from the half point of window			
+	# subwin = Window.new(hh,ww,rr,cc)
+	rr = subwin.begx 	#Frame Positions
+	cc = subwin.begy 	#Frame Positions
+	hh = subwin.maxx	#Frame Dimensions		# get parent max y	
+	ww = subwin.maxy	#Frame Dimensions		# get parent max x
+	w = subwin 			#Get the window
+	r = px - (stdscr.maxx / 2)	# get player x and subtract it from the half point of window
+	c = py - (stdscr.maxy / 2)		# get player y and subtract it from the half point of window			
 
 	# if c is greater than max_cols
-	if c + m >= ww
-		delta = max_cols - (c + w)
+	if c + w >= ww
+		delta = ww - (c + w)
 		cc = c + delta
 	else
 		cc = c
