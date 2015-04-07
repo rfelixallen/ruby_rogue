@@ -91,7 +91,7 @@ def center(subwin,parent,px,py)
 	end
 
 	subwin.move(rr, cc) # double check how move works
-	
+
 end
 
 #################################################################################
@@ -153,6 +153,8 @@ while 1
 	end
 	viewp.setpos(1,1)
 	viewp.addstr("Map x = #{parent_x}, Map y = #{parent_y}")
+	viewp.setpos(2,1)
+	viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
 	viewp.setpos(3,1)
 	viewp.addstr("Player x = #{p.px}, Player y = #{p.py}")
 	field.refresh
@@ -186,6 +188,8 @@ while 1
     	field.refresh
     when 'q' # Quit Game
     	break
+    when 'm' #move screen, tests the move method
+    	viewp.move(15,15)
     else
     	flash
     	field.refresh
