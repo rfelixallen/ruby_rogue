@@ -66,19 +66,22 @@ def center(subwin,parent,px,py)
 	cc = subwin.begy 	#Frame Positions
 	hh = parent.maxx	#Frame Dimensions		# get parent max y	
 	ww = parent.maxy	#Frame Dimensions		# get parent max x
-	height = subwin.maxx
-	width = subwin.maxy
+	height = subwin.maxy
+	width = subwin.maxx
 	r = px - (parent.maxx / 2)	# get player x and subtract it from the half point of window
 	c = py - (parent.maxy / 2)		# get player y and subtract it from the half point of window			
 
-	if (c + width) >= ww
+	colls = c + width
+	rowss = r + height
+
+	if colls >= ww
 		delta = ww - (c + width)
 		cc = c + delta
 	else
 		cc = c
 	end
 
-	if (r + height) >= hh
+	if rowss >= hh
 		delta = hh - (r + height)
 		rr = r + delta
 	else
