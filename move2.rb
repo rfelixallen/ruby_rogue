@@ -97,6 +97,7 @@ def center(subwin,parent,px,py)
 	end
 
 	subwin.move(rr, cc) # double check how move works
+	# I think this might need to be the parent window.
 
 end
 
@@ -126,11 +127,6 @@ parent_y = stdscr.maxy # Gets y of terminal screen
 #field = Window.new(parent_y * 2, parent_x * 2, 0, 0)
 field = Window.new(100, 100, 0, 0)
 viewp = field.subwin(30, 30, 0, 0)
-viewp.move(1,1)
-viewp.setpos(0,0)
-viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
-viewp.refresh
-getch
 
 # Draw borders, terrain and player
 borders(viewp)
@@ -139,7 +135,7 @@ simple_generate(field)
 fx = field.maxx
 fy = field.maxy
 
-p = Character.new((fy / 2), (fx / 2))
+p = Character.new((fy / 4), (fx / 4))
 mvwprintw(field, p.px, p.py, "#{p.symb}")
 #center(viewp,field,p.px,p.py)
 viewp.refresh
@@ -149,6 +145,7 @@ viewp.refresh
 #################################################################################
 
 while 1
+=begin	
 	# Resize window to the terminal screen
 	new_y = stdscr.maxy
 	new_x = stdscr.maxx
@@ -166,13 +163,13 @@ while 1
 		mvwprintw(field, p.px, p.py, "#{p.symb}")
 		field.refresh
 	end
+=end
 	viewp.setpos(1,1)
-	viewp.addstr("Map x = #{parent_x}, Map y = #{parent_y}")
+	viewp.addstr("Screen x = #{parent_x}, Screen y = #{parent_y}")
 	viewp.setpos(2,1)
-	viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
-	viewp.setpos(3,1)
 	viewp.addstr("Player x = #{p.px}, Player y = #{p.py}")
-	#field.refresh
+	viewp.setpos(3,1)
+	viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
 	viewp.refresh
 
 	input = getch
