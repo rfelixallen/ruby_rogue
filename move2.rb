@@ -124,9 +124,12 @@ viewp = field.subwin(parent_y, parent_x, 0, 0)
 borders(viewp)
 simple_generate(field)
 
-p = Character.new(5, 3)
+fx = field.maxx
+fy = field.maxy
+
+p = Character.new((fy / 2), (fx / 2))
 mvwprintw(field, p.px, p.py, "#{p.symb}")
-field.refresh
+#field.refresh
 viewp.refresh
 
 #################################################################################
@@ -166,25 +169,25 @@ while 1
     	p.px -= 1 if p.px > 1
 	    	mvwprintw(field, p.px + 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    center(viewp,field,p.px,p.py)
+	    #center(viewp,field,p.px,p.py)
     	field.refresh
     when 's' # move down
     	p.px += 1 if p.px < (field.maxy - 2)
 	    	mvwprintw(field, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    center(viewp,field,p.px,p.py)
+	    #center(viewp,field,p.px,p.py)
     	field.refresh
     when 'd' # move right
     	p.py += 1 if p.py < (field.maxx - 2)
 	    	mvwprintw(field, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    center(viewp,field,p.px,p.py)
+	    #center(viewp,field,p.px,p.py)
     	field.refresh
 	when 'a' # move left
     	p.py -= 1 if p.py > 1
 	    	mvwprintw(field, p.px, p.py + 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    center(viewp,field,p.px,p.py)
+	    #center(viewp,field,p.px,p.py)
     	field.refresh
     when 'q' # Quit Game
     	break
