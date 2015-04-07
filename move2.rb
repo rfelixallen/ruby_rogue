@@ -7,6 +7,7 @@ include Curses
 ##################################################################################
 # Class & Methods																 #
 ##################################################################################
+=begin
 class Character
 	attr_accessor :px, :py, :symb
 	def initialize(px, py)
@@ -93,7 +94,7 @@ def center(subwin,parent,px,py)
 	subwin.move(rr, cc) # double check how move works
 
 end
-
+=end
 #################################################################################
 # Initialize 																 	#
 #################################################################################
@@ -120,11 +121,11 @@ parent_y = stdscr.maxy # Gets y of terminal screen
 field = Window.new(parent_y * 2, parent_x * 2, 0, 0)
 viewp = field.subwin(parent_y, parent_x, 0, 0)
 viewp.move(1,1)
-viewp.setpos(0,0)
+#viewp.setpos(0,0)
 viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
 viewp.refresh
 getch
-
+=begin
 # Draw borders, terrain and player
 borders(viewp)
 simple_generate(field)
@@ -212,3 +213,4 @@ field.refresh
 field.close # free up memory
 refresh
 getch
+=end
