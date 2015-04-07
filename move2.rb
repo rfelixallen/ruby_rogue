@@ -118,8 +118,9 @@ refresh
 parent_x = stdscr.maxx # Gets x of terminal screen
 parent_y = stdscr.maxy # Gets y of terminal screen
 #field = stdscr.subwin(parent_y + 50, parent_x + 50, 0, 0)
-field = Window.new(parent_y * 2, parent_x * 2, 0, 0)
-viewp = field.subwin(parent_y, parent_x, 0, 0)
+#field = Window.new(parent_y * 2, parent_x * 2, 0, 0)
+field = Window.new(100, 100, 0, 0)
+viewp = field.subwin(30, 30, 0, 0)
 viewp.move(1,1)
 viewp.setpos(0,0)
 viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
