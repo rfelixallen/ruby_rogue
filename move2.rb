@@ -68,25 +68,27 @@ def center(subwin,parent,px,py)
 	ww = parent.maxy	#Frame Dimensions		# get parent max x
 	height = subwin.maxx
 	width = subwin.maxy
-	r = px - (stdscr.maxx / 2)	# get player x and subtract it from the half point of window
-	c = py - (stdscr.maxy / 2)		# get player y and subtract it from the half point of window			
+	r = px - (parent.maxx / 2)	# get player x and subtract it from the half point of window
+	c = py - (parent.maxy / 2)		# get player y and subtract it from the half point of window			
 
-	# if c is greater than max_cols
-	if c + width >= ww
+	if (c + width) >= ww
 		delta = ww - (c + width)
 		cc = c + delta
 	else
 		cc = c
 	end
-	if r + height >= hh
+
+	if (r + height) >= hh
 		delta = hh - (r + height)
 		rr = r + delta
 	else
 		rr = r
 	end
+
 	if r < 0
 		rr = 0
 	end
+
 	if c < 0
 		cc = 0
 	end
@@ -167,7 +169,7 @@ while 1
 	viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
 	viewp.setpos(3,1)
 	viewp.addstr("Player x = #{p.px}, Player y = #{p.py}")
-	field.refresh
+	#field.refresh
 	viewp.refresh
 
 	input = getch
