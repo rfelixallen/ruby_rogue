@@ -7,14 +7,57 @@ include Curses
 
 # Update: Problem seems to be with the terminal size. Specifying the size is better.
 
+def test_window_move(i)
+	n = i
+	i.times do
+		field = Window.new(n,n,0,0)
+		viewp = field.subwin(n,n,0,0)
+		refresh
+		
+		#control message
+		field.setpos(0,0)
+		field.addstr("Field #{n}: (#{field.begx},#{field.begy})")
+		field.refresh
+		getch
+		clear
+		refresh
+
+		#test move message
+		field.move(1,1)
+		field.setpos(0,0)
+		field.addstr("Field move #{n}: (#{field.begx},#{field.begy})")
+		field.refresh
+		getch
+		clear
+		refresh
+
+		viewp.setpos(0,0)
+		viewp.addstr("Viewp #{n}: (#{viewp.begx},#{viewp.begy})")
+		viewp.refresh
+		getch
+		clear
+		refresh
+
+		viewp.move(1,1)
+		viewp.setpos(0,0)
+		viewp.addstr("Viewp move #{n}: (#{viewp.begx},#{viewp.begy})")
+		viewp.refresh
+		getch
+		clear
+		refresh
+
+		viewp.close
+		field.close
+		n += 1
+	end
+end
+
 init_screen
 stdscr
 
 addstr("Enter the square dimensions for the window (i.e. 10, 20, etc)")
 refresh
 
-px = stdscr.maxx
-py = stdscr.maxy
 x = getstr.to_i		#Dimensions that work: 10,20,30,40
 
 noecho
@@ -22,12 +65,13 @@ curs_set(0)
 clear
 refresh
 
-field = Window.new(x,x,0,0)
-viewp = field.subwin(x,x,0,0)
-term = Window.new(py,px,0,0)
-subterm = term.subwin(py,px,0,0)
-refresh
+test_window_move(x)
 
+=begin
+px = stdscr.maxx
+py = stdscr.maxy
+#term = Window.new(py,px,0,0)
+#subterm = term.subwin(py,px,0,0)
 #control message
 field.setpos(0,0)
 field.addstr("Field: (#{field.begx},#{field.begy})")
@@ -89,3 +133,4 @@ subterm.setpos(0,0)
 subterm.addstr("Subterm move: (#{subterm.begx},#{subterm.begy})")
 subterm.refresh
 getch
+=end
