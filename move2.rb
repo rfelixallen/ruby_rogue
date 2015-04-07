@@ -90,7 +90,8 @@ def center(subwin,parent,px,py)
 		cc = 0
 	end
 
-	subwin.move(rr, cc)
+	subwin.move(rr, cc) # double check how move works
+	
 end
 
 #################################################################################
