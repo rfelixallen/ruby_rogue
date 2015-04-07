@@ -119,6 +119,11 @@ parent_y = stdscr.maxy # Gets y of terminal screen
 #field = stdscr.subwin(parent_y + 50, parent_x + 50, 0, 0)
 field = Window.new(parent_y * 2, parent_x * 2, 0, 0)
 viewp = field.subwin(parent_y, parent_x, 0, 0)
+viewp.move(1,1)
+viewp.setpos(0,0)
+viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
+viewp.refresh
+getch
 
 # Draw borders, terrain and player
 borders(viewp)
@@ -129,7 +134,7 @@ fy = field.maxy
 
 p = Character.new((fy / 2), (fx / 2))
 mvwprintw(field, p.px, p.py, "#{p.symb}")
-#field.refresh
+#center(viewp,field,p.px,p.py)
 viewp.refresh
 
 #################################################################################
@@ -169,30 +174,31 @@ while 1
     	p.px -= 1 if p.px > 1
 	    	mvwprintw(field, p.px + 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    #center(viewp,field,p.px,p.py)
-    	field.refresh
+	    center(viewp,field,p.px,p.py)
+    	viewp.refresh
     when 's' # move down
     	p.px += 1 if p.px < (field.maxy - 2)
 	    	mvwprintw(field, p.px - 1, p.py, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    #center(viewp,field,p.px,p.py)
-    	field.refresh
+	    center(viewp,field,p.px,p.py)
+    	viewp.refresh
     when 'd' # move right
     	p.py += 1 if p.py < (field.maxx - 2)
 	    	mvwprintw(field, p.px, p.py - 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    #center(viewp,field,p.px,p.py)
-    	field.refresh
+	    center(viewp,field,p.px,p.py)
+    	viewp.refresh
 	when 'a' # move left
     	p.py -= 1 if p.py > 1
 	    	mvwprintw(field, p.px, p.py + 1, "\"") # Looks like footprints
     		mvwprintw(field, p.px, p.py, "#{p.symb}")
-	    #center(viewp,field,p.px,p.py)
-    	field.refresh
+	    center(viewp,field,p.px,p.py)
+    	viewp.refresh
     when 'q' # Quit Game
     	break
     when 'm' #move screen, tests the move method
     	viewp.move(15,15)
+    	beep
     else
     	flash
     	field.refresh
