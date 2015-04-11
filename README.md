@@ -10,3 +10,7 @@ curses_test.rb - This was the first test script. Its purpose was to test initial
 win.rb - This was to test working with subwindows.
 move.rb - This was to test initializing the player and moving it on screen.
 terrain.rb - This was to explore different terrain generation methods.
+
+
+4/11/15 - I discovered that the curses library I have been using is inadequate. Specifically, I want the window to follow the player, and this is done in ncurses using a method called mvderwin. This function is missing in curses, and so I'm switching to a ncurses based library.
+The new gem is installed by: gem install ncurses-ruby
