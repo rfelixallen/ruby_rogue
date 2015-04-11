@@ -2,9 +2,9 @@ require 'ncurses'
 include Ncurses
 
 ##################################################################################
-# TODO																			 #
-# Convert old curses library to new ncurses library.							 #
-# Center viewport on the character, and make the window bigger than the viewport.#
+# TODO																			 #							 #
+# Fix centering.																 #
+# Combine border + generate to be handled at the same time						 #
 # 																				 #
 ##################################################################################
 # Class & Methods																 #
@@ -19,12 +19,21 @@ class Character
 	end
 end
 
-def borders(window)
+=begin
+def add_player(window, orow, ocol, nrow, ncol, symb)
+	if ((row_0 >= 0 && row_0 < height) && (col_0 >= 0 && col_0 < width))
+		mvwaddstr(window, orow, ocol, ' ')
+		mvwaddstr(window, nrow, ncol, symb)
+end
+=end
+
+def draw_map(window)
 	#window.clear
-	i = 0
+	i = 1
 	w_y = []
 	w_x = []
-	Ncurses.getmaxyx(stdscr,w_y,w_x)
+	Ncurses.getmaxyx(window,w_y,w_x)
+	# Draw Borders
 	while i <= (w_y[0] - 1) do
 		Ncurses.mvwaddstr(window, i, 0, "|")
 		Ncurses.mvwaddstr(window, i, w_x[0] - 1, "|")
@@ -37,6 +46,18 @@ def borders(window)
 		Ncurses.mvwaddstr(window, w_y[0] - 1, j, "+")
 		j += 1
 	end
+
+	# Draw Terrain
+	i = 1
+	while i < w_x[0] - 1
+		j = 1
+		while j < w_y[0] - 1
+			Ncurses.mvwaddstr(window, i, j, "~")
+			j += 1
+		end
+		i += 1
+	end
+
 	Ncurses.wrefresh(window)
 end
 
@@ -55,45 +76,48 @@ def simple_generate(window)
 		i += 1
 	end
 end
-=begin
+
 def center(subwin,parent,px,py)
-	rr = subwin.begx 	#Frame Positions
-	cc = subwin.begy 	#Frame Positions
-	hh = parent.maxx	#Frame Dimensions		# get parent max y	
-	ww = parent.maxy	#Frame Dimensions		# get parent max x
-	height = subwin.maxy
-	width = subwin.maxx
-	r = px - (parent.maxx / 2)	# get player x and subtract it from the half point of window
-	c = py - (parent.maxy / 2)		# get player y and subtract it from the half point of window			
+	rr = [] 	#Frame Positions
+	cc = [] 	#Frame Positions
+	Ncurses.getbegyx(subwin, rr, cc)
 
-	colls = c + width
-	rowss = r + height
+	hh = []		#Frame Dimensions
+	ww = []		#Frame Dimensions
+	Ncurses.getmaxyx(parent, hh, ww)
 
-	if colls >= ww
-		delta = ww - (c + width)
-		cc = c + delta
+	height = []
+	width = []
+	Ncurses.getmaxyx(subwin, height, width)
+
+	c = py - (hh[0] / 2)		# get player y and subtract it from the half point of window
+	r = px - (ww[0] / 2)		# get player x and subtract it from the half point of window		
+
+	if (c + width[0]) >= ww[0]
+		delta = ww[0] - (c + width[0])
+		cc[0] = c + delta
 	else
-		cc = c
+		cc[0] = c
 	end
 
-	if rowss >= hh
-		delta = hh - (r + height)
-		rr = r + delta
+	if (r + height[0]) >= hh[0]
+		delta = hh[0] - (r + height[0])
+		rr[0] = r + delta
 	else
-		rr = r
+		rr[0] = r
 	end
 
 	if r < 0
-		rr = 0
+		rr[0] = 0
 	end
 
 	if c < 0
-		cc = 0
+		cc[0] = 0
 	end
 
-	subwin.move(rr,cc) # mvderwin is the correct method
+	Ncurses.mvderwin(subwin,rr[0],cc[0])
 end
-=end
+
 #################################################################################
 # Initialize 																 	#
 #################################################################################
@@ -121,12 +145,13 @@ field = Ncurses.newwin(sd_y[0] * 2, sd_x[0] * 2, 0, 0)
 viewp = Ncurses.subwin(field,sd_y[0], sd_x[0], 0, 0)
 
 # Draw borders, terrain and player
-simple_generate(field)
-borders(viewp)
+draw_map(field)
 f_x = []
 f_y = []
 Ncurses.getmaxyx(field,f_y,f_x)
-p = Character.new((f_y[0] / 4), (f_x[0] / 4))
+startx = (f_x[0] / 4)
+starty = (f_y[0] / 4)
+p = Character.new(startx, starty)
 Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 Ncurses.wrefresh(viewp)
 
@@ -155,37 +180,43 @@ while 1
 		Ncurses.wrefresh(field)
 	end
 =end
-	Ncurses.mvwaddstr(viewp,1,1,"Screen lines = #{sd_y[0]}, Screen cols = #{sd_x[0]}")
-	Ncurses.mvwaddstr(viewp,2,1,"Player lines = #{p.px}, Player cols = #{p.py}")
-	Ncurses.wrefresh(viewp)
+	#Ncurses.mvwaddstr(viewp,1,1,"Screen lines = #{sd_y[0]}, Screen cols = #{sd_x[0]}")
+	#Ncurses.mvwaddstr(viewp,2,1,"Player lines = #{p.px}, Player cols = #{p.py}")
 	input = Ncurses.getch
 	case input
     when KEY_UP # move up
     	p.px -= 1 if p.px > 1
-	    	Ncurses.mvwaddstr(field, p.px + 1, p.py, "\"") # Looks like footprints
+	    	Ncurses.mvwaddstr(field, p.px + 1, p.py, " ") # Looks like footprints
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-	    #center(viewp,field,p.px,p.py)
+	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
     when KEY_DOWN # move down
     	p.px += 1 if p.px < (f_y[0] - 2)
-	    	Ncurses.mvwaddstr(field, p.px - 1, p.py, "\"") # Looks like footprints
+	    	Ncurses.mvwaddstr(field, p.px - 1, p.py, " ") # Looks like footprints
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-	    #center(viewp,field,p.px,p.py)
+	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
     when KEY_RIGHT # move right
     	p.py += 1 if p.py < (f_x[0] - 2)
-	    	Ncurses.mvwaddstr(field, p.px, p.py - 1, "\"") # Looks like footprints
+	    	Ncurses.mvwaddstr(field, p.px, p.py - 1, " ") # Looks like footprints
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-	    #center(viewp,field,p.px,p.py)
+	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
 	when KEY_LEFT # move left
     	p.py -= 1 if p.py > 1
-	    	Ncurses.mvwaddstr(field, p.px, p.py + 1, "\"") # Looks like footprints
+	    	Ncurses.mvwaddstr(field, p.px, p.py + 1, " ") # Looks like footprints
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-	    #center(viewp,field,p.px,p.py)
+	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
     when KEY_F2 # Quit Game
     	break
+    when KEY_F3 # Reset the Game
+    	Ncurses.wclear(field)
+    	draw_map(field)
+    	p.px = 2
+    	p.py = 2
+    	Ncurses.mvwaddstr(field, 2, 2, "#{p.symb}")
+    	Ncurses.wrefresh(viewp)
     else
     	Ncurses.flash
     	Ncurses.wrefresh(viewp)
