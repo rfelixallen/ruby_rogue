@@ -26,29 +26,29 @@ def borders(window)
 	w_x = []
 	Ncurses.getmaxyx(stdscr,w_y,w_x)
 	while i <= (w_y[0] - 1) do
-		mvwaddstr(window, i, 0, "|")
-		mvwaddstr(window, i, w_x[0] - 1, "|")
+		Ncurses.mvwaddstr(window, i, 0, "|")
+		Ncurses.mvwaddstr(window, i, w_x[0] - 1, "|")
 		i += 1
 	end
 
 	j = 0
 	while j <= (w_x[0] - 1) do
-		mvwaddstr(window, 0, j, "+")
-		mvwaddstr(window, w_y[0] - 1, j, "+")
+		Ncurses.mvwaddstr(window, 0, j, "+")
+		Ncurses.mvwaddstr(window, w_y[0] - 1, j, "+")
 		j += 1
 	end
-	Ncurses.refresh(window)
+	Ncurses.wrefresh(window)
 end
 
 def simple_generate(window)
 	i = 1
 	w_y = []
 	w_x = []
-	Ncurses.getmaxyx(stdscr,w_y,w_x)
+	Ncurses.getmaxyx(window,w_y,w_x)
 	while i < w_x[0] - 1
 		j = 1
 		while j < w_y[0] - 1
-			mvwaddstr(window, i, j, "~")
+			Ncurses.mvwaddstr(window, i, j, "~")
 			#Ncurses.refresh(window)
 			j += 1
 		end
@@ -121,8 +121,8 @@ field = Ncurses.newwin(sd_y[0] * 2, sd_x[0] * 2, 0, 0)
 viewp = Ncurses.subwin(field,sd_y[0], sd_x[0], 0, 0)
 
 # Draw borders, terrain and player
-#borders(viewp)
-#simple_generate(field)
+simple_generate(field)
+borders(viewp)
 f_x = []
 f_y = []
 Ncurses.getmaxyx(field,f_y,f_x)
