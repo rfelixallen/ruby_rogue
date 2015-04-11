@@ -23,7 +23,7 @@ def mvwprintw(window, x, y, symb)
 end
 
 def borders(window)
-	window.clear
+	#window.clear
 	i = 0
 	while i <= (lines - 1) do
 		mvwprintw(window, i, 0, "|")
@@ -48,7 +48,7 @@ def simple_generate(window)
 		j = 1
 		while j < max_x - 1
 			mvwprintw(window, i, j, "~")
-			window.refresh
+			#window.refresh
 			j += 1
 		end
 		i += 1
@@ -56,12 +56,6 @@ def simple_generate(window)
 end
 
 def center(subwin,parent,px,py)
-	# Get player x,y 
-	# Calculate player x,y as center of viewport
-	# player updates move in world. world shifts in viewport
-	# Set r,c to be the top left corner of the window
-	# Set move(r,c)
-	# subwin = Window.new(hh,ww,rr,cc)
 	rr = subwin.begx 	#Frame Positions
 	cc = subwin.begy 	#Frame Positions
 	hh = parent.maxx	#Frame Dimensions		# get parent max y	
@@ -96,9 +90,7 @@ def center(subwin,parent,px,py)
 		cc = 0
 	end
 
-	subwin.move(rr, cc) # double check how move works
-	# I think this might need to be the parent window.
-
+	subwin.move(rr,cc) # mvderwin is the correct method
 end
 
 #################################################################################
@@ -123,21 +115,16 @@ refresh
 # Make Game Map
 parent_x = stdscr.maxx # Gets x of terminal screen
 parent_y = stdscr.maxy # Gets y of terminal screen
-#field = stdscr.subwin(parent_y + 50, parent_x + 50, 0, 0)
-#field = Window.new(parent_y * 2, parent_x * 2, 0, 0)
 field = Window.new(100, 100, 0, 0)
-viewp = field.subwin(30, 30, 0, 0)
+viewp = field.subwin(39, 39, 0, 0)
 
 # Draw borders, terrain and player
 borders(viewp)
 simple_generate(field)
-
 fx = field.maxx
 fy = field.maxy
-
 p = Character.new((fy / 4), (fx / 4))
 mvwprintw(field, p.px, p.py, "#{p.symb}")
-#center(viewp,field,p.px,p.py)
 viewp.refresh
 
 #################################################################################
@@ -165,13 +152,12 @@ while 1
 	end
 =end
 	viewp.setpos(1,1)
-	viewp.addstr("Screen x = #{parent_x}, Screen y = #{parent_y}")
+	viewp.addstr("Screen lines = #{parent_x}, Screen cols = #{parent_y}")
 	viewp.setpos(2,1)
-	viewp.addstr("Player x = #{p.px}, Player y = #{p.py}")
+	viewp.addstr("Player lines = #{p.px}, Player cols = #{p.py}")
 	viewp.setpos(3,1)
 	viewp.addstr("Viewport Position = (#{viewp.begx},#{viewp.begy})")
 	viewp.refresh
-
 	input = getch
 	case input
     when 'w' # move up
@@ -205,7 +191,7 @@ while 1
     	beep
     else
     	flash
-    	field.refresh
+    	viewp.refresh
     end
 end
 
