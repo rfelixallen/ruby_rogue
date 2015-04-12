@@ -64,12 +64,12 @@ def center(subwin,parent,p_rows,p_cols)
 	cc = [] 	# Frame x Positions
 	Ncurses.getbegyx(subwin, rr, cc)
 
-	hh = []		# Parent Window Dimensions
-	ww = []		# Parent Window Dimensions
+	hh = []		# Parent Window Height
+	ww = []		# Parent Window Width
 	Ncurses.getmaxyx(parent, hh, ww)
 
-	height = []
-	width = []
+	height = [] # Frame Window Height
+	width = []  # Frame Window Width
 	Ncurses.getmaxyx(subwin, width, height)
 
 	r = p_rows - (height[0] / 2)
@@ -123,8 +123,10 @@ Ncurses.clear
 Ncurses.refresh
 
 # Make Game Map
-field = Ncurses.newwin(sd_y[0] * 2, sd_x[0] * 2, 0, 0)
-viewp = Ncurses.derwin(field,sd_y[0], sd_x[0], 0, 0)
+#field = Ncurses.newwin(sd_y[0] * 2, sd_x[0] * 2, 0, 0)
+#viewp = Ncurses.derwin(field,sd_y[0], sd_x[0], 0, 0)
+field = Ncurses.newwin(100, 100, 0, 0)
+viewp = Ncurses.derwin(field,25, 25, 0, 0)
 
 # Draw borders, terrain and player
 draw_map(field)
