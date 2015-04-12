@@ -3,8 +3,8 @@ include Ncurses
 
 ##################################################################################
 # TODO																			 #							 #
-# Fix centering.																 #
-# Combine border + generate to be handled at the same time						 #
+# Fix centering 																 #
+# Fix Terrain generation to fill entire game map             					 #
 # 																				 #
 ##################################################################################
 # Class & Methods																 #
@@ -59,7 +59,7 @@ def draw_map(window)
 	end
 end
 
-def center(subwin,parent,px,py)
+def center(subwin,parent,p_rows,p_cols)
 	rr = [] 	#Frame Positions
 	cc = [] 	#Frame Positions
 	Ncurses.getbegyx(subwin, rr, cc)
@@ -72,8 +72,8 @@ def center(subwin,parent,px,py)
 	width = []
 	Ncurses.getmaxyx(subwin, height, width)
 
-	c = py - (hh[0] / 2)		# get player y and subtract it from the half point of window
-	r = px - (ww[0] / 2)		# get player x and subtract it from the half point of window		
+	c = p_cols - (hh[0] / 2)		# get player y and subtract it from the half point of window
+	r = p_rows - (ww[0] / 2)		# get player x and subtract it from the half point of window		
 
 	if (c + width[0]) >= ww[0]
 		delta = ww[0] - (c + width[0])
