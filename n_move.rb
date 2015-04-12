@@ -57,24 +57,6 @@ def draw_map(window)
 		end
 		i += 1
 	end
-
-	Ncurses.wrefresh(window)
-end
-
-def simple_generate(window)
-	i = 1
-	w_y = []
-	w_x = []
-	Ncurses.getmaxyx(window,w_y,w_x)
-	while i < w_x[0] - 1
-		j = 1
-		while j < w_y[0] - 1
-			Ncurses.mvwaddstr(window, i, j, "~")
-			#Ncurses.refresh(window)
-			j += 1
-		end
-		i += 1
-	end
 end
 
 def center(subwin,parent,px,py)
@@ -151,7 +133,7 @@ f_y = []
 Ncurses.getmaxyx(field,f_y,f_x)
 startx = (f_x[0] / 4)
 starty = (f_y[0] / 4)
-p = Character.new(startx, starty)
+p = Character.new(starty, startx)
 Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 Ncurses.wrefresh(viewp)
 
