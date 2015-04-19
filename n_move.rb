@@ -44,14 +44,16 @@ def move_monster(window, orow, ocol, nrow, ncol, symb)
 end
 =end
 def target_position(window, lin, col)
-	target = mvwinch(window, lin, col)
-	if target == '~' || ' '
+	target = Ncurses.mvwinch(window, lin, col)
+	if target == '~' or target == ' '
 		return true
+	else
+		return false
 	end
 end
 
 def move_character(window,p)
-	if target_position(window, p.px, p.py) == true
+	if target_position(window, p.px - 1, p.py) == true
 		Ncurses.mvwaddstr(window, p.px + 1, p.py, " ") # for moving north
     	Ncurses.mvwaddstr(window, p.px, p.py, "#{p.symb}")
     end
