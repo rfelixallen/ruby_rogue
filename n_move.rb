@@ -43,6 +43,20 @@ def move_monster(window, orow, ocol, nrow, ncol, symb)
 	end
 end
 =end
+def target_position(window, lin, col)
+	target = mvwinch(window, lin, col)
+	if target == '~' || ' '
+		return true
+	end
+end
+
+def move_character(window,p)
+	if target_position(window, p.px, p.py) == true
+		Ncurses.mvwaddstr(window, p.px + 1, p.py, " ") # for moving north
+    	Ncurses.mvwaddstr(window, p.px, p.py, "#{p.symb}")
+    end
+end
+
 def terrain_tiles
 	# Pairs terrain name with icon
 end
@@ -250,8 +264,7 @@ while 1
 	case input
     when KEY_UP # move up
     	p.px -= 1 if p.px > 1
-	    	Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
-    		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
+			move_character(field,p)
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
     when KEY_DOWN # move down
