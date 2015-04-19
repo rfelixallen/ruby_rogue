@@ -28,31 +28,39 @@ class Monster
 		@my = my
 	end
 end
-
 =begin
 def add_player(window, orow, ocol, nrow, ncol, symb)
 	if ((row_0 >= 0 && row_0 < height) && (col_0 >= 0 && col_0 < width))
 		mvwaddstr(window, orow, ocol, ' ')
 		mvwaddstr(window, nrow, ncol, symb)
 end
-=end
 
 def move_monster(window, orow, ocol, nrow, ncol, symb)
+	
+	if ((row_0 >= 0 && row_0 < height) && (col_0 >= 0 && col_0 < width))
+		mvwaddstr(window, orow, ocol, ' ')
+		mvwaddstr(window, nrow, ncol, symb)
+	end
+end
+=end
+def terrain_tiles
+	# Pairs terrain name with icon
 end
 
 def draw_map(window)
-	#window.clear
+	# Draws borders and fills all game map tiles with snow.
 	i = 1
 	w_y = []
 	w_x = []
 	Ncurses.getmaxyx(window,w_y,w_x)
 	# Draw Borders
+	# Draw side borders
 	while i <= (w_y[0] - 1) do
 		Ncurses.mvwaddstr(window, i, 0, "|")
 		Ncurses.mvwaddstr(window, i, w_x[0] - 1, "|")
 		i += 1
 	end
-
+	# Draw Top/bottom borders
 	j = 0
 	while j <= (w_x[0] - 1) do
 		Ncurses.mvwaddstr(window, 0, j, "+")
@@ -61,6 +69,7 @@ def draw_map(window)
 	end
 
 	# Draw Terrain
+	# Draw snow on every tile
 	i = 1
 	while i < w_x[0] - 1
 		j = 1
@@ -70,6 +79,36 @@ def draw_map(window)
 		end
 		i += 1
 	end
+end
+
+def generate_random(window)
+	# Draws random characters to each tile
+	i = 1
+	w_y = []
+	w_x = []
+	Ncurses.getmaxyx(window,w_y,w_x)
+	while i < w_x[0] - 1
+		j = 1
+		while j < w_y[0] - 1
+			dice = rand(4)
+			case dice 
+			when 0
+				Ncurses.mvwaddstr(window, i, j, "#")
+			when 1
+				Ncurses.mvwaddstr(window, i, j, "*")
+			when 2
+				Ncurses.mvwaddstr(window, i, j, "^")
+			else
+				Ncurses.mvwaddstr(window, i, j, "~")
+			end
+		j += 1
+		end
+		i += 1
+	end
+end
+
+def generate_perlin(window)
+	# Use Perlin Noise algorithim to draw terrain
 end
 
 def center(subwin,parent,p_rows,p_cols)
@@ -142,16 +181,21 @@ field = Ncurses.newwin(100, 100, 0, 0)
 viewp = Ncurses.derwin(field,25, 25, 0, 0) # Must not exceed size of terminal
 
 # Draw borders, terrain and player
-draw_map(field)
+#draw_map(field)
+generate_random(field)
 f_x = []
 f_y = []
 Ncurses.getmaxyx(field,f_y,f_x)
 startx = (f_x[0] / 4)
 starty = (f_y[0] / 4)
 p = Character.new(starty, startx)
-m = Monster.new(f_y[0] - 10, f_x[0] - 10)
+monster_exist = true
 Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-Ncurses.mvwaddstr(field,m.mx,m.my,"#{m.symb}")
+if monster_exist == true
+	m = Monster.new(f_y[0] - 10, f_x[0] - 10)
+	Ncurses.mvwaddstr(field,m.mx,m.my,"#{m.symb}")
+end
+center(viewp,field,p.px,p.py)
 Ncurses.wrefresh(viewp)
 
 #################################################################################
@@ -220,6 +264,14 @@ while 1
     	Ncurses.flash
     	Ncurses.wrefresh(viewp)
     end
+
+    # Monster Moves
+    if monster_exist == true
+    	# Check to move left
+    	
+    end
+
+
 end
 
 Ncurses.clear
