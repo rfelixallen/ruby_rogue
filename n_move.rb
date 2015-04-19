@@ -43,9 +43,14 @@ def move_monster(window, orow, ocol, nrow, ncol, symb)
 	end
 end
 =end
+def terrain_tiles
+	# Pairs terrain name with icon
+	# Maybe this should be a class?
+end
+
 def target_position(window, lin, col)
 	target = Ncurses.mvwinch(window, lin, col)
-	if target == '~' or target == ' '
+	if target == '~' #or target == ' '
 		return true
 	else
 		return false
@@ -56,11 +61,9 @@ def move_character(window,p)
 	if target_position(window, p.px - 1, p.py) == true
 		Ncurses.mvwaddstr(window, p.px + 1, p.py, " ") # for moving north
     	Ncurses.mvwaddstr(window, p.px, p.py, "#{p.symb}")
+    else
+    	Ncurses.flash
     end
-end
-
-def terrain_tiles
-	# Pairs terrain name with icon
 end
 
 def borders(window)
@@ -217,7 +220,7 @@ viewp = Ncurses.derwin(field,25, 25, 0, 0) # Must not exceed size of terminal
 
 # Draw borders, terrain and player
 #draw_map(field) # Draws a plain map with one terrain type.
-
+walkable = [" ","~"] #walkable.include?('~')
 generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
 building(field,10,10)
 f_x = []
@@ -265,8 +268,11 @@ while 1
 	input = Ncurses.getch
 	case input
     when KEY_UP # move up
-    	p.px -= 1 if p.px > 1
-			move_character(field,p)
+    	#p.px -= 1 if p.px > 1 && walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
+    	p.px -= 1 if walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
+			Ncurses.mvwaddstr(field, p.px + 1, p.py, " ") # for moving north
+    		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
+			#move_character(field,p)
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
     when KEY_DOWN # move down
