@@ -69,6 +69,17 @@ def borders(window)
 	end
 end
 
+def building(window, lines, cols)
+	i = 1
+	Ncurses.mvwaddstr(window, lines, cols, "|=======|")
+	while i < 8
+		Ncurses.mvwaddstr(window, lines + i, cols, "|       |")
+		i += 1
+	end
+	Ncurses.mvwaddstr(window, lines + 4, cols, "|   H   |")
+	Ncurses.mvwaddstr(window, lines + 8, cols, "|==b d==|")
+end
+
 def draw_map(window)
 	borders(window)
 
@@ -192,6 +203,7 @@ viewp = Ncurses.derwin(field,25, 25, 0, 0) # Must not exceed size of terminal
 #draw_map(field) # Draws a plain map with one terrain type.
 
 generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
+building(field,10,10)
 f_x = []
 f_y = []
 Ncurses.getmaxyx(field,f_y,f_x)
