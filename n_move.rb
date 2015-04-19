@@ -47,8 +47,8 @@ def terrain_tiles
 	# Pairs terrain name with icon
 end
 
-def draw_map(window)
-	# Draws borders and fills all game map tiles with snow.
+def borders(window)
+		# Draws borders and fills all game map tiles with snow.
 	i = 1
 	w_y = []
 	w_x = []
@@ -67,10 +67,17 @@ def draw_map(window)
 		Ncurses.mvwaddstr(window, w_y[0] - 1, j, "+")
 		j += 1
 	end
+end
+
+def draw_map(window)
+	borders(window)
 
 	# Draw Terrain
 	# Draw snow on every tile
 	i = 1
+	w_y = []
+	w_x = []
+	Ncurses.getmaxyx(window,w_y,w_x)
 	while i < w_x[0] - 1
 		j = 1
 		while j < w_y[0] - 1
@@ -82,6 +89,7 @@ def draw_map(window)
 end
 
 def generate_random(window)
+	borders(window)
 	# Draws random characters to each tile
 	i = 1
 	w_y = []
@@ -181,8 +189,9 @@ field = Ncurses.newwin(100, 100, 0, 0)
 viewp = Ncurses.derwin(field,25, 25, 0, 0) # Must not exceed size of terminal
 
 # Draw borders, terrain and player
-#draw_map(field)
-generate_random(field)
+#draw_map(field) # Draws a plain map with one terrain type.
+
+generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
 f_x = []
 f_y = []
 Ncurses.getmaxyx(field,f_y,f_x)
