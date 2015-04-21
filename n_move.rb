@@ -191,6 +191,13 @@ def center(subwin,parent,p_rows,p_cols)
 	Ncurses.mvderwin(subwin,rr[0],cc[0])
 end
 
+def message(window,message)
+	Ncurses.wclear(window)
+	borders(window)
+	Ncurses.mvwaddstr(window, 1, 2, "#{message}")
+	Ncurses.wrefresh(window)
+end
+
 #################################################################################
 # Initialize 																 	#
 #################################################################################
@@ -222,7 +229,7 @@ console = Ncurses.newwin(3, 25, 25, 0) # Must not exceed size of terminal
 
 # Draw borders, terrain and player
 #draw_map(field) # Draws a plain map with one terrain type.
-walkable = [" ","~"] #walkable.include?('~')
+walkable = ["32","126",32,126," ","~"] #walkable.include?('~')
 generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
 building(field,10,10)
 f_x = []
@@ -275,6 +282,7 @@ while 1
     when KEY_UP # move up
     	#p.px -= 1 if p.px > 1 && walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
     	step = Ncurses.mvwinch(field,p.px - 1, p.py)
+    	message(console,step)
     	p.px -= 1 if step == " "
 			Ncurses.mvwaddstr(field, p.px + 1, p.py, " ") # for moving north
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
