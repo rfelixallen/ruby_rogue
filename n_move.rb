@@ -290,18 +290,24 @@ while 1
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
     when KEY_DOWN # move down
+    	step = Ncurses.mvwinch(field,p.px + 1, p.py)
+    	message(console,step)
     	p.px += 1 if p.px < (f_y[0] - 2)
 	    	Ncurses.mvwaddstr(field, p.px - 1, p.py, " ")
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
     when KEY_RIGHT # move right
+    	step = Ncurses.mvwinch(field,p.px, p.py + 1)
+    	message(console,step)
     	p.py += 1 if p.py < (f_x[0] - 2)
 	    	Ncurses.mvwaddstr(field, p.px, p.py - 1, " ")
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
 	when KEY_LEFT # move left
+		step = Ncurses.mvwinch(field,p.px, p.py - 1)
+    	message(console,step)
     	p.py -= 1 if p.py > 1
 	    	Ncurses.mvwaddstr(field, p.px, p.py + 1, " ")
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
