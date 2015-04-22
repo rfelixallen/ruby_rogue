@@ -283,8 +283,10 @@ while 1
     	#p.px -= 1 if p.px > 1 && walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
     	step = Ncurses.mvwinch(field,p.px - 1, p.py)
     	message(console,step)
-    	p.px -= 1 if step == " "
-			Ncurses.mvwaddstr(field, p.px + 1, p.py, " ") # for moving north
+    	p.px -= 1 if p.px > 1 && (step == 32 or step == 126)
+			if (step == 32 or step == 126)
+				Ncurses.mvwaddstr(field, p.px + 1, p.py, " ") # for moving north
+    		end
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 			#move_character(field,p)
 	    center(viewp,field,p.px,p.py)
@@ -292,24 +294,30 @@ while 1
     when KEY_DOWN # move down
     	step = Ncurses.mvwinch(field,p.px + 1, p.py)
     	message(console,step)
-    	p.px += 1 if p.px < (f_y[0] - 2)
-	    	Ncurses.mvwaddstr(field, p.px - 1, p.py, " ")
+    	p.px += 1 if p.px < (f_y[0] - 2) && (step == 32 or step == 126)
+			if (step == 32 or step == 126)
+				Ncurses.mvwaddstr(field, p.px - 1, p.py, " ") # for moving north
+    		end
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
     when KEY_RIGHT # move right
     	step = Ncurses.mvwinch(field,p.px, p.py + 1)
     	message(console,step)
-    	p.py += 1 if p.py < (f_x[0] - 2)
-	    	Ncurses.mvwaddstr(field, p.px, p.py - 1, " ")
+    	p.py += 1 if p.py < (f_x[0] - 2) && (step == 32 or step == 126)
+			if (step == 32 or step == 126)
+				Ncurses.mvwaddstr(field, p.px, p.py - 1, " ") # for moving north
+    		end
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
 	when KEY_LEFT # move left
 		step = Ncurses.mvwinch(field,p.px, p.py - 1)
     	message(console,step)
-    	p.py -= 1 if p.py > 1
-	    	Ncurses.mvwaddstr(field, p.px, p.py + 1, " ")
+    	p.py -= 1 if p.py > 1 && (step == 32 or step == 126)
+			if (step == 32 or step == 126)
+				Ncurses.mvwaddstr(field, p.px, p.py + 1, " ") # for moving north
+    		end
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
