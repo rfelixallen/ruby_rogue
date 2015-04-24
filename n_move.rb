@@ -146,7 +146,7 @@ def generate_random(window)
 		i += 1
 	end
 end
-
+=begin
 def fade(t)
 	return t * t * t * (t * (t * 6 - 15) + 10)
 end
@@ -191,12 +191,13 @@ def noise(x,y,z)
 	res = lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), grad(p[BA], x-1, y, z)), lerp(u, grad(p[AB], x, y-1, z), grad(p[BB], x-1, y-1, z))),	lerp(v, lerp(u, grad(p[AA+1], x, y, z-1), grad(p[BA+1], x-1, y, z-1)), lerp(u, grad(p[AB+1], x, y-1, z-1),	grad(p[BB+1], x-1, y-1, z-1))))
 	return (res + 1.0)/2.0
 end
-
+=end
 def generate_perlin(window)
 	# Use Perlin Noise algorithim to draw terrain
 	borders(window)
 	
 	pn = Perlin::Noise.new 2
+	contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 2)
 
 	i = 1
 	w_y = []
@@ -207,7 +208,8 @@ def generate_perlin(window)
 		while j < w_y[0] - 1
 			x = j / w_y[0]
 			y = i / w_x[0]
-			n = pn.noise(10 * x, 10 * y, 0.8)
+			n = pn[x * 10, y * 10]
+			#n = contrast.call n
 			case 
 			when n < 0.35
 				Ncurses.mvwaddstr(window, i, j, "#")
@@ -306,7 +308,7 @@ console = Ncurses.newwin(3, 25, 25, 0) # Must not exceed size of terminal
 walkable = ["32","126",32,126," ","~"] #walkable.include?('~')
 #generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
 generate_perlin(field)
-#building(field,10,10)
+building(field,10,10)
 f_x = []
 f_y = []
 Ncurses.getmaxyx(field,f_y,f_x)
