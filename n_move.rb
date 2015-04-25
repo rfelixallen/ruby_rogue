@@ -254,15 +254,18 @@ Ncurses.refresh
 # Make Game Map
 #field = Ncurses.newwin(sd_y[0] * 2, sd_x[0] * 2, 0, 0)
 #viewp = Ncurses.derwin(field,sd_y[0], sd_x[0], 0, 0)
+view_lines = 25
+view_cols = 25
 field = Ncurses.newwin(100, 100, 0, 0)
-viewp = Ncurses.derwin(field,25, 25, 0, 0) # Must not exceed size of terminal
-console = Ncurses.newwin(3, 25, 25, 0) # Must not exceed size of terminal
+viewp = Ncurses.derwin(field,view_lines, view_cols, 0, 0) # Must not exceed size of terminal
+console = Ncurses.newwin(3, view_cols, view_lines, 0) 
+hud = Ncurses.newwin(view_lines + 3, 15, 0, view_lines) 
 
 # Draw borders, terrain and player
-#draw_map(field) # Draws a plain map with one terrain type.
+draw_map(field) # Draws a plain map with one terrain type.
 walkable = ["32","126",32,126," ","~"] #walkable.include?('~')
 #generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
-generate_perlin(field)
+#generate_perlin(field)
 building(field,10,10)
 f_x = []
 f_y = []
@@ -279,9 +282,20 @@ end
 center(viewp,field,p.px,p.py)
 Ncurses.wrefresh(viewp)
 
+# Set up Console
 borders(console)
 Ncurses.mvwaddstr(console, 1, 2, "Hello!")
 Ncurses.wrefresh(console)
+
+# Set up HUD
+borders(hud)
+Ncurses.mvwaddstr(hud, 1, 1, "The Game")
+Ncurses.mvwaddstr(hud, 2, 1, "Time: 16:04")
+Ncurses.mvwaddstr(hud, 3, 1, "HP: 10")
+Ncurses.mvwaddstr(hud, 4, 1, "Inventory:")
+Ncurses.mvwaddstr(hud, 5, 1, "  -Club")
+Ncurses.mvwaddstr(hud, 6, 1, "  -Flashlight")
+Ncurses.wrefresh(hud)
 #################################################################################
 # Game Loop 																 	#
 #################################################################################
@@ -311,7 +325,7 @@ while 1
 	#Ncurses.mvwaddstr(viewp,2,1,"Player lines = #{p.px}, Player cols = #{p.py}") 		# FOR TESTING
 	input = Ncurses.getch
 	case input
-    when KEY_UP # move up
+    when KEY_UP, 119 # move up
     	#p.px -= 1 if p.px > 1 && walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
     	step = Ncurses.mvwinch(field,p.px - 1, p.py)
     	message(console,step)
@@ -323,7 +337,7 @@ while 1
 			#move_character(field,p)
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
-    when KEY_DOWN # move down
+    when KEY_DOWN, 115 # move down
     	step = Ncurses.mvwinch(field,p.px + 1, p.py)
     	message(console,step)
     	p.px += 1 if p.px < (f_y[0] - 2) && (step == 32 or step == 126)
@@ -333,7 +347,7 @@ while 1
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
-    when KEY_RIGHT # move right
+    when KEY_RIGHT, 100 # move right
     	step = Ncurses.mvwinch(field,p.px, p.py + 1)
     	message(console,step)
     	p.py += 1 if p.py < (f_x[0] - 2) && (step == 32 or step == 126)
@@ -343,7 +357,7 @@ while 1
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
-	when KEY_LEFT # move left
+	when KEY_LEFT, 97 # move left
 		step = Ncurses.mvwinch(field,p.px, p.py - 1)
     	message(console,step)
     	p.py -= 1 if p.py > 1 && (step == 32 or step == 126)
@@ -353,7 +367,9 @@ while 1
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
     	Ncurses.wrefresh(viewp)
-    when KEY_F2 # Quit Game
+    when 114, 82 # r or R
+    	message(console,"6..4..zzZzZ..7..Zz")
+    when KEY_F2, 113, 81 # Quit Game with F2, q or Q
     	break
     when KEY_F3 # Reset the Game
     	Ncurses.wclear(field)
@@ -364,6 +380,7 @@ while 1
     	Ncurses.wrefresh(viewp)
     else
     	Ncurses.flash
+    	message(console,input)
     	Ncurses.wrefresh(viewp)
     end
 
