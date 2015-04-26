@@ -393,6 +393,42 @@ while 1
     	score = f_x[0] * f_x[0] + f_y[0] *f_y[0]
     	dist = -1
 
+    	# Check to move up
+    	step = Ncurses.mvwinch(field,m.mx - 1, m.my)
+	    dist = ((p.px - (m.mx - 1)) ** 2) + ((p.py - m.my) ** 2)
+	    m.mx -= 1 if score > dist && (step == 32 or step == 126)
+			if (step == 32 or step == 126)
+				score = dist
+				Ncurses.mvwaddstr(field, m.mx + 1, m.my, " ") # for moving north
+				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+    			Ncurses.wrefresh(viewp)
+			end
+		#end
+
+    	# Check to move down
+    	step = Ncurses.mvwinch(field,m.mx + 1, m.my)
+	    dist = ((p.px - (m.mx + 1)) ** 2) + ((p.py - m.my) ** 2)
+	    m.mx += 1 if score > dist && (step == 32 or step == 126)
+			if (step == 32 or step == 126)
+				score = dist
+				Ncurses.mvwaddstr(field, m.mx - 1, m.my, " ") # for moving north
+				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+    			Ncurses.wrefresh(viewp)
+			end
+		#end
+
+    	# Check to move right
+    	step = Ncurses.mvwinch(field,m.mx, m.my + 1)
+	    dist = ((p.px - m.mx) ** 2) + ((p.py - (m.my + 1) ** 2))
+	    m.my += 1 if score > dist && (step == 32 or step == 126)
+			if (step == 32 or step == 126)
+				score = dist
+				Ncurses.mvwaddstr(field, m.mx, m.my - 1, " ") # for moving north
+				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+    			Ncurses.wrefresh(viewp)
+			end
+		#end
+
     	# Check to move left
     	step = Ncurses.mvwinch(field,m.mx, m.my - 1)
 	    dist = ((p.px - m.mx) ** 2) + ((p.py - (m.my - 1) ** 2))
@@ -400,21 +436,12 @@ while 1
 			if (step == 32 or step == 126)
 				score = dist
 				Ncurses.mvwaddstr(field, m.mx, m.my + 1, " ") # for moving north
+				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+    			Ncurses.wrefresh(viewp)
 			end
-		end
-		Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
-    	Ncurses.wrefresh(viewp)
-=begin
-		if (step == 32 or step == 126) 
-			dist = ((p.px - m.mx) ** 2) + ((p.py - (m.my - 1) ** 2)
-			if(score > dist)
-				score = dist
-				pos = 0
-			end
-		end
-=end
-    end
-
+		#end
+	end
+end
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_y[0] / 2, sd_x[0] / 2, "Good Bye!")
 Ncurses.wrefresh(stdscr)
