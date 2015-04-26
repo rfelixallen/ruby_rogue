@@ -23,11 +23,12 @@ class Character
 end
 
 class Monster
-	attr_accessor :mx, :my, :symb
+	attr_accessor :symb, :mx, :my, :hp
 	def initialize(mx, my)
 		@symb = 'M'
 		@mx = mx 
 		@my = my
+		@hp = 3
 	end
 end
 =begin
@@ -277,7 +278,7 @@ p = Character.new(starty, startx)
 monster_exist = true
 Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 if monster_exist == true
-	m = Monster.new(f_y[0] - 10, f_x[0] - 10)
+	m = Monster.new(starty + 10, startx + 10)
 	Ncurses.mvwaddstr(field,m.mx,m.my,"#{m.symb}")
 end
 center(viewp,field,p.px,p.py)
@@ -388,12 +389,31 @@ while 1
 
     # Monster Moves
     if monster_exist == true
+    	pos = -1
+    	score = f_x[0] * f_x[0] + f_y[0] *f_y[0]
+    	dist = -1
+
     	# Check to move left
-    	
+    	step = Ncurses.mvwinch(field,m.mx, m.my - 1)
+	    dist = ((p.px - m.mx) ** 2) + ((p.py - (m.my - 1) ** 2))
+	    m.my -= 1 if score > dist && (step == 32 or step == 126)
+			if (step == 32 or step == 126)
+				score = dist
+				Ncurses.mvwaddstr(field, m.mx, m.my + 1, " ") # for moving north
+			end
+		end
+		Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+    	Ncurses.wrefresh(viewp)
+=begin
+		if (step == 32 or step == 126) 
+			dist = ((p.px - m.mx) ** 2) + ((p.py - (m.my - 1) ** 2)
+			if(score > dist)
+				score = dist
+				pos = 0
+			end
+		end
+=end
     end
-
-
-end
 
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_y[0] / 2, sd_x[0] / 2, "Good Bye!")
