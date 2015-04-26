@@ -13,11 +13,12 @@ include Ncurses
 ##################################################################################
 
 class Character
-	attr_accessor :px, :py, :symb
+	attr_accessor :symb, :px, :py, :hp
 	def initialize(px, py)
 		@symb = '@'
-		@px = px 
-		@py = py
+		@px = px  # Player X location
+		@py = py # Player Y location
+		@hp = 10 # Hit Points
 	end
 end
 
@@ -291,10 +292,11 @@ Ncurses.wrefresh(console)
 borders(hud)
 Ncurses.mvwaddstr(hud, 1, 1, "The Game")
 Ncurses.mvwaddstr(hud, 2, 1, "Time: 16:04")
-Ncurses.mvwaddstr(hud, 3, 1, "HP: 10")
-Ncurses.mvwaddstr(hud, 4, 1, "Inventory:")
-Ncurses.mvwaddstr(hud, 5, 1, "  -Club")
-Ncurses.mvwaddstr(hud, 6, 1, "  -Flashlight")
+Ncurses.mvwaddstr(hud, 3, 1, "Temp: 16 F")
+Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+Ncurses.mvwaddstr(hud, 5, 1, "Inventory:")
+Ncurses.mvwaddstr(hud, 6, 1, "  -Club")
+Ncurses.mvwaddstr(hud, 7, 1, "  -Flashlight")
 Ncurses.wrefresh(hud)
 #################################################################################
 # Game Loop 																 	#
