@@ -13,7 +13,10 @@ include Ncurses
 ##################################################################################
 # Class & Methods                                                                #
 ##################################################################################
-library_test
+test_library
+test_ui
+test_terrain
+test_actors
 class Character
   attr_accessor :symb, :px, :py, :hp
   def initialize(px, py)
