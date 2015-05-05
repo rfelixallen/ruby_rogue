@@ -265,7 +265,12 @@ hud = Ncurses.newwin(view_lines + 3, 15, 0, view_lines)
 
 # Draw borders, terrain and player
 draw_map(field) # Draws a plain map with one terrain type.
+actors = []
+items = [36]
 walkable = [32,126] #walkable.include?('~')
+items.each do |x|
+	walkable << x
+end
 #generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
 #generate_perlin(field)
 building(field,10,10)
@@ -274,13 +279,15 @@ f_y = []
 Ncurses.getmaxyx(field,f_y,f_x)
 startx = (f_x[0] / 4)
 starty = (f_y[0] / 4)
+
 p = Character.new(starty, startx)
-monster_exist = true
+actors << p.symb
 Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-if monster_exist == true
-	m = Monster.new(starty + 10, startx + 10)
-	Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
-end
+
+m = Monster.new(starty + 10, startx + 10)
+actors << m.symb
+Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+
 center(viewp,field,p.px,p.py)
 Ncurses.wrefresh(viewp)
 
@@ -341,7 +348,7 @@ while p.hp > 0
     	step = Ncurses.mvwinch(field,p.px - 1, p.py)
     	message(console,step)
     	if p.px > 1 && (walkable.include?(step) or step == 77)
-			if (step == 32 or step == 126)
+			if walkable.include?(step)
 				p.px -= 1
 				Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
 				Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
