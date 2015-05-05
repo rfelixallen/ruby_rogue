@@ -300,6 +300,7 @@ Ncurses.mvwaddstr(hud, 6, 1, "  -Club")
 Ncurses.mvwaddstr(hud, 7, 1, "  -Flashlight")
 Ncurses.mvwaddstr(hud, 8, 1, "P: #{p.px},#{p.py}")
 Ncurses.mvwaddstr(hud, 9, 1, "M: #{m.mx},#{m.my}")
+Ncurses.mvwaddstr(hud, 10, 1, "M HP: #{m.hp}")
 Ncurses.wrefresh(hud)
 #################################################################################
 # Game Loop 																 	#
@@ -331,6 +332,8 @@ while 1
 	input = Ncurses.getch
 	Ncurses.mvwaddstr(hud, 8, 1, "P: #{p.px},#{p.py}")
 	Ncurses.mvwaddstr(hud, 9, 1, "M: #{m.mx},#{m.my}")
+	Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+	Ncurses.mvwaddstr(hud, 10, 1, "M HP: #{m.hp}")
 	Ncurses.wrefresh(hud)
 	case input
     when KEY_UP, 119 # move up
@@ -406,7 +409,10 @@ while 1
     end
 
     # Monster Move (Chasing Mode)
-    if monster_exist == true
+    if m.hp <= 0
+		Ncurses.mvwaddstr(field, m.mx, m.my, "X")
+		Ncurses.wrefresh(viewp)
+	else
     	flip1 = rand(2)
     	if flip1 == 0
 	    	# Move Left
