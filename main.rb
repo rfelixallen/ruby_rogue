@@ -1,3 +1,4 @@
+require_relative 'library'
 require 'ncurses'
 include Ncurses
 
@@ -12,7 +13,7 @@ include Ncurses
 ##################################################################################
 # Class & Methods                                                                #
 ##################################################################################
-
+library_test
 class Character
   attr_accessor :symb, :px, :py, :hp
   def initialize(px, py)
