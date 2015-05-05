@@ -279,7 +279,7 @@ monster_exist = true
 Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 if monster_exist == true
 	m = Monster.new(starty + 10, startx + 10)
-	Ncurses.mvwaddstr(field,m.mx,m.my,"#{m.symb}")
+	Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
 end
 center(viewp,field,p.px,p.py)
 Ncurses.wrefresh(viewp)
@@ -298,6 +298,8 @@ Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
 Ncurses.mvwaddstr(hud, 5, 1, "Inventory:")
 Ncurses.mvwaddstr(hud, 6, 1, "  -Club")
 Ncurses.mvwaddstr(hud, 7, 1, "  -Flashlight")
+Ncurses.mvwaddstr(hud, 8, 1, "P: #{p.px},#{p.py}")
+Ncurses.mvwaddstr(hud, 9, 1, "M: #{m.mx},#{m.my}")
 Ncurses.wrefresh(hud)
 #################################################################################
 # Game Loop 																 	#
@@ -327,6 +329,9 @@ while 1
 	#Ncurses.mvwaddstr(viewp,1,1,"Screen lines = #{sd_y[0]}, Screen cols = #{sd_x[0]}") # FOR TESTING
 	#Ncurses.mvwaddstr(viewp,2,1,"Player lines = #{p.px}, Player cols = #{p.py}") 		# FOR TESTING
 	input = Ncurses.getch
+	Ncurses.mvwaddstr(hud, 8, 1, "P: #{p.px},#{p.py}")
+	Ncurses.mvwaddstr(hud, 9, 1, "M: #{m.mx},#{m.my}")
+	Ncurses.wrefresh(hud)
 	case input
     when KEY_UP, 119 # move up
     	#p.px -= 1 if p.px > 1 && walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
@@ -335,6 +340,9 @@ while 1
     	p.px -= 1 if p.px > 1 && (step == 32 or step == 126)
 			if (step == 32 or step == 126)
 				Ncurses.mvwaddstr(field, p.px + 1, p.py, " ") # for moving north
+			else step == 77
+				p.px += 1
+				m.hp -= 1
     		end
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 			#move_character(field,p)
@@ -346,6 +354,9 @@ while 1
     	p.px += 1 if p.px < (f_y[0] - 2) && (step == 32 or step == 126)
 			if (step == 32 or step == 126)
 				Ncurses.mvwaddstr(field, p.px - 1, p.py, " ") # for moving north
+			else step == 77
+				p.px -= 1
+				m.hp -= 1
     		end
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
@@ -356,6 +367,9 @@ while 1
     	p.py += 1 if p.py < (f_x[0] - 2) && (step == 32 or step == 126)
 			if (step == 32 or step == 126)
 				Ncurses.mvwaddstr(field, p.px, p.py - 1, " ") # for moving north
+			else step == 77
+				p.py -= 1
+				m.hp -= 1    		
     		end
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
@@ -366,6 +380,9 @@ while 1
     	p.py -= 1 if p.py > 1 && (step == 32 or step == 126)
 			if (step == 32 or step == 126)
 				Ncurses.mvwaddstr(field, p.px, p.py + 1, " ") # for moving north
+			else step == 77
+				p.py += 1
+				m.hp -= 1
     		end
     		Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
 	    center(viewp,field,p.px,p.py)
@@ -387,59 +404,95 @@ while 1
     	Ncurses.wrefresh(viewp)
     end
 
-    # Monster Moves
+    # Monster Move (Chasing Mode)
     if monster_exist == true
-    	pos = -1
-    	score = f_x[0] * f_x[0] + f_y[0] *f_y[0]
-    	dist = -1
-
-    	# Check to move up
-    	step = Ncurses.mvwinch(field,m.mx - 1, m.my)
-	    dist = ((p.px - (m.mx - 1)) ** 2) + ((p.py - m.my) ** 2)
-	    m.mx -= 1 if score > dist && (step == 32 or step == 126)
-			if (step == 32 or step == 126)
-				score = dist
+    	flip1 = rand(2)
+    	if flip1 == 0
+	    	# Move Left
+	    	step1 = Ncurses.mvwinch(field,m.mx, m.my - 1)
+	    	step2 = Ncurses.mvwinch(field,m.mx, m.my + 1)
+	    	if m.my > p.py && (step1 == 32 or step1 == 126 or step1 == 64)
+		    	m.my -= 1
+		    	if (step1 == 32 or step1 == 126)
+					Ncurses.mvwaddstr(field, m.mx, m.my + 1, " ") # for moving north				
+		    	else step1 == 64
+					m.my += 1
+					p.hp -= 1
+				end
+				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+				Ncurses.wrefresh(viewp)
+			# Move Right	    	
+			elsif m.my < p.py && (step2 == 32 or step2 == 126 or step2 == 64)
+	    		m.my += 1
+	    		if (step2 == 32 or step2 == 126)
+	    			Ncurses.mvwaddstr(field, m.mx, m.my - 1, " ") # for moving north	
+				else step1 == 64
+					m.my -= 1
+					p.hp -= 1
+				end
+				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+				Ncurses.wrefresh(viewp)
+			 # Stay Put
+	    	else m.my == p.py
+		    	# Move Up
+		    	step3 = Ncurses.mvwinch(field,m.mx - 1, m.my)
+		    	step4 = Ncurses.mvwinch(field,m.mx + 1, m.my)
+		    	if m.mx > p.px && (step3 == 32 or step3 == 126 or step3 == 64)
+					m.mx -= 1
+					if (step3 == 32 or step3 == 126)
+						Ncurses.mvwaddstr(field, m.mx + 1, m.my, " ") # for moving north
+					else step3 == 64
+						m.mx += 1
+						p.hp -= 1
+					end
+					Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+					Ncurses.wrefresh(viewp)
+		    	# Move Down
+		    	else m.mx < p.px && (step4 == 32 or step4 == 126 or step4 == 64)
+					m.mx += 1
+					if (step4 == 32 or step4 == 126)
+						Ncurses.mvwaddstr(field, m.mx - 1, m.my, " ") # for moving north
+					else step4 == 64
+						m.mx -= 1
+						p.hp -= 1
+					end
+					Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+					Ncurses.wrefresh(viewp)
+				end
+	    	end
+		else	
+	    	# Move Up
+	    	step1 = Ncurses.mvwinch(field,m.mx - 1, m.my)
+	    	step2 = Ncurses.mvwinch(field,m.mx + 1, m.my)
+	    	if m.mx > p.px && (step1 == 32 or step1 == 126 or step1 == 64)
+				m.mx -= 1
 				Ncurses.mvwaddstr(field, m.mx + 1, m.my, " ") # for moving north
 				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
-    			Ncurses.wrefresh(viewp)
-			end
-		#end
-
-    	# Check to move down
-    	step = Ncurses.mvwinch(field,m.mx + 1, m.my)
-	    dist = ((p.px - (m.mx + 1)) ** 2) + ((p.py - m.my) ** 2)
-	    m.mx += 1 if score > dist && (step == 32 or step == 126)
-			if (step == 32 or step == 126)
-				score = dist
+				Ncurses.wrefresh(viewp)
+	    	# Move Down
+	    	elsif m.mx < p.px && (step2 == 32 or step2 == 126 or step2 == 64)
+				m.mx += 1
 				Ncurses.mvwaddstr(field, m.mx - 1, m.my, " ") # for moving north
 				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
-    			Ncurses.wrefresh(viewp)
-			end
-		#end
-
-    	# Check to move right
-    	step = Ncurses.mvwinch(field,m.mx, m.my + 1)
-	    dist = ((p.px - m.mx) ** 2) + ((p.py - (m.my + 1) ** 2))
-	    m.my += 1 if score > dist && (step == 32 or step == 126)
-			if (step == 32 or step == 126)
-				score = dist
-				Ncurses.mvwaddstr(field, m.mx, m.my - 1, " ") # for moving north
-				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
-    			Ncurses.wrefresh(viewp)
-			end
-		#end
-
-    	# Check to move left
-    	step = Ncurses.mvwinch(field,m.mx, m.my - 1)
-	    dist = ((p.px - m.mx) ** 2) + ((p.py - (m.my - 1) ** 2))
-	    m.my -= 1 if score > dist && (step == 32 or step == 126)
-			if (step == 32 or step == 126)
-				score = dist
-				Ncurses.mvwaddstr(field, m.mx, m.my + 1, " ") # for moving north
-				Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
-    			Ncurses.wrefresh(viewp)
-			end
-		#end
+				Ncurses.wrefresh(viewp)
+	    	else m.mx == p.px 
+		    	# Move Left
+		    	step3 = Ncurses.mvwinch(field,m.mx, m.my - 1)
+		    	step4 = Ncurses.mvwinch(field,m.mx, m.my + 1)
+		    	if m.my > p.py && (step3 == 32 or step3 == 126 or step3 == 64)
+					m.my -= 1
+					Ncurses.mvwaddstr(field, m.mx, m.my + 1, " ") # for moving north
+					Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+					Ncurses.wrefresh(viewp)
+				# Move Right
+		    	else m.my < p.py && (step4 == 32 or step4 == 126 or step4 == 64)
+					m.my += 1
+					Ncurses.mvwaddstr(field, m.mx, m.my - 1, " ") # for moving north
+					Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
+					Ncurses.wrefresh(viewp)
+				end
+			end		
+	    end
 	end
 end
 Ncurses.clear
