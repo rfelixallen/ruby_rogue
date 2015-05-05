@@ -32,6 +32,9 @@ def check_movement(window,px,py,walkable,items,actors)
     end
 end
 
+def attack(x)
+    x.hp -= 1
+end
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
@@ -141,7 +144,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           message(console,"Check = 1") # For Testing
         #elsif step == 77 
         elsif check == 3
-          m.hp -= 1
+          attack(m)
           message(console,"Check = 3") # For Testing
         #elsif items.include?(step)
         elsif check == 2
