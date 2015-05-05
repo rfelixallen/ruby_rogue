@@ -4,6 +4,7 @@ include Ncurses
 
 ##################################################################################
 # TODO                                                                           #
+#   *Refactor existing code, use header files                                    #
 #   *Add Perlin Noise                                                            #
 #   *Add item pickups                                                            #
 #   *Add z-levels                                                                #
@@ -247,34 +248,33 @@ actors = []         # Array will contain ascii decimal value of actor symbols
 items = [36]        # Array contains ascii decimal value of all items on ground
 walkable = [32,126] # Array contains ascii decimal value of all walkable terrain
 
-
-
-f_x = []
-f_y = []
-Ncurses.getmaxyx(field,f_y,f_x)
-startx = (f_x[0] / 4)
-starty = (f_y[0] / 4)
+# Setup Actors
+field_max_lines = []
+field_max_cols = []
+Ncurses.getmaxyx(field,field_max_cols,field_max_lines)   # Get Max Y,X of Field
+player_start_lines = (field_max_lines[0] / 4)
+player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Character
-p = Character.new(starty, startx)
-actors << p.symb
-Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
+p = Character.new(player_start_cols, player_start_lines) # Begin player in top, right corner
+actors << p.symb                                         # Add player symbol to array of actor symbols
+Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")        # Draw layer to map
+center(viewp,field,p.px,p.py)                            # Center map on player
 
 # Create Monster
-m = Monster.new(starty + 10, startx + 10)
-actors << m.symb
-Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
-
-center(viewp,field,p.px,p.py)
-Ncurses.wrefresh(viewp)
+m = Monster.new(player_start_cols + 10, player_start_lines + 10) # Begin Monster near player
+actors << m.symb                                                 # Add player symbol to array of actor symbols
+Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")                # Draw Monster to map
+Ncurses.wrefresh(viewp) # Update viewport with all previous changes
 
 # Set up Console
-borders(console)
-Ncurses.mvwaddstr(console, 1, 2, "Hello!")
-Ncurses.wrefresh(console)
+borders(console)                            # Add borders to the console
+Ncurses.mvwaddstr(console, 1, 2, "Hello!")  # Add a test message to confirm console works
+Ncurses.wrefresh(console)                   # Refresh console window with message
 
-# Set up HUD
-borders(hud)
+# Set up HUD (Heads-Up-Display)
+# Ideally, HUD will be updated automatically, and not by hand.
+borders(hud)                                
 Ncurses.mvwaddstr(hud, 1, 1, "The Game")
 Ncurses.mvwaddstr(hud, 2, 1, "Time: 16:04")
 Ncurses.mvwaddstr(hud, 3, 1, "Temp: 16 F")
@@ -284,10 +284,10 @@ Ncurses.mvwaddstr(hud, 6, 1, "  -Club")
 Ncurses.mvwaddstr(hud, 7, 1, "  -Flashlight")
 Ncurses.wrefresh(hud)
 #################################################################################
-# Game Loop                                   #
+# Game Loop                                                                     #
 #################################################################################
 
-while p.hp > 0
+while p.hp > 0  # While Player hit points are above 0, keep playing
 =begin  
   # Resize window to the terminal screen
   new_y = []
@@ -308,13 +308,9 @@ while p.hp > 0
     Ncurses.wrefresh(field)
   end
 =end
-  #Ncurses.mvwaddstr(viewp,1,1,"Screen lines = #{sd_cols[0]}, Screen cols = #{sd_lines[0]}") # FOR TESTING
-  #Ncurses.mvwaddstr(viewp,2,1,"Player lines = #{p.px}, Player cols = #{p.py}")     # FOR TESTING
   input = Ncurses.getch
-  Ncurses.wrefresh(hud)
   case input
-    when KEY_UP, 119 # move up
-      #p.px -= 1 if p.px > 1 && walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
+    when KEY_UP, 119 # Move Up
       step = Ncurses.mvwinch(field,p.px - 1, p.py)
       message(console,step)
       if p.px > 1 && (walkable.include?(step) or items.include?(step) or step == 77)
@@ -332,13 +328,12 @@ while p.hp > 0
         Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
         end
       end
-      #move_character(field,p)
       center(viewp,field,p.px,p.py)
       Ncurses.wrefresh(viewp)
-    when KEY_DOWN, 115 # move down
+    when KEY_DOWN, 115 # Move Down
       step = Ncurses.mvwinch(field,p.px + 1, p.py)
       message(console,step)
-      if p.px < (f_y[0] - 2) && (step == 32 or step == 126 or step == 77)
+      if p.px < (field_max_cols[0] - 2) && (step == 32 or step == 126 or step == 77)
       if (step == 32 or step == 126)
         p.px += 1 
         Ncurses.mvwaddstr(field, p.px - 1, p.py, " ")
@@ -349,10 +344,10 @@ while p.hp > 0
       end
       center(viewp,field,p.px,p.py)
       Ncurses.wrefresh(viewp)
-    when KEY_RIGHT, 100 # move right
+    when KEY_RIGHT, 100 # Move Right
       step = Ncurses.mvwinch(field,p.px, p.py + 1)
       message(console,step)
-      if p.py < (f_x[0] - 2) && (step == 32 or step == 126 or step == 77)
+      if p.py < (field_max_lines[0] - 2) && (step == 32 or step == 126 or step == 77)
       if (step == 32 or step == 126)
         p.py += 1 
         Ncurses.mvwaddstr(field, p.px, p.py - 1, " ")
@@ -363,7 +358,7 @@ while p.hp > 0
       end
       center(viewp,field,p.px,p.py)
       Ncurses.wrefresh(viewp)
-  when KEY_LEFT, 97 # move left
+  when KEY_LEFT, 97 # Move Left
     step = Ncurses.mvwinch(field,p.px, p.py - 1)
       message(console,step)
       if p.py > 1 && (step == 32 or step == 126 or step == 77)
@@ -377,14 +372,12 @@ while p.hp > 0
       end
       center(viewp,field,p.px,p.py)
       Ncurses.wrefresh(viewp)
-    when 114, 82 # r or R
-      message(console,"6..4..zzZzZ..7..Zz")
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
-      Ncurses.flash
-      message(console,input)
-      Ncurses.wrefresh(viewp)
+      Ncurses.flash           # Flash screen if undefined input selected
+      message(console,input)  # Display ascii decimal number of selected input
+      Ncurses.wrefresh(console) 
     end
 
     # Monster Move (Chasing Mode)
