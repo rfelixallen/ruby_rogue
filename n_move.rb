@@ -4,8 +4,8 @@ include Ncurses
 
 ##################################################################################
 # TODO																			 #
-#   *Add Perlin Noise
-#  	*Add Enemy code																 #
+#   *Add Perlin Noise 															 #
+#  	*Add item pickups															 #
 # 	*Add z-levels																 #
 #   *Add color																	 #
 ##################################################################################
@@ -99,7 +99,7 @@ def building(window, lines, cols)
 		Ncurses.mvwaddstr(window, lines + i, cols, "|       |")
 		i += 1
 	end
-	Ncurses.mvwaddstr(window, lines + 4, cols, "|   H   |")
+	Ncurses.mvwaddstr(window, lines + 4, cols, "|   $   |")
 	Ncurses.mvwaddstr(window, lines + 8, cols, "|==b d==|")
 end
 
@@ -265,7 +265,7 @@ hud = Ncurses.newwin(view_lines + 3, 15, 0, view_lines)
 
 # Draw borders, terrain and player
 draw_map(field) # Draws a plain map with one terrain type.
-walkable = ["32","126",32,126," ","~"] #walkable.include?('~')
+walkable = [32,126] #walkable.include?('~')
 #generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
 #generate_perlin(field)
 building(field,10,10)
@@ -306,7 +306,7 @@ Ncurses.wrefresh(hud)
 # Game Loop 																 	#
 #################################################################################
 
-while 1
+while p.hp > 0
 =begin	
 	# Resize window to the terminal screen
 	new_y = []
@@ -340,7 +340,7 @@ while 1
     	#p.px -= 1 if p.px > 1 && walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
     	step = Ncurses.mvwinch(field,p.px - 1, p.py)
     	message(console,step)
-    	if p.px > 1 && (step == 32 or step == 126 or step == 77)
+    	if p.px > 1 && (walkable.include?(step) or step == 77)
 			if (step == 32 or step == 126)
 				p.px -= 1
 				Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
