@@ -268,9 +268,11 @@ draw_map(field) # Draws a plain map with one terrain type.
 actors = []
 items = [36]
 walkable = [32,126] #walkable.include?('~')
+=begin
 items.each do |x|
 	walkable << x
 end
+=end
 #generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
 #generate_perlin(field)
 building(field,10,10)
@@ -305,9 +307,6 @@ Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
 Ncurses.mvwaddstr(hud, 5, 1, "Inventory:")
 Ncurses.mvwaddstr(hud, 6, 1, "  -Club")
 Ncurses.mvwaddstr(hud, 7, 1, "  -Flashlight")
-Ncurses.mvwaddstr(hud, 8, 1, "P: #{p.px},#{p.py}")
-Ncurses.mvwaddstr(hud, 9, 1, "M: #{m.mx},#{m.my}")
-Ncurses.mvwaddstr(hud, 10, 1, "M HP: #{m.hp}")
 Ncurses.wrefresh(hud)
 #################################################################################
 # Game Loop 																 	#
@@ -337,23 +336,25 @@ while p.hp > 0
 	#Ncurses.mvwaddstr(viewp,1,1,"Screen lines = #{sd_y[0]}, Screen cols = #{sd_x[0]}") # FOR TESTING
 	#Ncurses.mvwaddstr(viewp,2,1,"Player lines = #{p.px}, Player cols = #{p.py}") 		# FOR TESTING
 	input = Ncurses.getch
-	Ncurses.mvwaddstr(hud, 8, 1, "P: #{p.px},#{p.py}")
-	Ncurses.mvwaddstr(hud, 9, 1, "M: #{m.mx},#{m.my}")
-	Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
-	Ncurses.mvwaddstr(hud, 10, 1, "M HP: #{m.hp}")
 	Ncurses.wrefresh(hud)
 	case input
     when KEY_UP, 119 # move up
     	#p.px -= 1 if p.px > 1 && walkable.include?(Ncurses.mvwinch(field,p.px - 1, p.py)) 
     	step = Ncurses.mvwinch(field,p.px - 1, p.py)
     	message(console,step)
-    	if p.px > 1 && (walkable.include?(step) or step == 77)
+    	if p.px > 1 && (walkable.include?(step) or items.include?(step) or step == 77)
 			if walkable.include?(step)
 				p.px -= 1
 				Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
 				Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-			else step == 77
+			elsif step == 77 
 				m.hp -= 1
+			else items.include?(step)
+				Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
+				Ncurses.wrefresh(hud)
+				p.px -= 1
+				Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
+				Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
     		end
     	end
 			#move_character(field,p)
