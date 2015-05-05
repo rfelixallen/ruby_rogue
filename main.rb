@@ -21,8 +21,12 @@ test_actors
 def check_movement(window,px,py,walkable,items,actors)
     step = Ncurses.mvwinch(window, px, py)
     #message(console,step)
-    if (walkable.include?(step) or items.include?(step) or step == 77)
-      return true
+    if walkable.include?(step) 
+      return 1
+    elsif items.include?(step)
+      return 2
+    elsif actors.include?(step)
+      return 3
     else
       return false
     end
@@ -89,19 +93,20 @@ player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Character
 p = Character.new(player_start_cols, player_start_lines) # Begin player in top, right corner
-actors << p.symb                                         # Add player symbol to array of actor symbols
+actors << p.symb.ord                                         # Add player symbol to array of actor symbols
 Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")        # Draw layer to map
 center(viewp,field,p.px,p.py)                            # Center map on player
 
 # Create Monster
 m = Monster.new(player_start_cols + 10, player_start_lines + 10) # Begin Monster near player
-actors << m.symb                                                 # Add player symbol to array of actor symbols
+actors << m.symb.ord                                                 # Add player symbol to array of actor symbols
 Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")                # Draw Monster to map
 Ncurses.wrefresh(viewp) # Update viewport with all previous changes
+message(console,actors)
 
 # Set up Console
 borders(console)                            # Add borders to the console
-Ncurses.mvwaddstr(console, 1, 2, "Hello!")  # Add a test message to confirm console works
+#Ncurses.mvwaddstr(console, 1, 2, "Hello!")  # Add a test message to confirm console works
 Ncurses.wrefresh(console)                   # Refresh console window with message
 
 # Set up HUD (Heads-Up-Display)
@@ -123,24 +128,31 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      step = Ncurses.mvwinch(field,p.px - 1, p.py)
+      #step = Ncurses.mvwinch(field,p.px - 1, p.py)
       #message(console,step)
       #if p.px > 1 && (walkable.include?(step) or items.include?(step) or step == 77)
+      check = check_movement(field,p.px - 1,p.py,walkable,items,actors)
       if p.px > 1 #&& check_movement(field,p.px - 1,p.py,walkable,items,actors)
-        if walkable.include?(step)
+        #if walkable.include?(step)
+        if check == 1
           p.px -= 1
           Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
           Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-        elsif step == 77 
+          message(console,"Check = 1") # For Testing
+        #elsif step == 77 
+        elsif check == 3
           m.hp -= 1
-        elsif items.include?(step)
+          message(console,"Check = 3") # For Testing
+        #elsif items.include?(step)
+        elsif check == 2
           Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
           Ncurses.wrefresh(hud)
           p.px -= 1
           Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
           Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-        else
-          Ncurses.flash
+          message(console,"Check = 2") # For Testing
+        else # No valid move
+          message(console,"No Valid Move")
         end
       end
       center(viewp,field,p.px,p.py)
@@ -212,6 +224,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")       
           else step1 == 64
           p.hp -= 1
+          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+          Ncurses.wrefresh(hud)
         end
         Ncurses.wrefresh(viewp)
       # Move Right        
@@ -222,6 +236,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
             Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}") 
         else step1 == 64
           p.hp -= 1
+          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+          Ncurses.wrefresh(hud)
         end
         Ncurses.wrefresh(viewp)
        # Stay Put
@@ -236,6 +252,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
             Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
           else step3 == 64
             p.hp -= 1
+            Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+            Ncurses.wrefresh(hud)
           end
           Ncurses.wrefresh(viewp)
           # Move Down
@@ -246,6 +264,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
             Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
           else step4 == 64
             p.hp -= 1
+            Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+            Ncurses.wrefresh(hud)
           end
           Ncurses.wrefresh(viewp)
         end
@@ -261,6 +281,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
         else step1 == 64
           p.hp -= 1
+          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+          Ncurses.wrefresh(hud)
         end
         Ncurses.wrefresh(viewp)
         # Move Down
@@ -271,6 +293,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")
         else step2 == 64
           p.hp -= 1
+          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+          Ncurses.wrefresh(hud)
         end
         Ncurses.wrefresh(viewp)
         else m.mx == p.px 
@@ -283,12 +307,14 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
             Ncurses.mvwaddstr(field, m.mx, m.my + 1, " ")
             Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}")       
             else step3 == 64
-            p.hp -= 1
+              p.hp -= 1
+              Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
+              Ncurses.wrefresh(hud)
           end
           Ncurses.wrefresh(viewp)
         # Move Right        
         elsif m.my < p.py && (step4 == 32 or step4 == 126 or step4 == 64)
-            if (step4 == 32 or step4 == 126)
+          if (step4 == 32 or step4 == 126)
               m.my += 1
               Ncurses.mvwaddstr(field, m.mx, m.my - 1, " ")
               Ncurses.mvwaddstr(field, m.mx, m.my, "#{m.symb}") 
