@@ -18,6 +18,16 @@ test_ui
 test_terrain
 test_actors
 
+def check_movement(window,px,py,walkable,items,actors)
+    step = Ncurses.mvwinch(window, px, py)
+    #message(console,step)
+    if (walkable.include?(step) or items.include?(step) or step == 77)
+      return true
+    else
+      return false
+    end
+end
+
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
@@ -114,20 +124,23 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
   case input
     when KEY_UP, 119 # Move Up
       step = Ncurses.mvwinch(field,p.px - 1, p.py)
-      message(console,step)
-      if p.px > 1 && (walkable.include?(step) or items.include?(step) or step == 77)
-      if walkable.include?(step)
-        p.px -= 1
-        Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
-        Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-      elsif step == 77 
-        m.hp -= 1
-      else items.include?(step)
-        Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
-        Ncurses.wrefresh(hud)
-        p.px -= 1
-        Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
-        Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
+      #message(console,step)
+      #if p.px > 1 && (walkable.include?(step) or items.include?(step) or step == 77)
+      if p.px > 1 #&& check_movement(field,p.px - 1,p.py,walkable,items,actors)
+        if walkable.include?(step)
+          p.px -= 1
+          Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
+          Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
+        elsif step == 77 
+          m.hp -= 1
+        elsif items.include?(step)
+          Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
+          Ncurses.wrefresh(hud)
+          p.px -= 1
+          Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
+          Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
+        else
+          Ncurses.flash
         end
       end
       center(viewp,field,p.px,p.py)
