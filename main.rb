@@ -1,10 +1,10 @@
-require 'perlin_noise'
 require 'ncurses'
 include Ncurses
 
 ##################################################################################
 # TODO                                                                           #
 #   *Refactor existing code, use header files                                    #
+#   *Refactor character and monster class to be children of new Actor class      #
 #   *Add Perlin Noise                                                            #
 #   *Add item pickups                                                            #
 #   *Add z-levels                                                                #
@@ -113,40 +113,6 @@ def generate_random(window)
   end
 end
 
-def generate_perlin(window)
-  # Use Perlin Noise algorithim to draw terrain
-  borders(window)
-  
-  pn = Perlin::Noise.new 2
-  contrast = Perlin::Curve.contrast(Perlin::Curve::CUBIC, 2)
-
-  i = 1
-  w_y = []
-  w_x = []
-  Ncurses.getmaxyx(window,w_y,w_x)
-  while i < w_x[0] - 1
-    j = 1
-    while j < w_y[0] - 1
-      x = j / w_y[0]
-      y = i / w_x[0]
-      n = pn[x * 10, y * 10]
-      #n = contrast.call n
-      case 
-      when n < 0.35
-        Ncurses.mvwaddstr(window, i, j, "#")
-      when n >= 0.35 && n < 0.6
-        Ncurses.mvwaddstr(window, i, j, "*")
-      when n >= 0.6 && n < 0.8
-        Ncurses.mvwaddstr(window, i, j, "^")
-      else
-        Ncurses.mvwaddstr(window, i, j, "~")
-      end
-    j += 1
-    end
-    i += 1
-  end
-end
-
 def center(subwin,parent,p_rows,p_cols)
   rr = []   # Frame y Positions
   cc = []   # Frame x Positions
@@ -240,7 +206,6 @@ hud = Ncurses.newwin(hud_lines, hud_cols, 0, view_lines)
 # Included are 3 different map generation methods. Only one should be used.
 draw_map(field)         # Draws a simple map with one terrain type
 #generate_random(field) # Draws a map with x random characters, randomly chosen for each pixel.
-#generate_perlin(field) # Draws a random map based on perlin algorithim
 building(field,10,10)   # Adds a building to map. It overlays anything underneath it
 
 # Define Actors, Items and Terrain
