@@ -11,7 +11,7 @@ include Ncurses
 #   *Add z-levels                                                                #
 #   *Add color                                                                   #
 ##################################################################################
-# Class & Methods                                                                #
+# tests                                                                          #
 ##################################################################################
 test_library
 test_ui
@@ -33,7 +33,7 @@ sd_cols = []                # Standard Screen column aka y
 sd_lines = []               # Standard Screen lines aka x
 Ncurses.getmaxyx(stdscr,sd_cols,sd_lines) # Get Max Y,X for standard screen, place them in arrays. getmaxyx outputs to arrays.
 
-# Welcome Streen
+# Welcome Screen
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Welcome to Move!")
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2 + 1, sd_lines[0] / 2, "rows = #{sd_cols[0]}, rows = #{sd_lines[0]}")
 Ncurses.refresh             # Refresh window to display new text
@@ -110,26 +110,6 @@ Ncurses.wrefresh(hud)
 #################################################################################
 
 while p.hp > 0  # While Player hit points are above 0, keep playing
-=begin  
-  # Resize window to the terminal screen
-  new_y = []
-  new_x = []
-  Ncurses.getmaxyx(stdscr,new_y,new_x)
-
-  if (new_y != parent_y || new_x != parent_x)
-    Ncurses.wclear(viewp)
-
-    sd_lines[0] = new_x[0]
-    sd_cols[0] = new_y[0]
-
-    ######viewp.resize(new_y, new_x) # Resizes window to terminal screen
-    borders(viewp) # Redraw new borders
-    simple_generate(field) # Put snow back on map
-    Ncurses.wrefresh(viewp)
-    Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
-    Ncurses.wrefresh(field)
-  end
-=end
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
@@ -206,7 +186,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
     if m.hp <= 0
     Ncurses.mvwaddstr(field, m.mx, m.my, "X")
     Ncurses.wrefresh(viewp)
-  else
+    else
       flip1 = rand(2)
       if flip1 == 0
         # Move Left
