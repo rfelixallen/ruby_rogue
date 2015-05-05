@@ -32,6 +32,13 @@ def check_movement(window,px,py,walkable,items,actors)
     end
 end
 
+def move_character_x(window,px,py,symb,i)
+    px += i
+    Ncurses.mvwaddstr(window, px + -i, py, " ")
+    Ncurses.mvwaddstr(window, px, py, "#{symb}")
+    return px
+end
+
 def attack(x)
     x.hp -= 1
 end
@@ -138,9 +145,12 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       if p.px > 1 #&& check_movement(field,p.px - 1,p.py,walkable,items,actors)
         #if walkable.include?(step)
         if check == 1
+=begin          
           p.px -= 1
           Ncurses.mvwaddstr(field, p.px + 1, p.py, " ")
           Ncurses.mvwaddstr(field, p.px, p.py, "#{p.symb}")
+=end          
+          move_character_x(field,p.px,p.py,p.symb,-1)
           message(console,"Check = 1") # For Testing
         #elsif step == 77 
         elsif check == 3
