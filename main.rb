@@ -20,9 +20,9 @@ def check_movement(window,xlines,ycols,walkable,items,actors)
     #message(console,step)
     if walkable.include?(step) 
       return 1
-    elsif items.include?(step)
-      return 2
     elsif actors.include?(step)
+      return 2
+    elsif items.include?(step)
       return 3
     else
       return false
@@ -141,26 +141,17 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
   input = Ncurses.getch
   case input
     when KEY_UP, 119 # Move Up
-      #step = Ncurses.mvwinch(field,p.xlines - 1, p.ycols)
-      #message(console,step)
-      #if p.xlines > 1 && (walkable.include?(step) or items.include?(step) or step == 77)
       check = check_movement(field,p.xlines - 1,p.ycols,walkable,items,actors)
-      if p.xlines > 1 #&& check_movement(field,p.xlines - 1,p.ycols,walkable,items,actors)
-        #if walkable.include?(step)
-        if check == 1
-=begin          
-          p.xlines -= 1
-          Ncurses.mvwaddstr(field, p.xlines + 1, p.ycols, " ")
-          Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")
-=end          
+      if p.xlines > 1
+        if check == 1      
           move_character_x(field,p,-1)
           message(console,"Check = 1") # For Testing
         #elsif step == 77 
-        elsif check == 3
+        elsif check == 2
           attack(m)
           message(console,"Check = 3") # For Testing
         #elsif items.include?(step)
-        elsif check == 2
+        elsif check == 3
           Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
           Ncurses.wrefresh(hud)
           p.xlines -= 1
