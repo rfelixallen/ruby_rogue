@@ -49,14 +49,85 @@ def attack(x)
     x.hp -= 1
 end
 
+# Modes
+def mode_wander(window, character, player, walkable, items, actors,i,j)
+# i determines the min steps in a particular direction
+# j determines the max steps in a particular direction   
+  direction_steps = 0
+  counter = 0   
+  dice_roll = false
+  if counter <= direction_steps
+    if dice_roll == false
+     d6 = rand(6)
+     direction_steps = rand(i..j)
+     dice_roll == true
+    end
+    
+    # Move Left
+    if d6 == 0
+      check1 = check_movement(window,character.xlines,character.ycols - 1,walkable,items,actors) # Left
+      if check1 == 1
+        move_character_y(window,character,-1)
+      elsif check1 == 2
+        attack(player)
+      else
+        nil
+      end
+      counter += 1
+
+    # Move Right        
+    elsif d6 == 1
+      check2 = check_movement(window,character.xlines,character.ycols + 1,walkable,items,actors) # Right
+      if check2 == 1
+        move_character_y(window,character,1)
+      elsif check2 == 2
+        attack(player)
+      else
+        nil
+      end              
+      counter += 1
+
+    # Move Up
+    elsif d6 == 2
+      check3 = check_movement(window,character.xlines - 1,character.ycols,walkable,items,actors) # Up
+      if check3 == 1
+        move_character_x(window,character,-1)
+      elsif check3 == 2
+        attack(player)
+      else
+        nil
+      end                    
+      counter += 1
+
+    # Move Down
+    elsif d6 == 3
+      check4 = check_movement(window,character.xlines + 1,character.ycols,walkable,items,actors) # Down
+      if check4 == 1
+        move_character_x(window,character,1)
+      elsif check4 == 2
+        attack(player)
+      else
+        nil
+      end
+      counter += 1  
+    else
+      nil        
+    end    
+  else
+    dice_roll = false
+    counter = 0
+    direction_steps = 0
+  end   
+end
+
 # This mode causes the character to hunt the player.
 def mode_hunt(window, character, player, walkable, items, actors)
-  flip1 = rand(2)
-  if flip1 == 0        
-    check1 = check_movement(window,character.xlines,character.ycols - 1,walkable,items,actors)
-    check2 = check_movement(window,character.xlines,character.ycols + 1,walkable,items,actors)
-    check3 = check_movement(window,character.xlines - 1,character.ycols,walkable,items,actors)
-    check4 = check_movement(window,character.xlines + 1,character.ycols,walkable,items,actors)
+  flip = rand(2)
+  if flip == 0        
+    check1 = check_movement(window,character.xlines,character.ycols - 1,walkable,items,actors) # Left
+    check2 = check_movement(window,character.xlines,character.ycols + 1,walkable,items,actors) # Right
+    check3 = check_movement(window,character.xlines - 1,character.ycols,walkable,items,actors) # Up
+    check4 = check_movement(window,character.xlines + 1,character.ycols,walkable,items,actors) # Down
         
     # Move Left
     if character.ycols > player.ycols  

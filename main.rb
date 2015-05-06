@@ -180,7 +180,9 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
     Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
     Ncurses.wrefresh(viewp)
   else
-    mode_hunt(field, m, p, walkable, items, actors)
+    #mode_hunt(field, m, p, walkable, items, actors)
+    #mode_wander(field, m, p, walkable, items, actors,1,5) # Meander short distances
+    mode_wander(field, m, p, walkable, items, actors,10,25) # Meander long distances
   end
 end
 Ncurses.clear
