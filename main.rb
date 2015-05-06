@@ -145,15 +145,12 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       if p.xlines > 1
         if check == 1      
           move_character_x(field,p,-1)
-          message(console,"Check = 1") # For Testing
         elsif check == 2
           attack(m)
-          message(console,"Check = 2") # For Testing
         elsif check == 3
           Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
           Ncurses.wrefresh(hud)
           move_character_x(field,p,-1)
-          message(console,"Check = 3") # For Testing
         else # No valid move
           message(console,"No Valid Move")
         end
@@ -165,15 +162,12 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       if p.xlines < (field_max_cols[0] - 2)
         if check == 1      
           move_character_x(field,p,1)
-          message(console,"Check = 1") # For Testing
         elsif check == 2
           attack(m)
-          message(console,"Check = 2") # For Testing
         elsif check == 3
           Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
           Ncurses.wrefresh(hud)
           move_character_x(field,p,1)
-          message(console,"Check = 3") # For Testing
         else # No valid move
           message(console,"No Valid Move")
         end
@@ -184,16 +178,13 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       check = check_movement(field,p.xlines,p.ycols + 1,walkable,items,actors)
       if p.ycols < (field_max_cols[0] - 2)
         if check == 1      
-          move_character_y(field,p,1)
-          message(console,"Check = 1") # For Testing
+          move_character_y(field,p,1)          
         elsif check == 2
-          attack(m)
-          message(console,"Check = 2") # For Testing
+          attack(m)          
         elsif check == 3
           Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
           Ncurses.wrefresh(hud)
-          move_character_y(field,p,1)
-          message(console,"Check = 3") # For Testing
+          move_character_y(field,p,1)          
         else # No valid move
           message(console,"No Valid Move")
         end
@@ -204,16 +195,13 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       check = check_movement(field,p.xlines,p.ycols - 1,walkable,items,actors)
       if p.ycols > 1
         if check == 1      
-          move_character_y(field,p,-1)
-          message(console,"Check = 1") # For Testing
+          move_character_y(field,p,-1)          
         elsif check == 2
-          attack(m)
-          message(console,"Check = 2") # For Testing
+          attack(m)        
         elsif check == 3
           Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
           Ncurses.wrefresh(hud)
-          move_character_y(field,p,-1)
-          message(console,"Check = 3") # For Testing
+          move_character_y(field,p,-1)          
         else # No valid move
           message(console,"No Valid Move")
         end
