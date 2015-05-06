@@ -180,6 +180,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
     Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
     Ncurses.wrefresh(viewp)
     else
+      nil
+=begin
       flip1 = rand(2)
       if flip1 == 0
         # Move Left
@@ -288,8 +290,9 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           end
           Ncurses.wrefresh(viewp)
         end
-      end   
+      end         
     end
+=end    
   end
 end
 Ncurses.clear
