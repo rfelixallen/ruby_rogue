@@ -35,6 +35,12 @@ def move_character_x(window,character,i)
     Ncurses.mvwaddstr(window, character.xlines, character.ycols, "#{character.symb}")
 end
 
+def move_character_y(window,character,i)
+    character.ycols += i
+    Ncurses.mvwaddstr(window, character.xlines, character.ycols + -i, " ")
+    Ncurses.mvwaddstr(window, character.xlines, character.ycols, "#{character.symb}")
+end
+
 def attack(x)
     x.hp -= 1
 end
