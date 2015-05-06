@@ -175,126 +175,13 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       Ncurses.wrefresh(console) 
     end
 
-    # Monster Move (Chasing Mode)
-    if m.hp <= 0
-      Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
-      Ncurses.wrefresh(viewp)
-    else
-      mode_hunt(field, m, p, walkable, items, actors)
-    end
-=begin
-      flip1 = rand(2)
-      if flip1 == 0
-        # Move Left
-        check1 = check_movement(field,m.xlines,m.ycols - 1,walkable,items,actors)
-        check2 = check_movement(field,m.xlines,m.ycols + 1,walkable,items,actors)
-        
-        if m.ycols > p.ycols #&& (step1 == 32 or step1 == 126 or step1 == 64)
-          if check1 == 1
-            move_character_y(field,m,-1)
-          elsif check1 == 2
-            attack(p)
-          else
-            nil
-          end                
-        Ncurses.wrefresh(viewp)
-      # Move Right        
-        elsif m.ycols < p.ycols #&& (step2 == 32 or step2 == 126 or step2 == 64)
-          if check2 == 1
-            move_character_y(field,m,1)
-          elsif check2 == 2
-            attack(p)
-          else
-            nil
-          end
-        Ncurses.wrefresh(viewp)
-       # Stay Put
-        else m.ycols == p.ycols
-          # Move Up
-          step3 = Ncurses.mvwinch(field,m.xlines - 1, m.ycols)
-          step4 = Ncurses.mvwinch(field,m.xlines + 1, m.ycols)
-          if m.xlines > p.xlines && (step3 == 32 or step3 == 126 or step3 == 64)
-          if (step3 == 32 or step3 == 126)
-            m.xlines -= 1
-            Ncurses.mvwaddstr(field, m.xlines + 1, m.ycols, " ")
-            Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")
-          else step3 == 64
-            p.hp -= 1
-            Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
-            Ncurses.wrefresh(hud)
-          end
-          Ncurses.wrefresh(viewp)
-          # Move Down
-          else m.xlines < p.xlines && (step4 == 32 or step4 == 126 or step4 == 64)
-          m.xlines += 1
-          if (step4 == 32 or step4 == 126)
-            Ncurses.mvwaddstr(field, m.xlines - 1, m.ycols, " ")
-            Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")
-          else step4 == 64
-            p.hp -= 1
-            Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
-            Ncurses.wrefresh(hud)
-          end
-          Ncurses.wrefresh(viewp)
-        end
-        end
-    else  
-        # Move Up
-        step1 = Ncurses.mvwinch(field,m.xlines - 1, m.ycols)
-        step2 = Ncurses.mvwinch(field,m.xlines + 1, m.ycols)
-        if m.xlines > p.xlines && (step1 == 32 or step1 == 126 or step1 == 64)
-        if (step1 == 32 or step1 == 126)
-          m.xlines -= 1
-          Ncurses.mvwaddstr(field, m.xlines + 1, m.ycols, " ")
-          Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")
-        else step1 == 64
-          p.hp -= 1
-          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
-          Ncurses.wrefresh(hud)
-        end
-        Ncurses.wrefresh(viewp)
-        # Move Down
-        elsif m.xlines < p.xlines && (step2 == 32 or step2 == 126 or step2 == 64)
-        m.xlines += 1
-        if (step2 == 32 or step2 == 126)
-          Ncurses.mvwaddstr(field, m.xlines - 1, m.ycols, " ")
-          Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")
-        else step2 == 64
-          p.hp -= 1
-          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
-          Ncurses.wrefresh(hud)
-        end
-        Ncurses.wrefresh(viewp)
-        else m.xlines == p.xlines 
-          # Move Left
-          step3 = Ncurses.mvwinch(field,m.xlines, m.ycols - 1)
-          step4 = Ncurses.mvwinch(field,m.xlines, m.ycols + 1)
-          if m.ycols > p.ycols && (step3 == 32 or step3 == 126 or step3 == 64)
-            if (step3 == 32 or step3 == 126)
-              m.ycols -= 1
-            Ncurses.mvwaddstr(field, m.xlines, m.ycols + 1, " ")
-            Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")       
-            else step3 == 64
-              p.hp -= 1
-              Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
-              Ncurses.wrefresh(hud)
-          end
-          Ncurses.wrefresh(viewp)
-        # Move Right        
-        elsif m.ycols < p.ycols && (step4 == 32 or step4 == 126 or step4 == 64)
-          if (step4 == 32 or step4 == 126)
-              m.ycols += 1
-              Ncurses.mvwaddstr(field, m.xlines, m.ycols - 1, " ")
-              Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}") 
-          else step4 == 64
-            p.hp -= 1
-          end
-          Ncurses.wrefresh(viewp)
-        end
-      end         
-    end    
+  # Monster Move (Chasing Mode)
+  if m.hp <= 0
+    Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
+    Ncurses.wrefresh(viewp)
+  else
+    mode_hunt(field, m, p, walkable, items, actors)
   end
-=end
 end
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")
