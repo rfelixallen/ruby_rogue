@@ -76,14 +76,13 @@ player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Character
 p = Character.new(symb: '@', xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
-actors << p.symb.ord                                         # Add player symbol to array of actor symbols
-puts "#{p.symb}"
+actors << p.symb.ord                                            # Add player symbol to array of actor symbols
 Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")        # Draw layer to map
 center(viewp,field,p.xlines,p.ycols)                            # Center map on player
 
 # Create Monster
-m = Character.new(symb: 'M', xlines: player_start_cols + 10, ycols: player_start_lines + 10, hp: 3) # Begin Monster near player
-actors << m.symb.ord                                                 # Add player symbol to array of actor symbols
+m = Character.new(symb: 'M', xlines: player_start_cols + view_cols, ycols: player_start_lines + view_lines, hp: 3) # Begin Monster near player, but out of sight
+actors << m.symb.ord                                                    # Add player symbol to array of actor symbols
 Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")                # Draw Monster to map
 Ncurses.wrefresh(viewp) # Update viewport with all previous changes
 message(console,actors)
@@ -179,26 +178,31 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       Ncurses.wrefresh(console) 
     end
 
-  # Monster Move (Chasing Mode)
+  # Monster Move
   if m.hp <= 0
     Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
     Ncurses.wrefresh(viewp)
   else
-    #mode_hunt(field, m, p, walkable, items, actors)    
-    if counter <= direction_steps
-      if dice_roll == false
-       d6 = rand(6)
-       direction_steps = rand(10..25) # Meander long distances
-       dice_roll = true
+    distance_from_player = [(p.xlines - m.xlines).abs,(p.ycols - m.ycols).abs] # Get positive value of distance between monster and player
+    if distance_from_player[0] < view_lines / 2 or distance_from_player[1] < view_cols / 2 # if the monster is visible, chase player
+      message(console,"MONSTER HUNTS YOU!")  # Troubleshooting message for testing
+      mode_hunt(field, m, p, walkable, items, actors)
+    else # If player is not visible, wander around
+      if counter <= direction_steps
+        if dice_roll == false
+         d6 = rand(6)
+         direction_steps = rand(10..25) # Meander long distances
+         dice_roll = true
+        end
+        message(console,"steps:#{direction_steps},count:#{counter},d6:#{d6}")  # Troubleshooting message for testing
+        mode_wander(field, m, p, walkable, items, actors,d6)
+        counter += 1
+      else
+        message(console,"Monster move reset") # Troubleshooting message for testing
+        dice_roll = false
+        counter = 0
+        direction_steps = 0
       end
-      message(console,"steps:#{direction_steps},count:#{counter},d6:#{d6}")  # Troubleshooting message for testing
-      mode_wander(field, m, p, walkable, items, actors,d6)
-      counter += 1
-    else
-      message(console,"Monster move reset") # Troubleshooting message for testing
-      dice_roll = false
-      counter = 0
-      direction_steps = 0
     end
   end
 end
