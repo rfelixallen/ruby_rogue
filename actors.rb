@@ -48,15 +48,15 @@ end
 def attack(x)
     x.hp -= 1
 end
-=begin
+#=begin
 # This mode causes the character to hunt the player.
 def mode_hunt(window, character, player, walkable, items, actors))
   flip1 = rand(2)
-      if flip1 == 0
-        # Move Left
+      if flip1 == 0        
         check1 = check_movement(window,character.xlines,character.ycols - 1,walkable,items,actors)
         check2 = check_movement(window,character.xlines,character.ycols + 1,walkable,items,actors)
         
+        # Move Left
         if character.ycols > player.ycols #&& (step1 == 32 or step1 == 126 or step1 == 64)
           if check1 == 1
             move_character_y(window,character,-1)
@@ -65,21 +65,9 @@ def mode_hunt(window, character, player, walkable, items, actors))
           else
             nil
           end
-        end
-=begin                    
-          if (step1 == 32 or step1 == 126)
-            character.ycols -= 1
-          Ncurses.mvwaddstr(window, character.xlines, character.ycols + 1, " ")
-          Ncurses.mvwaddstr(window, character.xlines, character.ycols, "#{character.symb}")       
-          else step1 == 64
-          attack(player)
-          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{player.hp}")
-          Ncurses.wrefresh(hud)
-        end
-#=end        
-        #Ncurses.wrefresh(viewp)
+        end        
 
-      # Move Right        
+        # Move Right        
       elsif character.ycols < player.ycols #&& (step2 == 32 or step2 == 126 or step2 == 64)
         if check2 == 1
             move_character_y(window,character,1)
@@ -88,38 +76,44 @@ def mode_hunt(window, character, player, walkable, items, actors))
           else
             nil
           end
-        end
-=begin        
-        if (step2 == 32 or step2 == 126)
-          character.ycols += 1
-          Ncurses.mvwaddstr(window, character.xlines, character.ycols - 1, " ")
-          Ncurses.mvwaddstr(window, character.xlines, character.ycols, "#{character.symb}") 
-        else step1 == 64
-          attack(player)
-          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{player.hp}")
-          Ncurses.wrefresh(hud)
-        end
-#=end        
-        #Ncurses.wrefresh(viewp)
+        end        
 
        # Stay Put
-        else character.ycols == player.ycols
+      else character.ycols == player.ycols
           # Move Up
-          step3 = Ncurses.mvwinch(window,character.xlines - 1, character.ycols)
-          step4 = Ncurses.mvwinch(window,character.xlines + 1, character.ycols)
-          if character.xlines > player.xlines && (step3 == 32 or step3 == 126 or step3 == 64)
-          if (step3 == 32 or step3 == 126)
-            character.xlines -= 1
-            Ncurses.mvwaddstr(window, character.xlines + 1, character.ycols, " ")
-            Ncurses.mvwaddstr(window, character.xlines, character.ycols, "#{character.symb}")
-          else step3 == 64
-            attack(player)
-            Ncurses.mvwaddstr(hud, 4, 1, "HP: #{player.hp}")
-            Ncurses.wrefresh(hud)
-          end
-          Ncurses.wrefresh(viewp)
+          #step3 = Ncurses.mvwinch(window,character.xlines - 1, character.ycols)
+          #step4 = Ncurses.mvwinch(window,character.xlines + 1, character.ycols)
+          check3 = check_movement(window,character.xlines - 1,character.ycols,walkable,items,actors)
+          check4 = check_movement(window,character.xlines + 1,character.ycols,walkable,items,actors)
+          if character.xlines > player.xlines #&& (step3 == 32 or step3 == 126 or step3 == 64)
+            if check3 == 1
+              move_character_x(window,character,-1)
+            elsif check3 == 2
+              attack(player)
+            else
+              nil
+            end
+=begin
+            if (step3 == 32 or step3 == 126)
+              character.xlines -= 1
+              Ncurses.mvwaddstr(window, character.xlines + 1, character.ycols, " ")
+              Ncurses.mvwaddstr(window, character.xlines, character.ycols, "#{character.symb}")
+            else step3 == 64
+              attack(player)
+              Ncurses.mvwaddstr(hud, 4, 1, "HP: #{player.hp}")
+              Ncurses.wrefresh(hud)
+            end
+=end                      
           # Move Down
-          else character.xlines < player.xlines && (step4 == 32 or step4 == 126 or step4 == 64)
+          else character.xlines < player.xlines #&& (step4 == 32 or step4 == 126 or step4 == 64)
+            if check4 == 1
+              move_character_x(window,character,1)
+            elsif check4 == 2
+              attack(player)
+            else
+              nil
+            end
+=begin          
           character.xlines += 1
           if (step4 == 32 or step4 == 126)
             Ncurses.mvwaddstr(window, character.xlines - 1, character.ycols, " ")
@@ -129,9 +123,10 @@ def mode_hunt(window, character, player, walkable, items, actors))
             Ncurses.mvwaddstr(hud, 4, 1, "HP: #{player.hp}")
             Ncurses.wrefresh(hud)
           end
-          Ncurses.wrefresh(viewp)
-        end
-        end
+=end          
+          
+          end
+        #end
     else  
         # Move Up
         step1 = Ncurses.mvwinch(window,character.xlines - 1, character.ycols)
@@ -188,4 +183,4 @@ def mode_hunt(window, character, player, walkable, items, actors))
       end   
     end
 end
-=end
+#=end
