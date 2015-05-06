@@ -177,10 +177,11 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
 
     # Monster Move (Chasing Mode)
     if m.hp <= 0
-    Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
-    Ncurses.wrefresh(viewp)
+      Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
+      Ncurses.wrefresh(viewp)
     else
-      nil
+      mode_hunt(field, m, p, walkable, items, actors)
+    end
 =begin
       flip1 = rand(2)
       if flip1 == 0
@@ -291,9 +292,9 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(viewp)
         end
       end         
-    end
-=end    
+    end    
   end
+=end
 end
 Ncurses.clear
 Ncurses.mvwaddstr(stdscr, sd_cols[0] / 2, sd_lines[0] / 2, "Good Bye!")

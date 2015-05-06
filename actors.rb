@@ -51,11 +51,13 @@ end
 
 # This mode causes the character to hunt the player.
 def mode_hunt(window, character, player, walkable, items, actors)
-  flip1 = rand(2)
-  if flip1 == 0        
+  #flip1 = rand(2)
+  #if flip1 == 0        
     check1 = check_movement(window,character.xlines,character.ycols - 1,walkable,items,actors)
     check2 = check_movement(window,character.xlines,character.ycols + 1,walkable,items,actors)
-      
+    check3 = check_movement(window,character.xlines - 1,character.ycols,walkable,items,actors)
+    check4 = check_movement(window,character.xlines + 1,character.ycols,walkable,items,actors)
+        
     # Move Left
     if character.ycols > player.ycols  
       if check1 == 1
@@ -75,7 +77,29 @@ def mode_hunt(window, character, player, walkable, items, actors)
       else
         nil
       end              
-
+      
+      # Move Up
+      elsif character.xlines > player.xlines 
+        if check3 == 1
+          move_character_x(window,character,-1)
+        elsif check3 == 2
+          attack(player)
+        else
+          nil
+        end                    
+      
+      # Move Down
+      else character.xlines < player.xlines
+        if check4 == 1
+          move_character_x(window,character,1)
+        elsif check4 == 2
+          attack(player)
+        else
+          nil
+        end          
+      end
+    end
+=begin  
     # Move other axis
     else character.ycols == player.ycols                  
       check3 = check_movement(window,character.xlines - 1,character.ycols,walkable,items,actors)
@@ -102,7 +126,7 @@ def mode_hunt(window, character, player, walkable, items, actors)
         end          
       end
     end        
-#=begin  
+  
   else          
     check1 = check_movement(window,character.xlines - 1,character.ycols,walkable,items,actors)
     check2 = check_movement(window,character.xlines + 1,character.ycols,walkable,items,actors)        
@@ -152,7 +176,8 @@ def mode_hunt(window, character, player, walkable, items, actors)
         end
       end        
     end
-#=end             
+           
   end
   end
 end
+=end
