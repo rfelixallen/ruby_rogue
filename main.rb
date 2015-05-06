@@ -104,7 +104,7 @@ player_start_lines = (field_max_lines[0] / 4)
 player_start_cols = (field_max_cols[0] / 4)
 
 # Create Player Character
-p = Character.new(symb: '@', xlines: player_start_lines, ycols: player_start_cols, hp: 10) # Begin player in top, right corner
+p = Character.new(symb: '@', xlines: player_start_lines, ycols: player_start_cols, hp: 9) # Begin player in top, right corner
 actors << p.symb.ord                                         # Add player symbol to array of actor symbols
 puts "#{p.symb}"
 Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")        # Draw layer to map
@@ -146,18 +146,14 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
         if check == 1      
           move_character_x(field,p,-1)
           message(console,"Check = 1") # For Testing
-        #elsif step == 77 
         elsif check == 2
           attack(m)
-          message(console,"Check = 3") # For Testing
-        #elsif items.include?(step)
+          message(console,"Check = 2") # For Testing
         elsif check == 3
           Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
           Ncurses.wrefresh(hud)
-          p.xlines -= 1
-          Ncurses.mvwaddstr(field, p.xlines + 1, p.ycols, " ")
-          Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")
-          message(console,"Check = 2") # For Testing
+          move_character_x(field,p,-1)
+          message(console,"Check = 3") # For Testing
         else # No valid move
           message(console,"No Valid Move")
         end
@@ -165,15 +161,21 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       center(viewp,field,p.xlines,p.ycols)
       Ncurses.wrefresh(viewp)
     when KEY_DOWN, 115 # Move Down
-      step = Ncurses.mvwinch(field,p.xlines + 1, p.ycols)
-      message(console,step)
-      if p.xlines < (field_max_cols[0] - 2) && (step == 32 or step == 126 or step == 77)
-      if (step == 32 or step == 126)
-        p.xlines += 1 
-        Ncurses.mvwaddstr(field, p.xlines - 1, p.ycols, " ")
-        Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")
-      else step == 77
-        m.hp -= 1
+      check = check_movement(field,p.xlines + 1,p.ycols,walkable,items,actors)
+      if p.xlines < (field_max_cols[0] - 2)
+        if check == 1      
+          move_character_x(field,p,1)
+          message(console,"Check = 1") # For Testing
+        elsif check == 2
+          attack(m)
+          message(console,"Check = 2") # For Testing
+        elsif check == 3
+          Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
+          Ncurses.wrefresh(hud)
+          move_character_x(field,p,1)
+          message(console,"Check = 3") # For Testing
+        else # No valid move
+          message(console,"No Valid Move")
         end
       end
       center(viewp,field,p.xlines,p.ycols)
