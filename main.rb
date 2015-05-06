@@ -180,32 +180,44 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
       end
       center(viewp,field,p.xlines,p.ycols)
       Ncurses.wrefresh(viewp)
-    when KEY_RIGHT, 100 # Move Right
-      step = Ncurses.mvwinch(field,p.xlines, p.ycols + 1)
-      message(console,step)
-      if p.ycols < (field_max_lines[0] - 2) && (step == 32 or step == 126 or step == 77)
-      if (step == 32 or step == 126)
-        p.ycols += 1 
-        Ncurses.mvwaddstr(field, p.xlines, p.ycols - 1, " ")
-        Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")
-      else step == 77
-        m.hp -= 1       
+    when KEY_RIGHT, 100 # Move Right 
+      check = check_movement(field,p.xlines,p.ycols + 1,walkable,items,actors)
+      if p.ycols < (field_max_cols[0] - 2)
+        if check == 1      
+          move_character_y(field,p,1)
+          message(console,"Check = 1") # For Testing
+        elsif check == 2
+          attack(m)
+          message(console,"Check = 2") # For Testing
+        elsif check == 3
+          Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
+          Ncurses.wrefresh(hud)
+          move_character_y(field,p,1)
+          message(console,"Check = 3") # For Testing
+        else # No valid move
+          message(console,"No Valid Move")
         end
-      end
+      end    
       center(viewp,field,p.xlines,p.ycols)
       Ncurses.wrefresh(viewp)
-  when KEY_LEFT, 97 # Move Left
-    step = Ncurses.mvwinch(field,p.xlines, p.ycols - 1)
-      message(console,step)
-      if p.ycols > 1 && (step == 32 or step == 126 or step == 77)
-      if (step == 32 or step == 126)
-        p.ycols -= 1 
-        Ncurses.mvwaddstr(field, p.xlines, p.ycols + 1, " ")
-        Ncurses.mvwaddstr(field, p.xlines, p.ycols, "#{p.symb}")
-      else step == 77
-        m.hp -= 1
+  when KEY_LEFT, 97 # Move Left   
+      check = check_movement(field,p.xlines,p.ycols - 1,walkable,items,actors)
+      if p.ycols > 1
+        if check == 1      
+          move_character_y(field,p,-1)
+          message(console,"Check = 1") # For Testing
+        elsif check == 2
+          attack(m)
+          message(console,"Check = 2") # For Testing
+        elsif check == 3
+          Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
+          Ncurses.wrefresh(hud)
+          move_character_y(field,p,-1)
+          message(console,"Check = 3") # For Testing
+        else # No valid move
+          message(console,"No Valid Move")
         end
-      end
+      end 
       center(viewp,field,p.xlines,p.ycols)
       Ncurses.wrefresh(viewp)
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
