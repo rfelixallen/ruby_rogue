@@ -121,8 +121,8 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.mvwaddstr(hud, 8, 1, "  -Money")
           Ncurses.wrefresh(hud)
           move_character_x(field,p,-1)
-        else # No valid move
-          message(console,"Move not valid")
+        else # No valid move          
+          nil
         end      
       center(viewp,field,p.xlines,p.ycols)      
     when KEY_DOWN, 115 # Move Down
@@ -136,7 +136,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(hud)
           move_character_x(field,p,1)
         else # No valid move
-          message(console,"Move not valid")
+          nil
         end      
       center(viewp,field,p.xlines,p.ycols)      
     when KEY_RIGHT, 100 # Move Right 
@@ -150,7 +150,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(hud)
           move_character_y(field,p,1)          
         else # No valid move
-          message(console,"Move not valid")
+          nil
         end      
       center(viewp,field,p.xlines,p.ycols)      
   when KEY_LEFT, 97 # Move Left   
@@ -164,7 +164,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(hud)
           move_character_y(field,p,-1)          
         else # No valid move
-          message(console,"Move not valid")
+          nil
         end      
       center(viewp,field,p.xlines,p.ycols)      
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
@@ -177,36 +177,33 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
 
     # Monster Move (Chasing Mode)
     if m.hp <= 0
-    Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X")
+    Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
     Ncurses.wrefresh(viewp)
     else
       flip1 = rand(2)
       if flip1 == 0
         # Move Left
-        step1 = Ncurses.mvwinch(field,m.xlines, m.ycols - 1)
-        step2 = Ncurses.mvwinch(field,m.xlines, m.ycols + 1)
-        if m.ycols > p.ycols && (step1 == 32 or step1 == 126 or step1 == 64)
-          if (step1 == 32 or step1 == 126)
-            m.ycols -= 1
-          Ncurses.mvwaddstr(field, m.xlines, m.ycols + 1, " ")
-          Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}")       
-          else step1 == 64
-          p.hp -= 1
-          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
-          Ncurses.wrefresh(hud)
-        end
+        check1 = check_movement(field,m.xlines,m.ycols - 1,walkable,items,actors)
+        check2 = check_movement(field,m.xlines,m.ycols + 1,walkable,items,actors)
+        
+        if m.ycols > p.ycols #&& (step1 == 32 or step1 == 126 or step1 == 64)
+          if check1 == 1
+            move_character_y(field,m,-1)
+          elsif check1 == 2
+            attack(p)
+          else
+            nil
+          end                
         Ncurses.wrefresh(viewp)
       # Move Right        
-      elsif m.ycols < p.ycols && (step2 == 32 or step2 == 126 or step2 == 64)
-          if (step2 == 32 or step2 == 126)
-            m.ycols += 1
-            Ncurses.mvwaddstr(field, m.xlines, m.ycols - 1, " ")
-            Ncurses.mvwaddstr(field, m.xlines, m.ycols, "#{m.symb}") 
-        else step1 == 64
-          p.hp -= 1
-          Ncurses.mvwaddstr(hud, 4, 1, "HP: #{p.hp}")
-          Ncurses.wrefresh(hud)
-        end
+        elsif m.ycols < p.ycols #&& (step2 == 32 or step2 == 126 or step2 == 64)
+          if check2 == 1
+            move_character_y(field,m,1)
+          elsif check2 == 2
+            attack(p)
+          else
+            nil
+          end
         Ncurses.wrefresh(viewp)
        # Stay Put
         else m.ycols == p.ycols
@@ -292,7 +289,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(viewp)
         end
       end   
-      end
+    end
   end
 end
 Ncurses.clear
