@@ -108,6 +108,10 @@ Ncurses.wrefresh(hud)
 # Game Loop                                                                     #
 #################################################################################
 
+direction_steps = 0
+counter = 0   
+dice_roll = false
+
 while p.hp > 0  # While Player hit points are above 0, keep playing
   input = Ncurses.getch
   case input
@@ -180,9 +184,22 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
     Ncurses.mvwaddstr(field, m.xlines, m.ycols, "X") # Turn into dead body
     Ncurses.wrefresh(viewp)
   else
-    #mode_hunt(field, m, p, walkable, items, actors)
-    #mode_wander(field, m, p, walkable, items, actors,1,5) # Meander short distances
-    mode_wander(field, m, p, walkable, items, actors,10,25) # Meander long distances
+    #mode_hunt(field, m, p, walkable, items, actors)    
+    if counter <= direction_steps
+      if dice_roll == false
+       d6 = rand(6)
+       direction_steps = rand(10..25) # Meander long distances
+       dice_roll = true
+      end
+      message(console,"steps:#{direction_steps},count:#{counter},d6:#{d6}")  # Troubleshooting message for testing
+      mode_wander(field, m, p, walkable, items, actors,d6)
+      counter += 1
+    else
+      message(console,"Monster move reset") # Troubleshooting message for testing
+      dice_roll = false
+      counter = 0
+      direction_steps = 0
+    end
   end
 end
 Ncurses.clear
