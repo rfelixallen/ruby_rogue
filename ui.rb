@@ -65,6 +65,7 @@ def center(subwin,parent,p_rows,p_cols)
   end
 
   Ncurses.mvderwin(subwin,rr[0],cc[0])
+  Ncurses.wrefresh(subwin)
 end
 
 def message(window,message)

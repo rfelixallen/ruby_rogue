@@ -155,8 +155,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           message(console,"No Valid Move")
         end
       end
-      center(viewp,field,p.xlines,p.ycols)
-      Ncurses.wrefresh(viewp)
+      center(viewp,field,p.xlines,p.ycols)      
     when KEY_DOWN, 115 # Move Down
       check = check_movement(field,p.xlines + 1,p.ycols,walkable,items,actors)
       if p.xlines < (field_max_cols[0] - 2)
@@ -172,8 +171,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           message(console,"No Valid Move")
         end
       end
-      center(viewp,field,p.xlines,p.ycols)
-      Ncurses.wrefresh(viewp)
+      center(viewp,field,p.xlines,p.ycols)      
     when KEY_RIGHT, 100 # Move Right 
       check = check_movement(field,p.xlines,p.ycols + 1,walkable,items,actors)
       if p.ycols < (field_max_cols[0] - 2)
@@ -189,8 +187,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           message(console,"No Valid Move")
         end
       end    
-      center(viewp,field,p.xlines,p.ycols)
-      Ncurses.wrefresh(viewp)
+      center(viewp,field,p.xlines,p.ycols)      
   when KEY_LEFT, 97 # Move Left   
       check = check_movement(field,p.xlines,p.ycols - 1,walkable,items,actors)
       if p.ycols > 1
@@ -206,8 +203,7 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           message(console,"No Valid Move")
         end
       end 
-      center(viewp,field,p.xlines,p.ycols)
-      Ncurses.wrefresh(viewp)
+      center(viewp,field,p.xlines,p.ycols)      
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
