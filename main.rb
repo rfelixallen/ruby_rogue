@@ -15,35 +15,6 @@ test_ui
 test_terrain
 test_actors
 
-def check_movement(window,xlines,ycols,walkable,items,actors)
-    step = Ncurses.mvwinch(window, xlines, ycols)
-    #message(console,step)
-    if walkable.include?(step) 
-      return 1
-    elsif actors.include?(step)
-      return 2
-    elsif items.include?(step)
-      return 3
-    else
-      return false
-    end
-end
-
-def move_character_x(window,character,i)
-    character.xlines += i
-    Ncurses.mvwaddstr(window, character.xlines + -i, character.ycols, " ")
-    Ncurses.mvwaddstr(window, character.xlines, character.ycols, "#{character.symb}")
-end
-
-def move_character_y(window,character,i)
-    character.ycols += i
-    Ncurses.mvwaddstr(window, character.xlines, character.ycols + -i, " ")
-    Ncurses.mvwaddstr(window, character.xlines, character.ycols, "#{character.symb}")
-end
-
-def attack(x)
-    x.hp -= 1
-end
 #################################################################################
 # Initialize                                                                    #
 #################################################################################
@@ -142,7 +113,6 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
   case input
     when KEY_UP, 119 # Move Up
       check = check_movement(field,p.xlines - 1,p.ycols,walkable,items,actors)
-      if p.xlines > 1
         if check == 1      
           move_character_x(field,p,-1)
         elsif check == 2
@@ -152,13 +122,11 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(hud)
           move_character_x(field,p,-1)
         else # No valid move
-          message(console,"No Valid Move")
-        end
-      end
+          message(console,"Move not valid")
+        end      
       center(viewp,field,p.xlines,p.ycols)      
     when KEY_DOWN, 115 # Move Down
-      check = check_movement(field,p.xlines + 1,p.ycols,walkable,items,actors)
-      if p.xlines < (field_max_cols[0] - 2)
+      check = check_movement(field,p.xlines + 1,p.ycols,walkable,items,actors)      
         if check == 1      
           move_character_x(field,p,1)
         elsif check == 2
@@ -168,13 +136,11 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(hud)
           move_character_x(field,p,1)
         else # No valid move
-          message(console,"No Valid Move")
-        end
-      end
+          message(console,"Move not valid")
+        end      
       center(viewp,field,p.xlines,p.ycols)      
     when KEY_RIGHT, 100 # Move Right 
-      check = check_movement(field,p.xlines,p.ycols + 1,walkable,items,actors)
-      if p.ycols < (field_max_cols[0] - 2)
+      check = check_movement(field,p.xlines,p.ycols + 1,walkable,items,actors)      
         if check == 1      
           move_character_y(field,p,1)          
         elsif check == 2
@@ -184,13 +150,11 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(hud)
           move_character_y(field,p,1)          
         else # No valid move
-          message(console,"No Valid Move")
-        end
-      end    
+          message(console,"Move not valid")
+        end      
       center(viewp,field,p.xlines,p.ycols)      
   when KEY_LEFT, 97 # Move Left   
-      check = check_movement(field,p.xlines,p.ycols - 1,walkable,items,actors)
-      if p.ycols > 1
+      check = check_movement(field,p.xlines,p.ycols - 1,walkable,items,actors)      
         if check == 1      
           move_character_y(field,p,-1)          
         elsif check == 2
@@ -200,15 +164,14 @@ while p.hp > 0  # While Player hit points are above 0, keep playing
           Ncurses.wrefresh(hud)
           move_character_y(field,p,-1)          
         else # No valid move
-          message(console,"No Valid Move")
-        end
-      end 
+          message(console,"Move not valid")
+        end      
       center(viewp,field,p.xlines,p.ycols)      
     when KEY_F2, 113, 81 # Quit Game with F2, q or Q
       break
     else
       Ncurses.flash           # Flash screen if undefined input selected
-      message(console,input)  # Display ascii decimal number of selected input
+      message(console,"Move not valid")  # Display ascii decimal number of selected input
       Ncurses.wrefresh(console) 
     end
 
