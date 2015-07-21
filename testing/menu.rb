@@ -1,6 +1,8 @@
 require 'ncurses'
 include Ncurses
 
+
+
 def drawmenu(item)
 	c = 0
 	mainmenu = "Main Menu"
@@ -24,6 +26,7 @@ Ncurses.initscr
 drawmenu(menuitem)
 Ncurses.keypad(stdscr,true)
 Ncurses.noecho
+Ncurses.cbreak              # Only accept a single character of input
 key = 0
 while key != 113
 	drawmenu(menuitem)
@@ -45,3 +48,5 @@ while key != 113
 		Ncurses.flash
 	end
 end
+Ncurses.clear
+Ncurses.endwin
