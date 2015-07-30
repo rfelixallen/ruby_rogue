@@ -4,11 +4,14 @@ include Ncurses
 
 
 def drawmenu(item)
-	c = 0
 	mainmenu = "Main Menu"
 	menu = ["Answer E-mail", "Off to the Web","Word Processing","Financial Management","Maintenance","Shutdown"]
+	c = 0
 	Ncurses.clear
 	Ncurses.addstr(mainmenu)
+	for i in 0..5
+		Ncurses.mvaddstr(3 + (i * 2), 20, menu[i])
+	end
 	while c < 6
 		if c == item
 			Ncurses.attron(A_REVERSE)
